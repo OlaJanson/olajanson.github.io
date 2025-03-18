@@ -1,0 +1,197 @@
+/* Reset och grundläggande stilar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Libre Baskerville', serif;
+    line-height: 1.6;
+    color: #4a4a4a;
+    background-color: #e9e2cb;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Header och huvudrubrik */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5vh 5vw 0;
+}
+
+h1 {
+    font-family: 'Rozha One', serif;
+    font-size: 2.8rem;
+    color: #4a4a4a;
+    font-weight: 400;
+}
+
+/* Hamburgermeny-knapp */
+.menu-toggle {
+    display: none; /* Dölj på desktop */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    z-index: 10;
+    padding: 8px;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #4a4a4a;
+    margin: 6px 0;
+    transition: all 0.3s ease;
+}
+
+/* Desktop navigation */
+.desktop-nav {
+    text-align: center;
+    margin: 1.5rem 0 6vh;
+}
+
+.desktop-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.desktop-nav a {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    color: #4a4a4a;
+    font-weight: 400;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.desktop-nav a:hover {
+    color: #666;
+}
+
+/* Overlay-meny för mobil */
+.overlay-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e9e2cb;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.overlay-menu.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay-menu nav {
+    text-align: center;
+}
+
+.overlay-menu ul {
+    list-style: none;
+}
+
+.overlay-menu li {
+    margin: 2rem 0;
+}
+
+.overlay-menu a {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    color: #4a4a4a;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    color: #4a4a4a;
+}
+
+/* Main content */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hero-sektion */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.hero-image {
+    max-height: 60vh;
+    width: auto;
+    margin-top: 2vh;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #333;
+    font-size: 0.9rem;
+    font-family: Arial, sans-serif;
+    margin-top: auto;
+}
+
+/* Responsiv design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.4rem;
+    }
+    
+    .hero-image {
+        max-height: 50vh;
+    }
+    
+    .desktop-nav {
+        display: none; /* Dölj desktopmenyn på mobil */
+    }
+    
+    .menu-toggle {
+        display: block; /* Visa hamburgermenyn på mobil */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-image {
+        max-height: 45vh;
+    }
+    
+    header {
+        padding: 3vh 5vw 0;
+    }
+} 

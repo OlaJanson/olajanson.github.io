@@ -1,0 +1,86 @@
+{
+  // Projektets typ - i detta fall en vanlig webbsida
+  "projectType": "web",
+
+  // Hosting-plattform - vi anger att projektet körs på GitHub Pages
+  "hosting": "GitHub Pages",
+
+  // Vilka programmeringsspråk som används i projektet
+  "languages": ["html", "css", "javascript"],
+
+  // Ramverk eller bibliotek - tom eftersom vi använder ren HTML, CSS och JS
+  "frameworks": [],
+
+  // Funktioner som AI:n ska prioritera när den genererar kod
+  "features": {
+    "responsiveDesign": true, // Webbsidan ska vara responsiv
+    "progressiveEnhancement": true // Progressive enhancement = fungerar på alla enheter och webbläsare
+  },
+
+  // Formatteringsregler - hur koden ska struktureras för läsbarhet
+  "formatter": {
+    "html": {
+      "indent_size": 2, // Indrag i HTML är 2 mellanslag
+      "wrap_line_length": 120 // Max antal tecken per rad för bättre läsbarhet
+    },
+    "css": {
+      "indent_size": 2,
+      "max_line_length": 120,
+      "insert_final_newline": true // Lägg till en ny rad i slutet av filen
+    },
+    "javascript": {
+      "indent_size": 2,
+      "max_line_length": 120,
+      "insert_final_newline": true
+    }
+  },
+
+  // Linting-regler - säkerställer att AI-genererad kod följer standarder och bästa praxis
+  "linting": {
+    "html": {
+      "enable": true, // Aktivera HTML-linting
+      "rules": {
+        "no-inline-css": true, // Undvik att skriva CSS direkt i HTML
+        "no-missing-alt": true, // Alla bilder ska ha en alt-text
+        "indent": ["error", 2] // Indrag ska vara 2 mellanslag
+      }
+    },
+    "css": {
+      "enable": true, // Aktivera CSS-linting
+      "rules": {
+        "no-important": true, // Undvik !important för att hålla koden ren
+        "max-nesting-depth": 3, // Max 3 nivåer av nestade CSS-klasser
+        "indent": ["error", 2],
+        "prefer-css-grid": true, // Prioritera CSS Grid framför flexbox
+        "mobile-first": true // Använd en mobile-first-strategi i CSS
+      }
+    },
+    "javascript": {
+      "enable": true, // Aktivera JavaScript-linting
+      "rules": {
+        "no-console": "warn", // Console.log() ska undvikas i produktionskod
+        "no-unused-vars": "warn", // Oanvända variabler ska ge en varning
+        "indent": ["error", 2],
+        "prefer-const": "warn" // Använd const istället för let när det är möjligt
+      }
+    }
+  },
+
+  // Regler för responsiv design - brytpunkter för olika skärmstorlekar
+  "responsive": {
+    "breakpoints": {
+      "mobile": "480px",
+      "tablet": "768px",
+      "desktop": "1024px"
+    },
+    "default": "mobile-first" // Bygger designen från mobil uppåt
+  },
+
+  // GitHub Pages-inställningar - anpassningar för att fungera på din GitHub Pages-sida
+  "github": {
+    "repo": "olajanson.github.io", // Ditt GitHub Pages-repo
+    "branch": "main", // Huvudbranch där sidan byggs ifrån
+    "useGitHubPages": true, // Bekräftar att detta är ett GitHub Pages-projekt
+    "customDomain": "olajanson.se" // Din egen domän ompekad via DNS
+  }
+}
