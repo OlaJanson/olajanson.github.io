@@ -3,207 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Susa Art</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-
+    <title>The Attention Exchange Agreement</title>
     <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Russo+One&family=VT323&display=swap');
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
         }
 
         body {
-            font-family: 'Open Sans', sans-serif;
-            color: #333;
-            line-height: 1.6;
-            background-color: #fff;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: opacity 0.3s ease;
-        }
-
-        a:hover {
-            opacity: 0.6;
-        }
-
-        /* Header */
-        header {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 20px 5%;
-            background-color: #fff;
-            border-bottom: 1px solid #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: relative;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-svg {
-            width: 40px;
-            height: 40px;
-        }
-
-        .logo-text {
-            font-family: 'Merriweather', serif;
+        /* Top Left Title */
+        .header-title {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-family: 'Russo One', sans-serif;
             font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            font-size: 0.95rem;
-            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            text-align: left;
+            max-width: 300px;
+            line-height: 1.2;
+            z-index: 10;
         }
 
-        .social-icons {
+        /* Main Container for the illustration */
+        .illustration-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
             display: flex;
-            gap: 15px;
-            font-size: 1.2rem;
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 5%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            justify-content: center;
             align-items: center;
         }
 
-        .image-container {
-            width: 100%;
+        /* The Dithering Image - moved 200px to the left */
+        .dithering-ola {
+            width: auto;
             height: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: none;
+            max-height: none;
+            image-rendering: pixelated;
+            filter: grayscale(100%) contrast(150%);
+            transform: translateX(-200px);
         }
 
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 4px;
+        /* The Thought Bubble - moved 50px to the right */
+        .thought-bubble {
+            position: absolute;
+            top: 10%;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border: 3px solid var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .text-content {
-            padding-right: 20px;
+        /* The Tail of the bubble pointing to the head */
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: -35px;
+            width: 0;
+            height: 0;
+            border-top: 25px solid transparent;
+            border-bottom: 25px solid transparent;
+            border-right: 35px solid var(--text-color);
         }
 
-        h1 {
-            font-family: 'Merriweather', serif;
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 25px;
-            color: #111;
-            line-height: 1.2;
+        /* Inner white triangle to mask the border for the tail */
+        .thought-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: -26px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 28px solid var(--bg-color);
+            z-index: 2;
         }
 
-        p {
-            margin-bottom: 20px;
-            color: #555;
-            font-size: 1.05rem;
-            font-weight: 300;
+        /* Retro Text inside bubble */
+        .retro-text {
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: 1px;
+            animation: flicker 4s infinite;
         }
 
-        /* Mobile Responsive */
+        /* Subtle flicker animation for retro feel */
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            5% { opacity: 1; }
+            10% { opacity: 0.8; }
+            15% { opacity: 1; }
+            50% { opacity: 1; }
+            55% { opacity: 0.95; }
+            60% { opacity: 1; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            header {
+            .header-title {
+                top: 20px;
+                left: 20px;
+                font-size: 1rem;
+            }
+            .illustration-container {
+                width: 90%;
+                height: auto;
                 flex-direction: column;
-                gap: 20px;
             }
-
-            .nav-links {
-                gap: 15px;
-                font-size: 0.85rem;
+            .dithering-ola {
+                transform: translateX(0);
             }
-
-            main {
-                grid-template-columns: 1fr;
-                gap: 40px;
-                margin-top: 30px;
+            .thought-bubble {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 20px;
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1/1;
             }
-
-            .text-content {
-                padding-right: 0;
-            }
-
-            h1 {
-                font-size: 2rem;
+            .thought-bubble::after, .thought-bubble::before {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <!-- Simple SVG Logo mimicking the "me" circle -->
-            <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="48" stroke="black" stroke-width="2"/>
-                <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="serif" font-size="40" font-style="italic">me</text>
-            </svg>
-            <span class="logo-text">Susa Art</span>
-        </div>
+    <!-- Top Left Title -->
+    <div class="header-title">
+        The attention<br>exchange<br>agreement
+    </div>
 
-        <nav>
-            <div class="nav-links">
-                <a href="#">Hem</a>
-                <a href="#">Målningar</a>
+    <!-- Main Illustration Area -->
+    <div class="illustration-container">
+        <!-- Using the provided dithering image -->
+        <img src="https://olajanson.se/dithering-ola.png" alt="Dithering Ola" class="dithering-ola">
+        
+        <!-- Thought Bubble -->
+        <div class="thought-bubble">
+            <div class="retro-text">
+                Please<br>interupt me...
             </div>
-            <div class="social-icons">
-                <a href="#" aria-label="Instagram">📷</a>
-                <a href="#" aria-label="Facebook">📘</a>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <div class="image-container">
-            <!-- 
-                IMPORTANT: Replace the src below with the path to your own image file.
-                For example: src="min-bild.jpg"
-            -->
-            <img src="https://image.qwenlm.ai/public_source/6cab6775-d20d-463a-a2d8-3e51494531c8/1bbada193-3acc-4ba1-a273-d83f6c112f34.png" alt="Susa Art - Konstnären">
         </div>
-
-        <div class="text-content">
-            <h1>Mina penseldrag...</h1>
-            
-            <p>Hej och varmt välkommen till Susa Art!</p>
-            
-            <p>För mig personligen handlar konst inte om komplicerade ord eller ett måste att förklara varje steg eller tanke genom processen. Ibland är det till och med omöjligt.</p>
-            
-            <p>Att skapa är att andas, en egen plats i universum.</p>
-            
-            <p>Det bästa är att hamna i tidlösheten när tiden bara stannar upp och man är helt uppslukad av det som är svårt att beskriva...kanalisering?</p>
-        </div>
-    </main>
+    </div>
 
 </body>
 </html>
