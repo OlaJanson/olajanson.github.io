@@ -260,6 +260,127 @@
             font-weight: bold;
         }
 
+        /* Image display patterns */
+        .image-text-scene {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .scene-image {
+            max-width: 45%;
+            max-height: 50vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            image-rendering: pixelated;
+            filter: grayscale(100%) contrast(200%);
+            border: 3px solid var(--text-color);
+        }
+
+        .scene-image-full {
+            max-width: 80%;
+            max-height: 60vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            image-rendering: pixelated;
+            filter: grayscale(100%) contrast(200%);
+            border: 3px solid var(--text-color);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .scene-image-full:hover {
+            transform: scale(1.02);
+        }
+
+        .image-text-content {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        /* Voting button */
+        .vote-btn {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 3px solid var(--text-color);
+            padding: 15px 30px;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vote-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--text-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .vote-btn:hover::before {
+            left: 0;
+        }
+
+        .vote-btn:hover {
+            color: var(--bg-color);
+        }
+
+        /* Lightbox for fullscreen images */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            image-rendering: pixelated;
+            filter: grayscale(100%) contrast(200%);
+            border: 3px solid var(--text-color);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-color);
+            border: 2px solid var(--text-color);
+            padding: 10px 20px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
         /* Ola character - corner position */
         .ola-container {
             position: fixed;
@@ -496,6 +617,34 @@
 
             .scene-header {
                 font-size: 1.1rem;
+            }
+
+            /* Image layouts on mobile */
+            .image-text-scene {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px;
+            }
+
+            .scene-image {
+                max-width: 80%;
+                max-height: 35vh;
+            }
+
+            .scene-image-full {
+                max-width: 90%;
+                max-height: 50vh;
+            }
+
+            .image-text-content {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .vote-btn {
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
                 top: 20px;
                 left: 20px;
             }
@@ -658,12 +807,12 @@
     <div class="scene" id="scene-2">
         <h1>MY PROJECTS</h1>
         <div class="projects-grid">
-            <div class="project-card" onclick="toggleProject(this)">
+            <div class="project-card" onclick="goToScene(10)">
                 <h3>INFERNAL VENTURES</h3>
                 <p>Special forces colonizing hell for profit-hungry industrialists.</p>
                 <div class="project-details">
                     <p>An alternate history early 1900s where you play mercenaries working for industrialists who decided to colonize hell. Heart of Darkness dressed as Indiana Jones. A card-based TTRPG about colonialism, capitalism, and the occult.</p>
-                    <button class="more-btn" onclick="event.stopPropagation(); alert('More info coming soon!')">Tell me more</button>
+                    <button class="more-btn" onclick="event.stopPropagation(); goToScene(10)">Tell me more</button>
                 </div>
             </div>
 
@@ -819,6 +968,36 @@
         </div>
     </div>
 
+    <!-- Scene 10: Infernal Ventures Detail with Image -->
+    <div class="scene" id="scene-10">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="image-text-scene">
+            <img src="https://olajanson.se/infernal-ventures.png" alt="Arcane Disruptors" class="scene-image-full" onclick="openLightbox('https://olajanson.se/infernal-ventures.png')">
+            <div class="image-text-content">
+                <h2>INFERNAL VENTURES</h2>
+                <p>Special forces colonizing hell for profit-hungry industrialists. Heart of Darkness dressed as Indiana Jones.</p>
+                <p>An alternate history early 1900s where you play mercenaries working for industrialists who decided to colonize hell.</p>
+                <button class="vote-btn" onclick="voteForProject('infernal-ventures')">
+                    ✓ Click if you want me to continue this
+                </button>
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(2)">
+                ← Back to all projects
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(1)">
+                Ask me something else →
+            </button>
+        </div>
+    </div>
+
+    <!-- Lightbox for fullscreen images -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">× CLOSE</button>
+        <img src="" alt="Fullscreen view" id="lightbox-img">
+    </div>
+
     <script>
         let hasEntered = false;
 
@@ -866,6 +1045,34 @@
 
         function toggleProject(card) {
             card.classList.toggle('expanded');
+        }
+
+        // Lightbox functions
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // Voting function (placeholder - can be connected to Google Forms later)
+        function voteForProject(projectName) {
+            // Visual feedback
+            const btn = event.target;
+            btn.textContent = '✓ Vote recorded! Thanks.';
+            btn.style.background = 'var(--text-color)';
+            btn.style.color = 'var(--bg-color)';
+            btn.disabled = true;
+            
+            // Here you would connect to Google Forms or similar
+            console.log('Vote for:', projectName);
+            
+            // Show a simple alert for now
+            setTimeout(() => {
+                alert('Thanks for your interest! I\'ll prioritize this project. (Google Forms integration coming soon)');
+            }, 300);
         }
 
         function toggleContact() {
