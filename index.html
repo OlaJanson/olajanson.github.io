@@ -179,6 +179,87 @@
             z-index: 90;
         }
 
+        /* Response scenes with floating bubbles */
+        .response-scene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 120px 40px 200px 40px;
+        }
+
+        .floating-response {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .response-bubble {
+            background: var(--bg-color);
+            border: 3px solid var(--text-color);
+            padding: 30px 40px;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            position: relative;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .response-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid var(--text-color);
+        }
+
+        .response-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 17px solid transparent;
+            border-right: 17px solid transparent;
+            border-top: 17px solid var(--bg-color);
+        }
+
+        /* Two options layout */
+        .choices.two-options {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 700px;
+            margin-top: 40px;
+        }
+
+        .choices.two-options .choice-btn {
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .choices.two-options .back-option {
+            border-style: dashed;
+            opacity: 0.8;
+        }
+
+        .choices.two-options .continue-option {
+            font-weight: bold;
+        }
+
         /* Ola character - corner position */
         .ola-container {
             position: fixed;
@@ -483,6 +564,20 @@
                 font-size: 1.1rem;
             }
 
+            .choices.two-options {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .choices.two-options .choice-btn {
+                max-width: 100%;
+            }
+
+            .response-bubble {
+                padding: 20px 25px;
+                font-size: 1.2rem;
+            }
+
             .projects-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
@@ -546,13 +641,13 @@
         <div class="opening-content">
             <div class="scene-subtitle">you might be wondering...</div>
             <div class="choices">
-                <button class="choice-btn" onclick="goToScene(2)">
+                <button class="choice-btn" onclick="goToScene(4)">
                     What kind of stuff?
                 </button>
-                <button class="choice-btn" onclick="goToScene(3)">
+                <button class="choice-btn" onclick="goToScene(5)">
                     Why don't they meet the world?
                 </button>
-                <button class="choice-btn" onclick="goToScene(2)">
+                <button class="choice-btn" onclick="goToScene(6)">
                     what is the attention exchange agreement?
                 </button>
             </div>
@@ -615,6 +710,115 @@
         </div>
     </div>
 
+    <!-- Scene 4: What kind of stuff? - Response -->
+    <div class="scene response-scene" id="scene-4">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="floating-response">
+            <div class="response-bubble">
+                I create tabletop RPGs. Stories about colonising hell, dying underwater colonies, and teenage detectives in black metal bands. Interactive fiction where your choices matter.
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(1)">
+                ← Not what I expected, go back
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(2)">
+                Show me the stuff! →
+            </button>
+        </div>
+    </div>
+
+    <!-- Scene 5: Why don't they meet the world? - Response -->
+    <div class="scene response-scene" id="scene-5">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="floating-response">
+            <div class="response-bubble">
+                I get excited about ideas. I start them. Then life happens, or I get distracted by the next shiny thing. The Attention Exchange Agreement is my attempt to actually finish and share.
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(1)">
+                ← I understand, take me back
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(2)">
+                Let's see what you've made →
+            </button>
+        </div>
+    </div>
+
+    <!-- Scene 6: What is the attention exchange agreement? - Response -->
+    <div class="scene response-scene" id="scene-6">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="floating-response">
+            <div class="response-bubble">
+                The attention exchange agreement is the design principle of this page. It describes the exchange of attention between you, the visitor, and me, the creator, in this dialogue-form website.
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(1)">
+                ← Interesting, but I'm done here
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(7)">
+                Tell me more →
+            </button>
+        </div>
+    </div>
+
+    <!-- Scene 7: Deep dive - Attention Exchange Agreement -->
+    <div class="scene" id="scene-7">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="opening-content">
+            <div class="scene-subtitle">go deeper...</div>
+            <div class="choices">
+                <button class="choice-btn" onclick="goToScene(8)">
+                    where do I sign the agreement!
+                </button>
+                <button class="choice-btn" onclick="goToScene(9)">
+                    lets dive deeper in a meta discussion!
+                </button>
+                <button class="choice-btn" onclick="goToScene(1)">
+                    I have changed my mind, lets go back to where we started
+                    </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 8: Where do I sign -->
+    <div class="scene response-scene" id="scene-8">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="floating-response">
+            <div class="response-bubble">
+                You already have! By engaging with this dialogue, by choosing what interests you, you've entered into the agreement. Your attention is the currency, your curiosity the signature.
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(7)">
+                ← Back to deep dive options
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(2)">
+                Show me your projects →
+            </button>
+        </div>
+    </div>
+
+    <!-- Scene 9: Meta discussion -->
+    <div class="scene response-scene" id="scene-9">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
+        <div class="floating-response">
+            <div class="response-bubble">
+                This whole site is meta. The agreement describes itself. You choose your path through my work. I give you pieces; you assemble meaning. It's collaborative storytelling between creator and visitor.
+            </div>
+        </div>
+        <div class="choices two-options">
+            <button class="choice-btn back-option" onclick="goToScene(7)">
+                ← Back to deep dive options
+            </button>
+            <button class="choice-btn continue-option" onclick="goToScene(1)">
+                Back to the beginning →
+            </button>
+        </div>
+    </div>
+
     <script>
         let hasEntered = false;
 
@@ -647,9 +851,17 @@
             const speeches = {
                 1: "Most of it never meets the world. This is an attempt to solve that.",
                 2: "Here are some things I've been working on. Corporate hell, underwater doom, and teenage detectives.",
-                3: "I get excited about ideas. I start them. Then life happens..."
+                3: "I get excited about ideas. I start them. Then life happens...",
+                4: "Tabletop RPGs. Interactive stories. Your choices matter.",
+                5: "The Attention Exchange Agreement helps me finish what I start.",
+                6: "It's an agreement between us. Your attention, my creation.",
+                7: "How deep do you want to go?",
+                8: "You've already signed. Your curiosity is the signature.",
+                9: "We are co-creating meaning right now."
             };
-            document.getElementById('ola-speech').textContent = speeches[sceneNum];
+            if (speeches[sceneNum]) {
+                document.getElementById('ola-speech').textContent = speeches[sceneNum];
+            }
         }
 
         function toggleProject(card) {
