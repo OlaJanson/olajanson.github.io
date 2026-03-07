@@ -27,7 +27,72 @@
             overflow-x: hidden;
         }
 
-        /* Ola character - always visible */
+        /* Landing page - full screen */
+        .landing-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            background: var(--bg-color);
+            transition: opacity 0.5s ease;
+        }
+
+        .landing-page.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .landing-image {
+            max-width: 90vw;
+            max-height: 70vh;
+            width: auto;
+            height: auto;
+            image-rendering: pixelated;
+            filter: grayscale(100%) contrast(200%);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .landing-image:hover {
+            transform: scale(1.02);
+        }
+
+        .landing-speech-bubble {
+            background: var(--bg-color);
+            border: 3px solid var(--text-color);
+            padding: 20px 30px;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .landing-speech-bubble:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .landing-speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--text-color);
+        }
+
+        /* Ola character - corner position */
         .ola-container {
             position: fixed;
             bottom: 20px;
@@ -36,6 +101,14 @@
             display: flex;
             align-items: flex-end;
             gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .ola-container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .ola-image {
@@ -246,6 +319,11 @@
                 font-size: 18px;
             }
 
+            .landing-speech-bubble {
+                font-size: 1.2rem;
+                padding: 15px 20px;
+            }
+
             .ola-container {
                 bottom: 10px;
                 left: 10px;
@@ -309,16 +387,24 @@
     </style>
 </head>
 <body>
-    <!-- Ola is always present -->
-    <div class="ola-container">
+    <!-- Landing Page - Full Screen -->
+    <div class="landing-page" id="landing-page" onclick="enterSite()">
+        <img src="https://olajanson.se/dithering-ola.png" alt="Ola" class="landing-image">
+        <div class="landing-speech-bubble">
+            Hej jag heter Ola, I make stuff.
+        </div>
+    </div>
+
+    <!-- Ola character - corner position (hidden initially) -->
+    <div class="ola-container" id="ola-container">
         <img src="https://olajanson.se/dithering-ola.png" alt="Ola" class="ola-image">
         <div class="speech-bubble" id="ola-speech">
-            Hi im Ola i make stuff. Most of it never meets the world. This is an attempt to solve that.
+            Most of it never meets the world. This is an attempt to solve that.
         </div>
     </div>
 
     <!-- Scene 1: Opening -->
-    <div class="scene active" id="scene-1">
+    <div class="scene" id="scene-1">
         <div class="opening-content">
             <h1>THE ATTENTION EXCHANGE</h1>
             <div class="choices">
@@ -392,6 +478,24 @@
     </div>
 
     <script>
+        let hasEntered = false;
+
+        function enterSite() {
+            if (hasEntered) return;
+            hasEntered = true;
+            
+            // Hide landing page
+            document.getElementById('landing-page').classList.add('hidden');
+            
+            // Show Ola in corner
+            setTimeout(() => {
+                document.getElementById('ola-container').classList.add('visible');
+            }, 300);
+            
+            // Show scene 1
+            document.getElementById('scene-1').classList.add('active');
+        }
+
         function goToScene(sceneNum) {
             // Hide all scenes
             document.querySelectorAll('.scene').forEach(scene => {
@@ -403,7 +507,7 @@
             
             // Update Ola's speech
             const speeches = {
-                1: "Hi im Ola i make stuff. Most of it never meets the world. This is an attempt to solve that.",
+                1: "Most of it never meets the world. This is an attempt to solve that.",
                 2: "Here are some things I've been working on. Corporate hell, underwater doom, and teenage detectives.",
                 3: "I get excited about ideas. I start them. Then life happens..."
             };
