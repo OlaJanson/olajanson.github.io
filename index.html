@@ -145,6 +145,40 @@
             50% { transform: translateY(-10px); }
         }
 
+        /* Fixed title for landing page */
+        .landing-title {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 250;
+            max-width: 300px;
+            line-height: 1.2;
+        }
+
+        /* Scene subtitle */
+        .scene-subtitle {
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        /* Fixed header for scenes */
+        .scene-header {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 90;
+        }
+
         /* Ola character - corner position */
         .ola-container {
             position: fixed;
@@ -372,6 +406,23 @@
                 font-size: 18px;
             }
 
+            .landing-title {
+                font-size: 1.2rem;
+                top: 20px;
+                left: 20px;
+                max-width: 200px;
+            }
+
+            .scene-header {
+                font-size: 1.1rem;
+                top: 20px;
+                left: 20px;
+            }
+
+            .scene-subtitle {
+                font-size: 1.2rem;
+            }
+
             .landing-content {
                 flex-direction: column;
                 gap: 30px;
@@ -466,6 +517,7 @@
 <body>
     <!-- Landing Page - Full Screen -->
     <div class="landing-page" id="landing-page">
+        <div class="landing-title">THE ATTENTION EXCHANGE AGREEMENT</div>
         <div class="landing-content">
             <img src="https://olajanson.se/dithering-ola.png" alt="Ola" class="landing-image">
             <div class="landing-speech-wrapper">
@@ -490,8 +542,9 @@
 
     <!-- Scene 1: Opening -->
     <div class="scene" id="scene-1">
+        <div class="scene-header">THE ATTENTION EXCHANGE AGREEMENT</div>
         <div class="opening-content">
-            <h1>THE ATTENTION EXCHANGE AGREEMENT</h1>
+            <div class="scene-subtitle">you might be wondering...</div>
             <div class="choices">
                 <button class="choice-btn" onclick="goToScene(2)">
                     What kind of stuff?
@@ -500,7 +553,7 @@
                     Why don't they meet the world?
                 </button>
                 <button class="choice-btn" onclick="goToScene(2)">
-                    Can I see something?
+                    what is the attention exchange agreement?
                 </button>
             </div>
         </div>
