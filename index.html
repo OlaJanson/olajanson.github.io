@@ -48,48 +48,101 @@
             pointer-events: none;
         }
 
+        .landing-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
         .landing-image {
-            max-width: 90vw;
-            max-height: 70vh;
+            max-width: 50vw;
+            max-height: 60vh;
             width: auto;
             height: auto;
             image-rendering: pixelated;
             filter: grayscale(100%) contrast(200%);
-            cursor: pointer;
-            transition: transform 0.2s;
         }
 
-        .landing-image:hover {
-            transform: scale(1.02);
+        .landing-speech-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         .landing-speech-bubble {
             background: var(--bg-color);
             border: 3px solid var(--text-color);
             padding: 20px 30px;
-            margin-top: 30px;
             font-size: 1.5rem;
             position: relative;
-            cursor: pointer;
-            transition: all 0.2s;
+            max-width: 300px;
         }
 
-        .landing-speech-bubble:hover {
-            background: var(--text-color);
-            color: var(--bg-color);
+        .landing-speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 18px solid var(--text-color);
         }
 
         .landing-speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid var(--text-color);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 14px solid var(--bg-color);
+        }
+
+        .ok-button {
+            background: var(--bg-color);
+            border: 3px solid var(--text-color);
+            color: var(--text-color);
+            padding: 15px 50px;
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .ok-button:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,0,0,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0,0,0,0); }
+        }
+
+        .click-indicator {
+            position: absolute;
+            bottom: -50px;
+            font-size: 1rem;
+            opacity: 0.7;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         /* Ola character - corner position */
@@ -319,9 +372,33 @@
                 font-size: 18px;
             }
 
+            .landing-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .landing-image {
+                max-width: 70vw;
+                max-height: 40vh;
+            }
+
             .landing-speech-bubble {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
                 padding: 15px 20px;
+                max-width: 280px;
+            }
+
+            .landing-speech-bubble::before {
+                display: none;
+            }
+
+            .landing-speech-bubble::after {
+                display: none;
+            }
+
+            .ok-button {
+                padding: 12px 40px;
+                font-size: 1.5rem;
             }
 
             .ola-container {
@@ -388,10 +465,18 @@
 </head>
 <body>
     <!-- Landing Page - Full Screen -->
-    <div class="landing-page" id="landing-page" onclick="enterSite()">
-        <img src="https://olajanson.se/dithering-ola.png" alt="Ola" class="landing-image">
-        <div class="landing-speech-bubble">
-            Hej jag heter Ola, I make stuff.
+    <div class="landing-page" id="landing-page">
+        <div class="landing-content">
+            <img src="https://olajanson.se/dithering-ola.png" alt="Ola" class="landing-image">
+            <div class="landing-speech-wrapper">
+                <div class="landing-speech-bubble">
+                    Hi my name is Ola, I make stuff.
+                </div>
+                <button class="ok-button" onclick="enterSite()">
+                    OK
+                </button>
+                <div class="click-indicator">↓ click to continue ↓</div>
+            </div>
         </div>
     </div>
 
