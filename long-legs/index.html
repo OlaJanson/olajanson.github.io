@@ -61,9 +61,9 @@
                 ctx.fillRect(this.rightArm.x, this.rightArm.y, this.rightArm.width, this.rightArm.height);
 
                 ctx.fillStyle = this.leftStilt.color;
-                ctx.fillRect(this.leftStilt.x, this.leftStilt.y, this.leftStilt.width, this.leftStilt.height);
+                ctx.fillRect(this.leftStilt.x, this.leftStilt.y, this.leftStilt.width, this.leftFoot.y - this.leftStilt.y);
                 ctx.fillStyle = this.rightStilt.color;
-                ctx.fillRect(this.rightStilt.x, this.rightStilt.y, this.rightStilt.width, this.rightStilt.height);
+                ctx.fillRect(this.rightStilt.x, this.rightStilt.y, this.rightStilt.width, this.rightFoot.y - this.rightStilt.y);
 
                 ctx.fillStyle = this.leftFoot.color;
                 ctx.fillRect(this.leftFoot.x, this.leftFoot.y, this.leftFoot.width, this.leftFoot.height);
@@ -77,13 +77,50 @@
         const character = new Character();
 
         const STEP = character.leftStilt.height * 0.6;
+        const STEP_FRAMES = 18;
+
+        let stepState = {
+            active: false,
+            progress: 0,
+            dir: 0,
+            activeFoot: 'left'
+        };
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight') character.x += STEP;
-            if (e.key === 'ArrowLeft')  character.x -= STEP;
+            if (stepState.active) return;
+            if (e.key === 'ArrowRight') {
+                stepState.active = true;
+                stepState.progress = 0;
+                stepState.dir = 1;
+            }
+            if (e.key === 'ArrowLeft') {
+                stepState.active = true;
+                stepState.progress = 0;
+                stepState.dir = -1;
+            }
         });
 
+        function updateStep() {
+            if (!stepState.active) return;
+
+            stepState.progress++;
+            const t = stepState.progress / STEP_FRAMES;
+
+            character.x += stepState.dir * STEP / STEP_FRAMES;
+
+            const foot = stepState.activeFoot === 'left' ? character.leftFoot : character.rightFoot;
+            foot.y = 416 - 25 * Math.sin(t * Math.PI);
+
+            if (stepState.progress >= STEP_FRAMES) {
+                stepState.active = false;
+                stepState.activeFoot = stepState.activeFoot === 'left' ? 'right' : 'left';
+                character.leftFoot.y = 416;
+                character.rightFoot.y = 416;
+            }
+        }
+
         function gameLoop() {
+            updateStep();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             character.draw();
             requestAnimationFrame(gameLoop);
