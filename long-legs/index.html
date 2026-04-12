@@ -115,9 +115,9 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
-                stiltLen = Math.max(STILT_MIN, Math.min(STILT_MAX,
-                    stiltLen + (e.key === 'ArrowUp' ? 12 : -12)));
                 if (!stepState.active) {
+                    stiltLen = Math.max(STILT_MIN, Math.min(STILT_MAX,
+                        stiltLen + (e.key === 'ArrowUp' ? 12 : -12)));
                     character.leftStilt.length  = stiltLen;
                     character.rightStilt.length = stiltLen;
                 }
