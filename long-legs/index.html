@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Render</title>
     <style>
-        canvas {
-            display: block;
-            margin: 0 auto;
-            background-color: #0a0a1a;
-        }
+        body { margin: 0; background: #0a0a1a; display: flex; flex-direction: column; align-items: center; }
+        canvas { display: block; }
+        .controls { display: flex; gap: 20px; margin-top: 12px; }
+        .btn { width: 70px; height: 70px; font-size: 28px; background: #223; color: #7af; border: 2px solid #5cf; border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <div class="controls">
+        <button class="btn" id="btnLeft">&#8592;</button>
+        <button class="btn" id="btnRight">&#8594;</button>
+    </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -62,14 +65,14 @@
 
                 ctx.save();
                 ctx.translate(this.leftStilt.hipX, this.leftStilt.hipY);
-                ctx.rotate(this.leftStilt.angle);
+                ctx.rotate(-this.leftStilt.angle);
                 ctx.fillStyle = this.leftStilt.color;
                 ctx.fillRect(-2, 0, this.leftStilt.width, this.leftStilt.length);
                 ctx.restore();
 
                 ctx.save();
                 ctx.translate(this.rightStilt.hipX, this.rightStilt.hipY);
-                ctx.rotate(this.rightStilt.angle);
+                ctx.rotate(-this.rightStilt.angle);
                 ctx.fillStyle = this.rightStilt.color;
                 ctx.fillRect(-2, 0, this.rightStilt.width, this.rightStilt.length);
                 ctx.restore();
@@ -121,9 +124,11 @@
             const t = stepState.progress / STEP_FRAMES;
 
             const stilt = stepState.activeFoot === 'left' ? character.leftStilt : character.rightStilt;
+            const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
 
             stilt.angle = stepState.dir * 0.35 * Math.sin(t * Math.PI);
             stilt.length = 200 * (1 - 0.12 * Math.sin(t * Math.PI));
+            planted.angle = stepState.dir * (-0.12) * Math.sin(t * Math.PI);
 
             character.x += stepState.dir * STEP / STEP_FRAMES;
 
@@ -145,6 +150,9 @@
         }
 
         requestAnimationFrame(gameLoop);
+
+        document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft'})); });
+        document.getElementById('btnRight').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight'})); });
     </script>
 </body>
 </html>
