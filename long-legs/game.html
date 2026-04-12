@@ -94,21 +94,22 @@
         let stiltLen = 200;
         const STILT_MIN = 80;
         const STILT_MAX = 400;
-        const LIFT_FRAMES  = 22;   // leg swings up to 45°
-        const PAUSE_FRAMES = 10;   // hold at peak
-        const FALL_FRAMES  = 42;   // body falls forward, foot lands
-        const SETTLE_FRAMES = 30;  // back leg swings to neutral
-        const TOTAL_STEP   = LIFT_FRAMES + PAUSE_FRAMES + FALL_FRAMES;
+        const LIFT_DUR    = 22 / 60;   // seconds
+        const PAUSE_DUR   = 10 / 60;
+        const FALL_DUR    = 42 / 60;
+        const SETTLE_DUR  = 30 / 60;
+        const STEP_DUR    = LIFT_DUR + PAUSE_DUR + FALL_DUR;
 
         let stepState = {
             active: false,
-            progress: 0,
+            time: 0,
             dir: 0,
             activeFoot: 'left',
             startX: 0,
             plantedWorldX: 0,
             settleLeftAngle: 0,
-            settleRightAngle: 0
+            settleRightAngle: 0,
+            landingSaved: false
         };
 
         document.addEventListener('keydown', function(e) {
@@ -128,7 +129,8 @@
             if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                 const dir = e.key === 'ArrowRight' ? 1 : -1;
                 stepState.active = true;
-                stepState.progress = 0;
+                stepState.time = 0;
+                stepState.landingSaved = false;
                 stepState.dir = dir;
                 stepState.startX = character.x;
                 const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
@@ -136,11 +138,11 @@
             }
         });
 
-        function updateStep() {
+        function updateStep(dt) {
             if (!stepState.active) return;
 
-            stepState.progress++;
-            const p = stepState.progress;
+            stepState.time += dt;
+            const t0 = stepState.time;
             const activeStilt  = stepState.activeFoot === 'left' ? character.leftStilt  : character.rightStilt;
             const plantedStilt = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
 
@@ -149,41 +151,42 @@
                 plantedStilt.angle = Math.asin(Math.max(-0.9, Math.min(0.9, relX / plantedStilt.length)));
             }
 
-            if (p <= LIFT_FRAMES) {
+            if (t0 <= LIFT_DUR) {
                 // Phase 1: body still, active leg lifts to 45°
-                const t = p / LIFT_FRAMES;
+                const t = t0 / LIFT_DUR;
                 activeStilt.angle  = stepState.dir * 0.785 * t;
                 activeStilt.length = stiltLen * (1 - 0.12 * t);
                 trackPlanted();
 
-            } else if (p <= LIFT_FRAMES + PAUSE_FRAMES) {
+            } else if (t0 <= LIFT_DUR + PAUSE_DUR) {
                 // Phase 2: hold at peak — brief pause before fall
                 activeStilt.angle  = stepState.dir * 0.785;
                 activeStilt.length = stiltLen * 0.88;
                 trackPlanted();
 
-            } else if (p <= TOTAL_STEP) {
+            } else if (t0 <= STEP_DUR) {
                 // Phase 3: body falls forward, active leg extends to ground
-                const t = (p - LIFT_FRAMES - PAUSE_FRAMES) / FALL_FRAMES;
+                const t = (t0 - LIFT_DUR - PAUSE_DUR) / FALL_DUR;
                 character.x = stepState.startX + stepState.dir * (stiltLen * 0.6) * (t * t);
                 activeStilt.angle  = stepState.dir * 0.785 * (1 - t);
                 activeStilt.length = stiltLen * (0.88 + 0.12 * t);
                 trackPlanted();
 
-                // Save angles at landing moment for settle phase
-                if (p === TOTAL_STEP) {
+                // Save angles once at landing moment
+                if (!stepState.landingSaved) {
                     stepState.settleLeftAngle  = character.leftStilt.angle;
                     stepState.settleRightAngle = character.rightStilt.angle;
+                    stepState.landingSaved = true;
                 }
 
             } else {
                 // Phase 4: weight transferred — back leg swings smoothly to neutral
-                const st = (p - TOTAL_STEP) / SETTLE_FRAMES;
+                const st = Math.min(1, (t0 - STEP_DUR) / SETTLE_DUR);
                 character.leftStilt.angle  = stepState.settleLeftAngle  * (1 - st);
                 character.rightStilt.angle = stepState.settleRightAngle * (1 - st);
             }
 
-            if (p >= TOTAL_STEP + SETTLE_FRAMES) {
+            if (t0 >= STEP_DUR + SETTLE_DUR) {
                 stepState.active = false;
                 stepState.activeFoot = stepState.activeFoot === 'left' ? 'right' : 'left';
                 character.leftStilt.angle  = 0;
@@ -194,9 +197,13 @@
         }
 
         const GROUND_Y = 420;
+        let lastTime = null;
 
-        function gameLoop() {
-            updateStep();
+        function gameLoop(timestamp) {
+            if (lastTime === null) lastTime = timestamp;
+            const dt = Math.min((timestamp - lastTime) / 1000, 0.05); // cap at 50ms
+            lastTime = timestamp;
+            updateStep(dt);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const zoom = Math.max(0.45, Math.min(1.5, 200 / stiltLen));
