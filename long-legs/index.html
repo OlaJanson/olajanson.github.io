@@ -166,7 +166,9 @@
             plantedWorldX: 0,
             settleLeftAngle: 0,
             settleRightAngle: 0,
-            landingSaved: false
+            landingSaved: false,
+            startGroundY: 0,
+            landingGroundY: 0
         };
 
         let balanceState = {
@@ -232,6 +234,9 @@
                 stepState.startX = character.x;
                 const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
                 stepState.plantedWorldX = character.x + planted.hipX + Math.sin(planted.angle) * planted.length;
+                stepState.startGroundY = characterGroundY;
+                const activeHipX = stepState.activeFoot === 'left' ? character.leftStilt.hipX : character.rightStilt.hipX;
+                stepState.landingGroundY = groundAtX(character.x + dir * stiltLen * 0.6 + activeHipX);
             }
         });
 
@@ -267,6 +272,7 @@
                 character.x = stepState.startX + stepState.dir * (stiltLen * 0.6) * (t * t);
                 activeStilt.angle  = stepState.dir * 0.785 * (1 - t);
                 activeStilt.length = stiltLen * (0.88 + 0.12 * t);
+                characterGroundY = stepState.startGroundY + (stepState.landingGroundY - stepState.startGroundY) * (t * t);
                 trackPlanted();
 
             } else {
@@ -289,7 +295,6 @@
                 character.rightStilt.angle = 0;
                 character.leftStilt.length  = stiltLen;
                 character.rightStilt.length = stiltLen;
-                characterGroundY = groundAtX(character.x);
             }
         }
 
