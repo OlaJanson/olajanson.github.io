@@ -172,15 +172,14 @@
                 activeStilt.length = stiltLen * (0.88 + 0.12 * t);
                 trackPlanted();
 
-                // Save angles once at landing moment
+            } else {
+                // Phase 4: weight transferred — back leg swings smoothly to neutral
+                // Save angles on first frame of phase 4 (foot just landed)
                 if (!stepState.landingSaved) {
                     stepState.settleLeftAngle  = character.leftStilt.angle;
                     stepState.settleRightAngle = character.rightStilt.angle;
                     stepState.landingSaved = true;
                 }
-
-            } else {
-                // Phase 4: weight transferred — back leg swings smoothly to neutral
                 const st = Math.min(1, (t0 - STEP_DUR) / SETTLE_DUR);
                 character.leftStilt.angle  = stepState.settleLeftAngle  * (1 - st);
                 character.rightStilt.angle = stepState.settleRightAngle * (1 - st);
