@@ -115,13 +115,13 @@
             // Right stilt (lifted, angled out)
             ctx.save();
             ctx.translate(this.rightStilt.hipX, this.rightStilt.hipY);
-            ctx.rotate(-0.5); // angle out to the right
+            ctx.rotate(-0.18); // angle out slightly to the right
             ctx.fillStyle = this.rightStilt.color;
             ctx.fillRect(-2, 0, this.rightStilt.width, stiltLen * 0.85);
             ctx.restore();
             // Right foot (at end of angled stilt)
-            const rfX = this.rightStilt.hipX + Math.sin(0.5) * stiltLen * 0.85;
-            const rfY = this.rightStilt.hipY + Math.cos(0.5) * stiltLen * 0.85;
+            const rfX = this.rightStilt.hipX + Math.sin(0.18) * stiltLen * 0.85;
+            const rfY = this.rightStilt.hipY + Math.cos(0.18) * stiltLen * 0.85;
             ctx.fillStyle = this.rightFoot.color;
             ctx.fillRect(rfX - 5, rfY - 2, this.rightFoot.width, this.rightFoot.height);
 
@@ -176,8 +176,8 @@
             fallen: false
         };
 
-        const BALANCE_GRAVITY  = 1.4;  // lean acceleration per rad of lean
-        const BALANCE_DRIFT    = 0.25; // random perturbation strength
+        const BALANCE_GRAVITY  = 1.6;  // lean acceleration per rad of lean
+        const BALANCE_DRIFT    = 1.2;  // random perturbation strength (jerky)
         const BALANCE_MAX_LEAN = 0.55; // rad before falling (~31°)
         const BALANCE_CORRECT  = 1.8;  // correction impulse per keypress
 
@@ -202,7 +202,7 @@
                     balanceState.fallen = false;
                 } else {
                     balanceState.active = true;
-                    balanceState.lean = 0;
+                    balanceState.lean = -0.06; // slight left lean (weight over planted foot)
                     balanceState.velocity = 0;
                     balanceState.fallen = false;
                 }
