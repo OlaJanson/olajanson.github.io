@@ -311,6 +311,17 @@
         }
 
         const GROUND_Y = 420;
+
+        // Stenar spridda i världen (x, bredd, höjd)
+        const rocks = [];
+        for (let i = 0; i < 30; i++) {
+            rocks.push({
+                x: 900 + i * 380 + (i * 79 % 180) - (i % 3 === 0 ? 600 + i * 200 : 0),
+                w: 22 + (i * 41 % 44),
+                h: 16 + (i * 53 % 38)
+            });
+        }
+
         let lastTime = null;
 
         function gameLoop(timestamp) {
@@ -324,16 +335,26 @@
             const zoom = Math.max(0.45, Math.min(1.5, 200 / stiltLen));
             const ax = canvas.width / 2;
             ctx.save();
-            ctx.translate(ax * (1 - zoom), GROUND_Y * (1 - zoom));
+            ctx.translate(ax - character.x * zoom, GROUND_Y * (1 - zoom));
             ctx.scale(zoom, zoom);
 
             // Ground
             ctx.fillStyle = '#334';
-            ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+            ctx.fillRect(character.x - 6000, GROUND_Y, 12000, canvas.height - GROUND_Y);
 
             // Ceiling — visible when zoomed out to ~2x
             ctx.fillStyle = '#334';
-            ctx.fillRect(0, -340, canvas.width, 60);
+            ctx.fillRect(character.x - 6000, -340, 12000, 60);
+
+            // Stenar
+            ctx.fillStyle = '#556';
+            for (const r of rocks) {
+                ctx.fillRect(r.x, GROUND_Y - r.h, r.w, r.h);
+                // Lite ljusare topp
+                ctx.fillStyle = '#778';
+                ctx.fillRect(r.x, GROUND_Y - r.h, r.w, 3);
+                ctx.fillStyle = '#556';
+            }
 
             if (balanceState.active) {
                 character.drawBalance();
