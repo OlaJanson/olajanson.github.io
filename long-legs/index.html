@@ -29,10 +29,10 @@
                 this.torso = { x: -9, y: 206, width: 18, height: 14, color: '#7af' };
                 this.leftArm = { x: -13, y: 207, width: 4, height: 14, color: '#5cf' };
                 this.rightArm = { x: 9, y: 207, width: 4, height: 14, color: '#5cf' };
-                this.leftStilt = { x: -9, y: 220, width: 4, height: 200, color: '#5cf' };
-                this.rightStilt = { x: 5, y: 220, width: 4, height: 200, color: '#5cf' };
-                this.leftFoot = { x: -12, y: 416, width: 10, height: 5, color: '#aef' };
-                this.rightFoot = { x: 2, y: 416, width: 10, height: 5, color: '#aef' };
+                this.leftStilt = { hipX: -5, hipY: 220, angle: 0, length: 200, width: 4, color: '#5cf' };
+                this.rightStilt = { hipX: 9, hipY: 220, angle: 0, length: 200, width: 4, color: '#5cf' };
+                this.leftFoot = { width: 10, height: 5, color: '#aef' };
+                this.rightFoot = { width: 10, height: 5, color: '#aef' };
             }
 
             draw() {
@@ -60,15 +60,29 @@
                 ctx.fillStyle = this.rightArm.color;
                 ctx.fillRect(this.rightArm.x, this.rightArm.y, this.rightArm.width, this.rightArm.height);
 
+                ctx.save();
+                ctx.translate(this.leftStilt.hipX, this.leftStilt.hipY);
+                ctx.rotate(this.leftStilt.angle);
                 ctx.fillStyle = this.leftStilt.color;
-                ctx.fillRect(this.leftStilt.x, this.leftStilt.y, this.leftStilt.width, this.leftFoot.y - this.leftStilt.y);
-                ctx.fillStyle = this.rightStilt.color;
-                ctx.fillRect(this.rightStilt.x, this.rightStilt.y, this.rightStilt.width, this.rightFoot.y - this.rightStilt.y);
+                ctx.fillRect(-2, 0, this.leftStilt.width, this.leftStilt.length);
+                ctx.restore();
 
+                ctx.save();
+                ctx.translate(this.rightStilt.hipX, this.rightStilt.hipY);
+                ctx.rotate(this.rightStilt.angle);
+                ctx.fillStyle = this.rightStilt.color;
+                ctx.fillRect(-2, 0, this.rightStilt.width, this.rightStilt.length);
+                ctx.restore();
+
+                const lFootX = this.leftStilt.hipX + Math.sin(this.leftStilt.angle) * this.leftStilt.length;
+                const lFootY = this.leftStilt.hipY + Math.cos(this.leftStilt.angle) * this.leftStilt.length;
                 ctx.fillStyle = this.leftFoot.color;
-                ctx.fillRect(this.leftFoot.x, this.leftFoot.y, this.leftFoot.width, this.leftFoot.height);
+                ctx.fillRect(lFootX - 5, lFootY - 2, this.leftFoot.width, this.leftFoot.height);
+
+                const rFootX = this.rightStilt.hipX + Math.sin(this.rightStilt.angle) * this.rightStilt.length;
+                const rFootY = this.rightStilt.hipY + Math.cos(this.rightStilt.angle) * this.rightStilt.length;
                 ctx.fillStyle = this.rightFoot.color;
-                ctx.fillRect(this.rightFoot.x, this.rightFoot.y, this.rightFoot.width, this.rightFoot.height);
+                ctx.fillRect(rFootX - 5, rFootY - 2, this.rightFoot.width, this.rightFoot.height);
 
                 ctx.restore();
             }
@@ -76,8 +90,8 @@
 
         const character = new Character();
 
-        const STEP = character.leftStilt.height * 0.6;
-        const STEP_FRAMES = 18;
+        const STEP = character.leftStilt.length * 0.6;
+        const STEP_FRAMES = 30;
 
         let stepState = {
             active: false,
@@ -106,16 +120,20 @@
             stepState.progress++;
             const t = stepState.progress / STEP_FRAMES;
 
-            character.x += stepState.dir * STEP / STEP_FRAMES;
+            const stilt = stepState.activeFoot === 'left' ? character.leftStilt : character.rightStilt;
 
-            const foot = stepState.activeFoot === 'left' ? character.leftFoot : character.rightFoot;
-            foot.y = 416 - 25 * Math.sin(t * Math.PI);
+            stilt.angle = stepState.dir * 0.35 * Math.sin(t * Math.PI);
+            stilt.length = 200 * (1 - 0.12 * Math.sin(t * Math.PI));
+
+            character.x += stepState.dir * STEP / STEP_FRAMES;
 
             if (stepState.progress >= STEP_FRAMES) {
                 stepState.active = false;
                 stepState.activeFoot = stepState.activeFoot === 'left' ? 'right' : 'left';
-                character.leftFoot.y = 416;
-                character.rightFoot.y = 416;
+                character.leftStilt.angle = 0;
+                character.rightStilt.angle = 0;
+                character.leftStilt.length = 200;
+                character.rightStilt.length = 200;
             }
         }
 
