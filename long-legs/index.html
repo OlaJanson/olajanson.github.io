@@ -196,6 +196,12 @@
         document.addEventListener('keydown', function(e) {
             if ((e.key === 'z' || e.key === 'Z') && !stepState.active) {
                 if (balanceState.active) {
+                    // Place right foot in lean direction to catch the body
+                    const catchAngle = Math.max(-0.55, Math.min(0.55, balanceState.lean * 2.5));
+                    character.rightStilt.angle = catchAngle;
+                    character.rightStilt.length = stiltLen;
+                    // Shift body slightly in lean direction for visual continuity
+                    character.x += Math.sin(balanceState.lean) * stiltLen * 0.15;
                     balanceState.active = false;
                     balanceState.lean = 0;
                     balanceState.velocity = 0;
