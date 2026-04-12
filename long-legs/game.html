@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long Legs</title>
+    <style>
+        body { margin: 0; background: #0a0a1a; display: flex; flex-direction: column; align-items: center; }
+        canvas { display: block; }
+        .controls { display: flex; gap: 20px; margin-top: 12px; }
+        .btn { width: 70px; height: 70px; font-size: 28px; background: #223; color: #7af; border: 2px solid #5cf; border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <div class="controls">
+        <button class="btn" id="btnLeft">&#8592;</button>
+        <button class="btn" id="btnRight">&#8594;</button>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        class Character {
+            constructor() {
+                // Character center x, can be changed to move character
+                this.x = canvas.width / 2;
+
+                this.head = { x: -11, y: 184, width: 22, height: 22, color: '#7af' };
+                this.leftEye = { x: -7, y: 191, width: 3, height: 3, color: '#012' };
+                this.rightEye = { x: 2, y: 191, width: 3, height: 3, color: '#012' };
+                this.torso = { x: -9, y: 206, width: 18, height: 14, color: '#7af' };
+                this.leftArm = { x: -13, y: 207, width: 4, height: 14, color: '#5cf' };
+                this.rightArm = { x: 9, y: 207, width: 4, height: 14, color: '#5cf' };
+                this.leftStilt = { hipX: -5, hipY: 220, angle: 0, length: 200, width: 4, color: '#5cf' };
+                this.rightStilt = { hipX: 9, hipY: 220, angle: 0, length: 200, width: 4, color: '#5cf' };
+                this.leftFoot = { width: 10, height: 5, color: '#aef' };
+                this.rightFoot = { width: 10, height: 5, color: '#aef' };
+            }
+
+            draw() {
+                // Ground spans full canvas — draw BEFORE translate
+                ctx.fillStyle = '#334';
+                ctx.fillRect(0, 420, canvas.width, canvas.height - 420);
+
+                // All character parts drawn relative to this.x
+                ctx.save();
+                ctx.translate(this.x, 0);
+
+                ctx.fillStyle = this.head.color;
+                ctx.fillRect(this.head.x, this.head.y, this.head.width, this.head.height);
+
+                ctx.fillStyle = this.leftEye.color;
+                ctx.fillRect(this.leftEye.x, this.leftEye.y, this.leftEye.width, this.leftEye.height);
+                ctx.fillStyle = this.rightEye.color;
+                ctx.fillRect(this.rightEye.x, this.rightEye.y, this.rightEye.width, this.rightEye.height);
+
+                ctx.fillStyle = this.torso.color;
+                ctx.fillRect(this.torso.x, this.torso.y, this.torso.width, this.torso.height);
+
+                ctx.fillStyle = this.leftArm.color;
+                ctx.fillRect(this.leftArm.x, this.leftArm.y, this.leftArm.width, this.leftArm.height);
+                ctx.fillStyle = this.rightArm.color;
+                ctx.fillRect(this.rightArm.x, this.rightArm.y, this.rightArm.width, this.rightArm.height);
+
+                ctx.save();
+                ctx.translate(this.leftStilt.hipX, this.leftStilt.hipY);
+                ctx.rotate(-this.leftStilt.angle);
+                ctx.fillStyle = this.leftStilt.color;
+                ctx.fillRect(-2, 0, this.leftStilt.width, this.leftStilt.length);
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(this.rightStilt.hipX, this.rightStilt.hipY);
+                ctx.rotate(-this.rightStilt.angle);
+                ctx.fillStyle = this.rightStilt.color;
+                ctx.fillRect(-2, 0, this.rightStilt.width, this.rightStilt.length);
+                ctx.restore();
+
+                const lFootX = this.leftStilt.hipX + Math.sin(this.leftStilt.angle) * this.leftStilt.length;
+                const lFootY = this.leftStilt.hipY + Math.cos(this.leftStilt.angle) * this.leftStilt.length;
+                ctx.fillStyle = this.leftFoot.color;
+                ctx.fillRect(lFootX - 5, lFootY - 2, this.leftFoot.width, this.leftFoot.height);
+
+                const rFootX = this.rightStilt.hipX + Math.sin(this.rightStilt.angle) * this.rightStilt.length;
+                const rFootY = this.rightStilt.hipY + Math.cos(this.rightStilt.angle) * this.rightStilt.length;
+                ctx.fillStyle = this.rightFoot.color;
+                ctx.fillRect(rFootX - 5, rFootY - 2, this.rightFoot.width, this.rightFoot.height);
+
+                ctx.restore();
+            }
+        }
+
+        const character = new Character();
+
+        const STILT_LEN   = 200;
+        const STEP        = STILT_LEN * 0.6;
+        const LIFT_FRAMES  = 22;   // leg swings up to 45°
+        const PAUSE_FRAMES = 10;   // hold at peak
+        const FALL_FRAMES  = 42;   // body falls forward, foot lands
+        const SETTLE_FRAMES = 30;  // back leg swings to neutral
+        const TOTAL_STEP   = LIFT_FRAMES + PAUSE_FRAMES + FALL_FRAMES;
+
+        let stepState = {
+            active: false,
+            progress: 0,
+            dir: 0,
+            activeFoot: 'left',
+            startX: 0,
+            plantedWorldX: 0,
+            settleLeftAngle: 0,
+            settleRightAngle: 0
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (stepState.active) return;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const dir = e.key === 'ArrowRight' ? 1 : -1;
+                stepState.active = true;
+                stepState.progress = 0;
+                stepState.dir = dir;
+                stepState.startX = character.x;
+                const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
+                stepState.plantedWorldX = character.x + planted.hipX + Math.sin(planted.angle) * planted.length;
+            }
+        });
+
+        function updateStep() {
+            if (!stepState.active) return;
+
+            stepState.progress++;
+            const p = stepState.progress;
+            const activeStilt  = stepState.activeFoot === 'left' ? character.leftStilt  : character.rightStilt;
+            const plantedStilt = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
+
+            function trackPlanted() {
+                const relX = stepState.plantedWorldX - character.x - plantedStilt.hipX;
+                plantedStilt.angle = Math.asin(Math.max(-0.9, Math.min(0.9, relX / plantedStilt.length)));
+            }
+
+            if (p <= LIFT_FRAMES) {
+                // Phase 1: body still, active leg lifts to 45°
+                const t = p / LIFT_FRAMES;
+                activeStilt.angle  = stepState.dir * 0.785 * t;
+                activeStilt.length = STILT_LEN * (1 - 0.12 * t);
+                trackPlanted();
+
+            } else if (p <= LIFT_FRAMES + PAUSE_FRAMES) {
+                // Phase 2: hold at peak — brief pause before fall
+                activeStilt.angle  = stepState.dir * 0.785;
+                activeStilt.length = STILT_LEN * 0.88;
+                trackPlanted();
+
+            } else if (p <= TOTAL_STEP) {
+                // Phase 3: body falls forward, active leg extends to ground
+                const t = (p - LIFT_FRAMES - PAUSE_FRAMES) / FALL_FRAMES;
+                character.x = stepState.startX + stepState.dir * STEP * (t * t);
+                activeStilt.angle  = stepState.dir * 0.785 * (1 - t);
+                activeStilt.length = STILT_LEN * (0.88 + 0.12 * t);
+                trackPlanted();
+
+                // Save angles at landing moment for settle phase
+                if (p === TOTAL_STEP) {
+                    stepState.settleLeftAngle  = character.leftStilt.angle;
+                    stepState.settleRightAngle = character.rightStilt.angle;
+                }
+
+            } else {
+                // Phase 4: weight transferred — back leg swings smoothly to neutral
+                const st = (p - TOTAL_STEP) / SETTLE_FRAMES;
+                character.leftStilt.angle  = stepState.settleLeftAngle  * (1 - st);
+                character.rightStilt.angle = stepState.settleRightAngle * (1 - st);
+            }
+
+            if (p >= TOTAL_STEP + SETTLE_FRAMES) {
+                stepState.active = false;
+                stepState.activeFoot = stepState.activeFoot === 'left' ? 'right' : 'left';
+                character.leftStilt.angle  = 0;
+                character.rightStilt.angle = 0;
+                character.leftStilt.length  = STILT_LEN;
+                character.rightStilt.length = STILT_LEN;
+            }
+        }
+
+        function gameLoop() {
+            updateStep();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            character.draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        requestAnimationFrame(gameLoop);
+
+        document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft'})); });
+        document.getElementById('btnRight').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight'})); });
+    </script>
+</body>
+</html>
