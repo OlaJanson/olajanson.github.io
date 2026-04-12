@@ -41,9 +41,9 @@
             }
 
             draw() {
-                // Body shifts up as stilts grow so feet stay on ground
+                // Body lifts with stilt length and when standing on rocks
                 ctx.save();
-                ctx.translate(this.x, 200 - stiltLen);
+                ctx.translate(this.x, (characterGroundY - GROUND_Y) + 200 - stiltLen);
 
                 ctx.fillStyle = this.head.color;
                 ctx.fillRect(this.head.x, this.head.y, this.head.width, this.head.height);
@@ -93,13 +93,13 @@
             const lean = balanceState.lean;
             // Pivot around left foot ground contact
             const pivotX = this.x + this.leftStilt.hipX;
-            const pivotY = 420; // ground
+            const pivotY = characterGroundY;
 
             ctx.save();
             ctx.translate(pivotX, pivotY);
             ctx.rotate(lean);
             ctx.translate(-pivotX, -pivotY);
-            ctx.translate(this.x, 200 - stiltLen);
+            ctx.translate(this.x, (characterGroundY - GROUND_Y) + 200 - stiltLen);
 
             // Left stilt (planted)
             ctx.save();
@@ -289,6 +289,7 @@
                 character.rightStilt.angle = 0;
                 character.leftStilt.length  = stiltLen;
                 character.rightStilt.length = stiltLen;
+                characterGroundY = groundAtX(character.x);
             }
         }
 
@@ -321,6 +322,15 @@
                 h: 16 + (i * 53 % 38)
             });
         }
+
+        function groundAtX(wx) {
+            for (const r of rocks) {
+                if (wx > r.x && wx < r.x + r.w) return GROUND_Y - r.h;
+            }
+            return GROUND_Y;
+        }
+
+        let characterGroundY = GROUND_Y;
 
         let lastTime = null;
 
