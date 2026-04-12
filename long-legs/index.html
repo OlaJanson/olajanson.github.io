@@ -236,10 +236,7 @@
                 stepState.plantedWorldX = character.x + planted.hipX + Math.sin(planted.angle) * planted.length;
                 stepState.startGroundY = characterGroundY;
                 const activeHipX = stepState.activeFoot === 'left' ? character.leftStilt.hipX : character.rightStilt.hipX;
-                const rawLandingY = groundAtX(character.x + dir * stiltLen * 0.6 + activeHipX);
-                const climbHeight = characterGroundY - rawLandingY; // hur högt upp steget är
-                const maxClimb = stiltLen * 0.38; // fotklearens vid peaklyft
-                stepState.landingGroundY = climbHeight <= maxClimb ? rawLandingY : characterGroundY;
+                stepState.landingGroundY = groundAtX(character.x + dir * stiltLen * 0.6 + activeHipX);
             }
         });
 
@@ -275,7 +272,35 @@
                 character.x = stepState.startX + stepState.dir * (stiltLen * 0.6) * (t * t);
                 activeStilt.angle  = stepState.dir * 0.785 * (1 - t);
                 activeStilt.length = stiltLen * (0.88 + 0.12 * t);
-                characterGroundY = stepState.startGroundY + (stepState.landingGroundY - stepState.startGroundY) * (t * t);
+
+                // Live collision: kontrollera fotens position mot stenar
+                // Använd startGroundY som referens — där foten SKULLE vara utan höjdändring
+                const footX = character.x + activeStilt.hipX + Math.sin(activeStilt.angle) * activeStilt.length;
+                const footY0 = (stepState.startGroundY - GROUND_Y) + 200 - stiltLen
+                             + activeStilt.hipY + Math.cos(activeStilt.angle) * activeStilt.length;
+
+                let sideBlocked = false;
+                for (const r of rocks) {
+                    if (footX > r.x && footX < r.x + r.w) {
+                        const rockTop = GROUND_Y - r.h;
+                        if (footY0 < rockTop) {
+                            // Stensida: foten träffar väggen — blockera horisontell rörelse
+                            const edgeX = stepState.dir > 0 ? r.x : r.x + r.w;
+                            character.x = edgeX - activeStilt.hipX
+                                        - Math.sin(activeStilt.angle) * activeStilt.length;
+                            characterGroundY = stepState.startGroundY;
+                            sideBlocked = true;
+                        }
+                        break;
+                    }
+                }
+
+                if (!sideBlocked) {
+                    // Stentopp eller mark: lerpa höjden mjukt
+                    characterGroundY = stepState.startGroundY
+                        + (stepState.landingGroundY - stepState.startGroundY) * (t * t);
+                }
+
                 trackPlanted();
 
             } else {
