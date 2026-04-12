@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Render</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #0a0a1a;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        class Character {
+            constructor() {
+                // Character center x, can be changed to move character
+                this.x = canvas.width / 2;
+
+                this.head = { x: -11, y: 184, width: 22, height: 22, color: '#7af' };
+                this.leftEye = { x: -7, y: 191, width: 3, height: 3, color: '#012' };
+                this.rightEye = { x: 2, y: 191, width: 3, height: 3, color: '#012' };
+                this.torso = { x: -9, y: 206, width: 18, height: 14, color: '#7af' };
+                this.leftArm = { x: -13, y: 207, width: 4, height: 14, color: '#5cf' };
+                this.rightArm = { x: 9, y: 207, width: 4, height: 14, color: '#5cf' };
+                this.leftStilt = { x: -9, y: 220, width: 4, height: 200, color: '#5cf' };
+                this.rightStilt = { x: 5, y: 220, width: 4, height: 200, color: '#5cf' };
+                this.leftFoot = { x: -12, y: 416, width: 10, height: 5, color: '#aef' };
+                this.rightFoot = { x: 2, y: 416, width: 10, height: 5, color: '#aef' };
+            }
+
+            draw() {
+                // Ground spans full canvas — draw BEFORE translate
+                ctx.fillStyle = '#334';
+                ctx.fillRect(0, 420, canvas.width, canvas.height - 420);
+
+                // All character parts drawn relative to this.x
+                ctx.save();
+                ctx.translate(this.x, 0);
+
+                ctx.fillStyle = this.head.color;
+                ctx.fillRect(this.head.x, this.head.y, this.head.width, this.head.height);
+
+                ctx.fillStyle = this.leftEye.color;
+                ctx.fillRect(this.leftEye.x, this.leftEye.y, this.leftEye.width, this.leftEye.height);
+                ctx.fillStyle = this.rightEye.color;
+                ctx.fillRect(this.rightEye.x, this.rightEye.y, this.rightEye.width, this.rightEye.height);
+
+                ctx.fillStyle = this.torso.color;
+                ctx.fillRect(this.torso.x, this.torso.y, this.torso.width, this.torso.height);
+
+                ctx.fillStyle = this.leftArm.color;
+                ctx.fillRect(this.leftArm.x, this.leftArm.y, this.leftArm.width, this.leftArm.height);
+                ctx.fillStyle = this.rightArm.color;
+                ctx.fillRect(this.rightArm.x, this.rightArm.y, this.rightArm.width, this.rightArm.height);
+
+                ctx.fillStyle = this.leftStilt.color;
+                ctx.fillRect(this.leftStilt.x, this.leftStilt.y, this.leftStilt.width, this.leftStilt.height);
+                ctx.fillStyle = this.rightStilt.color;
+                ctx.fillRect(this.rightStilt.x, this.rightStilt.y, this.rightStilt.width, this.rightStilt.height);
+
+                ctx.fillStyle = this.leftFoot.color;
+                ctx.fillRect(this.leftFoot.x, this.leftFoot.y, this.leftFoot.width, this.leftFoot.height);
+                ctx.fillStyle = this.rightFoot.color;
+                ctx.fillRect(this.rightFoot.x, this.rightFoot.y, this.rightFoot.width, this.rightFoot.height);
+
+                ctx.restore();
+            }
+        }
+
+        const character = new Character();
+
+        const STEP = character.leftStilt.height * 0.6;
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') character.x += STEP;
+            if (e.key === 'ArrowLeft')  character.x -= STEP;
+        });
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            character.draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
