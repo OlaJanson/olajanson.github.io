@@ -12,10 +12,12 @@
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <canvas id="gameCanvas" width="900" height="580"></canvas>
     <div class="controls">
+        <button class="btn" id="btnUp">&#8593;</button>
         <button class="btn" id="btnLeft">&#8592;</button>
         <button class="btn" id="btnRight">&#8594;</button>
+        <button class="btn" id="btnDown">&#8595;</button>
     </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -39,13 +41,9 @@
             }
 
             draw() {
-                // Ground spans full canvas — draw BEFORE translate
-                ctx.fillStyle = '#334';
-                ctx.fillRect(0, 420, canvas.width, canvas.height - 420);
-
-                // All character parts drawn relative to this.x
+                // Body shifts up as stilts grow so feet stay on ground
                 ctx.save();
-                ctx.translate(this.x, 0);
+                ctx.translate(this.x, 200 - stiltLen);
 
                 ctx.fillStyle = this.head.color;
                 ctx.fillRect(this.head.x, this.head.y, this.head.width, this.head.height);
@@ -93,9 +91,14 @@
 
         const character = new Character();
 
-        const STEP = character.leftStilt.length * 0.6;
-        const STEP_FRAMES = 50;
-        const SETTLE_FRAMES = 15;
+        let stiltLen = 200;
+        const STILT_MIN = 80;
+        const STILT_MAX = 400;
+        const LIFT_FRAMES  = 22;   // leg swings up to 45°
+        const PAUSE_FRAMES = 10;   // hold at peak
+        const FALL_FRAMES  = 42;   // body falls forward, foot lands
+        const SETTLE_FRAMES = 30;  // back leg swings to neutral
+        const TOTAL_STEP   = LIFT_FRAMES + PAUSE_FRAMES + FALL_FRAMES;
 
         let stepState = {
             active: false,
@@ -107,6 +110,18 @@
             settleLeftAngle: 0,
             settleRightAngle: 0
         };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                stiltLen = Math.max(STILT_MIN, Math.min(STILT_MAX,
+                    stiltLen + (e.key === 'ArrowUp' ? 12 : -12)));
+                if (!stepState.active) {
+                    character.leftStilt.length  = stiltLen;
+                    character.rightStilt.length = stiltLen;
+                }
+            }
+        });
 
         document.addEventListener('keydown', function(e) {
             if (stepState.active) return;
@@ -125,57 +140,91 @@
             if (!stepState.active) return;
 
             stepState.progress++;
+            const p = stepState.progress;
+            const activeStilt  = stepState.activeFoot === 'left' ? character.leftStilt  : character.rightStilt;
+            const plantedStilt = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
 
-            if (stepState.progress <= STEP_FRAMES) {
-                const t = stepState.progress / STEP_FRAMES;
+            function trackPlanted() {
+                const relX = stepState.plantedWorldX - character.x - plantedStilt.hipX;
+                plantedStilt.angle = Math.asin(Math.max(-0.9, Math.min(0.9, relX / plantedStilt.length)));
+            }
 
-                // Ease-in: slow lift phase, fast fall
-                character.x = stepState.startX + stepState.dir * STEP * (t * t);
+            if (p <= LIFT_FRAMES) {
+                // Phase 1: body still, active leg lifts to 45°
+                const t = p / LIFT_FRAMES;
+                activeStilt.angle  = stepState.dir * 0.785 * t;
+                activeStilt.length = stiltLen * (1 - 0.12 * t);
+                trackPlanted();
 
-                // Active stilt: arc up and back down
-                const stilt = stepState.activeFoot === 'left' ? character.leftStilt : character.rightStilt;
-                const arc = Math.sin(t * Math.PI);
-                stilt.angle = stepState.dir * 0.4 * arc;
-                stilt.length = 200 * (1 - 0.15 * arc);
+            } else if (p <= LIFT_FRAMES + PAUSE_FRAMES) {
+                // Phase 2: hold at peak — brief pause before fall
+                activeStilt.angle  = stepState.dir * 0.785;
+                activeStilt.length = stiltLen * 0.88;
+                trackPlanted();
 
-                // Planted stilt: foot stays in world space
-                const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
-                const relX = stepState.plantedWorldX - character.x - planted.hipX;
-                planted.angle = Math.asin(Math.max(-0.7, Math.min(0.7, relX / planted.length)));
+            } else if (p <= TOTAL_STEP) {
+                // Phase 3: body falls forward, active leg extends to ground
+                const t = (p - LIFT_FRAMES - PAUSE_FRAMES) / FALL_FRAMES;
+                character.x = stepState.startX + stepState.dir * (stiltLen * 0.6) * (t * t);
+                activeStilt.angle  = stepState.dir * 0.785 * (1 - t);
+                activeStilt.length = stiltLen * (0.88 + 0.12 * t);
+                trackPlanted();
 
-                // Save angles at end of step for settle interpolation
-                if (stepState.progress === STEP_FRAMES) {
-                    stepState.settleLeftAngle = character.leftStilt.angle;
+                // Save angles at landing moment for settle phase
+                if (p === TOTAL_STEP) {
+                    stepState.settleLeftAngle  = character.leftStilt.angle;
                     stepState.settleRightAngle = character.rightStilt.angle;
                 }
+
             } else {
-                // Settle phase: hold spread then smoothly return to neutral
-                const st = (stepState.progress - STEP_FRAMES) / SETTLE_FRAMES;
-                character.leftStilt.angle = stepState.settleLeftAngle * (1 - st);
+                // Phase 4: weight transferred — back leg swings smoothly to neutral
+                const st = (p - TOTAL_STEP) / SETTLE_FRAMES;
+                character.leftStilt.angle  = stepState.settleLeftAngle  * (1 - st);
                 character.rightStilt.angle = stepState.settleRightAngle * (1 - st);
             }
 
-            if (stepState.progress >= STEP_FRAMES + SETTLE_FRAMES) {
+            if (p >= TOTAL_STEP + SETTLE_FRAMES) {
                 stepState.active = false;
                 stepState.activeFoot = stepState.activeFoot === 'left' ? 'right' : 'left';
-                character.leftStilt.angle = 0;
+                character.leftStilt.angle  = 0;
                 character.rightStilt.angle = 0;
-                character.leftStilt.length = 200;
-                character.rightStilt.length = 200;
+                character.leftStilt.length  = stiltLen;
+                character.rightStilt.length = stiltLen;
             }
         }
+
+        const GROUND_Y = 420;
 
         function gameLoop() {
             updateStep();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const zoom = Math.max(0.45, Math.min(1.5, 200 / stiltLen));
+            const ax = canvas.width / 2;
+            ctx.save();
+            ctx.translate(ax * (1 - zoom), GROUND_Y * (1 - zoom));
+            ctx.scale(zoom, zoom);
+
+            // Ground
+            ctx.fillStyle = '#334';
+            ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+
+            // Ceiling — visible when zoomed out to ~2x
+            ctx.fillStyle = '#334';
+            ctx.fillRect(0, -340, canvas.width, 60);
+
             character.draw();
+            ctx.restore();
+
             requestAnimationFrame(gameLoop);
         }
 
         requestAnimationFrame(gameLoop);
 
-        document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft'})); });
+        document.getElementById('btnUp').addEventListener('touchstart',    function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowUp'})); });
+        document.getElementById('btnLeft').addEventListener('touchstart',  function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft'})); });
         document.getElementById('btnRight').addEventListener('touchstart', function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight'})); });
+        document.getElementById('btnDown').addEventListener('touchstart',  function(e){ e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown'})); });
     </script>
 </body>
 </html>
