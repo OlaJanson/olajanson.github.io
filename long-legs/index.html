@@ -236,7 +236,10 @@
                 stepState.plantedWorldX = character.x + planted.hipX + Math.sin(planted.angle) * planted.length;
                 stepState.startGroundY = characterGroundY;
                 const activeHipX = stepState.activeFoot === 'left' ? character.leftStilt.hipX : character.rightStilt.hipX;
-                stepState.landingGroundY = groundAtX(character.x + dir * stiltLen * 0.6 + activeHipX);
+                const rawLandingY = groundAtX(character.x + dir * stiltLen * 0.6 + activeHipX);
+                const climbHeight = characterGroundY - rawLandingY; // hur högt upp steget är
+                const maxClimb = stiltLen * 0.38; // fotklearens vid peaklyft
+                stepState.landingGroundY = climbHeight <= maxClimb ? rawLandingY : characterGroundY;
             }
         });
 
