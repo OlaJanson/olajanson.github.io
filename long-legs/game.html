@@ -93,7 +93,7 @@
 
         let stiltLen = 200;
         const STILT_MIN = 80;
-        const STILT_MAX = 500;
+        const STILT_MAX = 400;
         const LIFT_FRAMES  = 22;   // leg swings up to 45°
         const PAUSE_FRAMES = 10;   // hold at peak
         const FALL_FRAMES  = 42;   // body falls forward, foot lands
@@ -205,8 +205,13 @@
             ctx.translate(ax * (1 - zoom), GROUND_Y * (1 - zoom));
             ctx.scale(zoom, zoom);
 
+            // Ground
             ctx.fillStyle = '#334';
             ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+
+            // Ceiling — visible when zoomed out to ~2x
+            ctx.fillStyle = '#334';
+            ctx.fillRect(0, -340, canvas.width, 60);
 
             character.draw();
             ctx.restore();
