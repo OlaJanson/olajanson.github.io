@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Render</title>
+    <title>Long Legs</title>
     <style>
         body { margin: 0; background: #0a0a1a; display: flex; flex-direction: column; align-items: center; }
         canvas { display: block; }
@@ -100,20 +100,21 @@
             active: false,
             progress: 0,
             dir: 0,
-            activeFoot: 'left'
+            activeFoot: 'left',
+            startX: 0,
+            plantedWorldX: 0
         };
 
         document.addEventListener('keydown', function(e) {
             if (stepState.active) return;
-            if (e.key === 'ArrowRight') {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const dir = e.key === 'ArrowRight' ? 1 : -1;
                 stepState.active = true;
                 stepState.progress = 0;
-                stepState.dir = 1;
-            }
-            if (e.key === 'ArrowLeft') {
-                stepState.active = true;
-                stepState.progress = 0;
-                stepState.dir = -1;
+                stepState.dir = dir;
+                stepState.startX = character.x;
+                const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
+                stepState.plantedWorldX = character.x + planted.hipX + Math.sin(planted.angle) * planted.length;
             }
         });
 
@@ -123,14 +124,19 @@
             stepState.progress++;
             const t = stepState.progress / STEP_FRAMES;
 
+            // Ease-in: slow lift phase, fast fall
+            character.x = stepState.startX + stepState.dir * STEP * (t * t);
+
+            // Active stilt: arc up and back down
             const stilt = stepState.activeFoot === 'left' ? character.leftStilt : character.rightStilt;
+            const arc = Math.sin(t * Math.PI);
+            stilt.angle = stepState.dir * 0.4 * arc;
+            stilt.length = 200 * (1 - 0.15 * arc);
+
+            // Planted stilt: foot stays in world space
             const planted = stepState.activeFoot === 'left' ? character.rightStilt : character.leftStilt;
-
-            stilt.angle = stepState.dir * 0.35 * Math.sin(t * Math.PI);
-            stilt.length = 200 * (1 - 0.12 * Math.sin(t * Math.PI));
-            planted.angle = stepState.dir * (-0.12) * Math.sin(t * Math.PI);
-
-            character.x += stepState.dir * STEP / STEP_FRAMES;
+            const relX = stepState.plantedWorldX - character.x - planted.hipX;
+            planted.angle = Math.asin(Math.max(-0.7, Math.min(0.7, relX / planted.length)));
 
             if (stepState.progress >= STEP_FRAMES) {
                 stepState.active = false;
