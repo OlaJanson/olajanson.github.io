@@ -89,6 +89,63 @@
             }
         }
 
+        Character.prototype.drawBalance = function() {
+            const lean = balanceState.lean;
+            // Pivot around left foot ground contact
+            const pivotX = this.x + this.leftStilt.hipX;
+            const pivotY = 420; // ground
+
+            ctx.save();
+            ctx.translate(pivotX, pivotY);
+            ctx.rotate(lean);
+            ctx.translate(-pivotX, -pivotY);
+            ctx.translate(this.x, 200 - stiltLen);
+
+            // Left stilt (planted)
+            ctx.save();
+            ctx.translate(this.leftStilt.hipX, this.leftStilt.hipY);
+            ctx.fillStyle = this.leftStilt.color;
+            ctx.fillRect(-2, 0, this.leftStilt.width, stiltLen);
+            ctx.restore();
+            // Left foot
+            ctx.fillStyle = this.leftFoot.color;
+            ctx.fillRect(this.leftStilt.hipX - 5, this.leftStilt.hipY + stiltLen - 2,
+                         this.leftFoot.width, this.leftFoot.height);
+
+            // Right stilt (lifted, angled out)
+            ctx.save();
+            ctx.translate(this.rightStilt.hipX, this.rightStilt.hipY);
+            ctx.rotate(-0.5); // angle out to the right
+            ctx.fillStyle = this.rightStilt.color;
+            ctx.fillRect(-2, 0, this.rightStilt.width, stiltLen * 0.85);
+            ctx.restore();
+            // Right foot (at end of angled stilt)
+            const rfX = this.rightStilt.hipX + Math.sin(0.5) * stiltLen * 0.85;
+            const rfY = this.rightStilt.hipY + Math.cos(0.5) * stiltLen * 0.85;
+            ctx.fillStyle = this.rightFoot.color;
+            ctx.fillRect(rfX - 5, rfY - 2, this.rightFoot.width, this.rightFoot.height);
+
+            // Torso
+            ctx.fillStyle = this.torso.color;
+            ctx.fillRect(this.torso.x, this.torso.y, this.torso.width, this.torso.height);
+
+            // Arms — wider in balance mode
+            ctx.fillStyle = this.leftArm.color;
+            ctx.fillRect(this.leftArm.x - 6, this.leftArm.y, this.leftArm.width + 2, this.leftArm.height);
+            ctx.fillStyle = this.rightArm.color;
+            ctx.fillRect(this.rightArm.x + 6, this.rightArm.y, this.rightArm.width + 2, this.rightArm.height);
+
+            // Head
+            ctx.fillStyle = this.head.color;
+            ctx.fillRect(this.head.x, this.head.y, this.head.width, this.head.height);
+            ctx.fillStyle = this.leftEye.color;
+            ctx.fillRect(this.leftEye.x, this.leftEye.y, this.leftEye.width, this.leftEye.height);
+            ctx.fillStyle = this.rightEye.color;
+            ctx.fillRect(this.rightEye.x, this.rightEye.y, this.rightEye.width, this.rightEye.height);
+
+            ctx.restore();
+        };
+
         const character = new Character();
 
         let stiltLen = 200;
@@ -112,6 +169,18 @@
             landingSaved: false
         };
 
+        let balanceState = {
+            active: false,
+            lean: 0,        // radians, positive = lean right
+            velocity: 0,    // rad/s
+            fallen: false
+        };
+
+        const BALANCE_GRAVITY  = 1.4;  // lean acceleration per rad of lean
+        const BALANCE_DRIFT    = 0.25; // random perturbation strength
+        const BALANCE_MAX_LEAN = 0.55; // rad before falling (~31°)
+        const BALANCE_CORRECT  = 1.8;  // correction impulse per keypress
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -125,7 +194,29 @@
         });
 
         document.addEventListener('keydown', function(e) {
+            if ((e.key === 'z' || e.key === 'Z') && !stepState.active) {
+                if (balanceState.active) {
+                    balanceState.active = false;
+                    balanceState.lean = 0;
+                    balanceState.velocity = 0;
+                    balanceState.fallen = false;
+                } else {
+                    balanceState.active = true;
+                    balanceState.lean = 0;
+                    balanceState.velocity = 0;
+                    balanceState.fallen = false;
+                }
+            }
+            // Balance correction with arrow keys
+            if (balanceState.active && !balanceState.fallen) {
+                if (e.key === 'ArrowLeft')  balanceState.velocity -= BALANCE_CORRECT * 0.016;
+                if (e.key === 'ArrowRight') balanceState.velocity += BALANCE_CORRECT * 0.016;
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
             if (stepState.active) return;
+            if (balanceState.active) return;
             if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                 const dir = e.key === 'ArrowRight' ? 1 : -1;
                 stepState.active = true;
@@ -195,6 +286,24 @@
             }
         }
 
+        function updateBalance(dt) {
+            if (!balanceState.active || balanceState.fallen) return;
+            // Inverted pendulum: lean accelerates in lean direction
+            balanceState.velocity += balanceState.lean * BALANCE_GRAVITY * dt;
+            balanceState.velocity += (Math.random() - 0.5) * BALANCE_DRIFT * dt;
+            balanceState.lean += balanceState.velocity * dt;
+            if (Math.abs(balanceState.lean) > BALANCE_MAX_LEAN) {
+                balanceState.fallen = true;
+                setTimeout(function() {
+                    balanceState.active = false;
+                    balanceState.fallen = false;
+                    balanceState.lean = 0;
+                    balanceState.velocity = 0;
+                    character.x = canvas.width / 2;
+                }, 800);
+            }
+        }
+
         const GROUND_Y = 420;
         let lastTime = null;
 
@@ -203,6 +312,7 @@
             const dt = Math.min((timestamp - lastTime) / 1000, 0.05); // cap at 50ms
             lastTime = timestamp;
             updateStep(dt);
+            updateBalance(dt);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const zoom = Math.max(0.45, Math.min(1.5, 200 / stiltLen));
@@ -219,7 +329,11 @@
             ctx.fillStyle = '#334';
             ctx.fillRect(0, -340, canvas.width, 60);
 
-            character.draw();
+            if (balanceState.active) {
+                character.drawBalance();
+            } else {
+                character.draw();
+            }
             ctx.restore();
 
             requestAnimationFrame(gameLoop);
