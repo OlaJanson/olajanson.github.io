@@ -1,0 +1,97 @@
+@use "./base.scss";
+
+/* Garden-whisperer design — varm papperston, terracotta/moss, Fraunces/Labrada */
+
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Labrada:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+/* Paper texture background */
+body {
+  background-image:
+    radial-gradient(at 20% 10%, color-mix(in oklab, #d4a84a 20%, transparent) 0px, transparent 55%),
+    radial-gradient(at 80% 60%, color-mix(in oklab, #b55a3e 15%, transparent) 0px, transparent 60%),
+    radial-gradient(at 40% 90%, color-mix(in oklab, #5e8c5e 12%, transparent) 0px, transparent 55%);
+  background-attachment: fixed;
+}
+
+/* Typography */
+.page h1, .page h2, .page h3, .page h4,
+.article-title,
+.section-title {
+  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.page h1 { font-weight: 900; letter-spacing: -0.02em; }
+.page h2 { font-size: 1.9rem; margin-top: 2.2em; }
+.page h3 { font-size: 1.35rem; font-style: italic; }
+
+/* Article content */
+.article-content {
+  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-size: 1.18rem;
+  line-height: 1.75;
+}
+
+.article-content p { margin: 1.1em 0; }
+
+.article-content a {
+  color: var(--secondary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in oklab, var(--secondary) 40%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+.article-content a:hover { text-decoration-color: var(--secondary); }
+
+.article-content blockquote {
+  border-left: 3px solid var(--secondary);
+  padding-left: 1.25em;
+  font-style: italic;
+  color: var(--darkgray);
+  margin: 1.5em 0;
+}
+
+.article-content code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+  background: var(--lightgray);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.article-content pre {
+  background: #2a2520;
+  color: #e8e0d8;
+  padding: 1em 1.2em;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+.article-content pre code { background: transparent; padding: 0; color: inherit; }
+
+.article-content img {
+  border-radius: 4px;
+  margin: 1.5em 0;
+  box-shadow: 0 6px 20px -8px rgba(0,0,0,0.2);
+}
+
+/* Sidebar header */
+.page-title {
+  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+}
+
+/* Maturity badges inspired by garden-whisperer */
+.maturity-seedling::before { content: "🌱 "; }
+.maturity-budding::before { content: "🌿 "; }
+.maturity-evergreen::before { content: "🌳 "; }
+
+/* Selection */
+::selection {
+  background: color-mix(in oklab, var(--secondary) 70%, transparent);
+  color: var(--light);
+}
