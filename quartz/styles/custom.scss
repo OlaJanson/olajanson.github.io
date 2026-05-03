@@ -1,10 +1,7 @@
 @use "./base.scss";
 
-/* Garden-whisperer design — varm papperston, terracotta/moss, Fraunces/Labrada */
-
-/* Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Labrada:ital,wght@0,100..900;1,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
+/* Garden-whisperer design — varm papperston, terracotta/moss, Labrada/IBM Plex Mono */
+/* Fonts are loaded via quartz.config.ts -> googleFonts */
 
 /* Paper texture background */
 body {

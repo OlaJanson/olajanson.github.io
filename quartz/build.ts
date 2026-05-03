@@ -201,6 +201,7 @@ async function rebuild(changes: ChangeEvent[], clientRefresh: () => void, buildD
   }
 
   const staticResources = getStaticResourcesFromPlugins(ctx)
+  staticResources.pages = processedFiles
   const pathsToParse: FilePath[] = []
   for (const [fp, type] of Object.entries(changesSinceLastBuild)) {
     if (type === "delete" || path.extname(fp) !== ".md") continue

@@ -15,6 +15,7 @@ export async function emitContent(ctx: BuildCtx, content: ProcessedContent[]) {
 
   let emittedFiles = 0
   const staticResources = getStaticResourcesFromPlugins(ctx)
+  staticResources.pages = content
   await Promise.all(
     cfg.plugins.emitters.map(async (emitter) => {
       try {

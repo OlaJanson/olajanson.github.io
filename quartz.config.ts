@@ -12,7 +12,7 @@ const config: QuartzConfig = {
     pageTitleSuffix: " — Digital Garden",
     enableSPA: true,
     enablePopovers: true,
-    locale: "sv-SE",
+    locale: "en-US",
     baseUrl: "olajanson.se",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",

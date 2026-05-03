@@ -1,5 +1,6 @@
 ---
 title: "Om mig"
+stage: seedling
 tags: [meta]
 ---
 

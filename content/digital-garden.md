@@ -1,5 +1,6 @@
 ---
 title: "Vad är en digital trädgård?"
+stage: budding
 tags: [meta, gardening]
 ---
 
@@ -15,4 +16,4 @@ Istället för att publicera färdiga artiklar i kronologisk ordning (som en blo
 
 Läs mer hos [Maggie Appleton](https://maggieappleton.com/garden-history) om varför digitala trädgårdar är ett kraftfullt sätt att tänka högt på webben.
 
-Se även: [[om-mig|Om mig]]
+Se även: [[Om mig]]
