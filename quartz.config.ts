@@ -8,8 +8,8 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Ola Janson",
-    pageTitleSuffix: " — Digital Garden",
+    pageTitle: "En mytomaniens lögndetektorfabrik",
+    pageTitleSuffix: " — Slumpmässiga tankar från en schweizisk armékniv",
     enableSPA: true,
     enablePopovers: true,
     locale: "en-US",
