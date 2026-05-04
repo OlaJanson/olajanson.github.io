@@ -27,7 +27,17 @@ export const defaultContentPageLayout: PageLayout = {
   ],
   left: [],
   right: [
+    Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
+    Component.Flex({
+      components: [
+        {
+          Component: Component.Search(),
+          grow: true,
+        },
+        { Component: Component.Darkmode() },
+      ],
+    }),
   ],
 }
 
