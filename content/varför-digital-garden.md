@@ -10,7 +10,7 @@ En student vars intresserad primärt var inom skrivande delade en sida och sa: "
 
 Och det fick mig att inse: hur jävla mycket vi sitter fast i andras affärssystem. Och affärsmodeller. Vi sitter fast för att de har övertygat oss om att det här är det enda sättet att göra det — att det är så mycket enklare. Och det anser jag är bevisligen inte sant, speciellt inte nu med hjälp av AI.
 
-Jag läste vidare på Maggies sida. Jag läste hennes artikel om digital gardens. Jag nästan förbannad, kanske mest på mig själv — hur fan har jag missat det här? Hur har det här gått mig förbi? Why was I not invited to this party?
+Jag läste vidare på Maggies sida. Jag läste hennes artikel om [digital gardens](https://maggieappleton.com/garden-history). Jag blev nästan förbannad men mest på mig själv — hur fan har jag missat det här? Hur har det här gått mig förbi? Why was I not invited to this party?
 
 Det satte nämligen fingret på exakt det som jag har känt saknas just nu i webbsammanhang. Jag känner, som många, att min tilltro till sociala medier helt gått förlorad. Sociala medier handlar om att sälja sitt innehåll till någon annan och vara helt i händerna på någon annans affärsmodell. Där du har noll kontroll eller noll möjligheter att göra någonting om du inte är otroligt följsam och hela tiden försöker hacka koden för att go viral.
 
@@ -23,7 +23,3 @@ Jag har använt Obsidian i många, många år nu. Och bara det — att skriva i 
 Slutsatsen i korthet – digital gardening är som gjort för mig.
 
 Sedan vet jag inte om det bara blir ytterligare en gravplats på internet där bokstäver och ord får tyna bort och till slut hamna i Wayback Machine. Det får tiden utvisa.
-
-## Inspirationen: Maggie Appleton
-
-Det finns jättemånga artiklar skrivna om Digital Gardens och andra skrivande som jag ska länka till. Jag har nästan enbart tittat på en person — Maggie Appleton — hennes förklaringar av hur det fungerar var en riktig ögonöppnare och låste upp jättemycket för mig. Och sen var det också layouten och den estetiska aspekten — gränslandet mellan estetik och funktionalitet — som var oöverträffat bra jämfört med mycket annat.

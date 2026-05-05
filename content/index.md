@@ -2,7 +2,10 @@
 title: "En mytoman i en lögndetektorfabrik"
 stage: evergreen
 tags: [meta, garden]
+feature: dithering-effect-hus_trans.png
 ---
+
+![](dithering-effect-hus_trans.png)
 
 Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral eller göra något som skulle lämpa sig på linjära plattformar eller sociala medier. Här har jag full kontroll.
 
