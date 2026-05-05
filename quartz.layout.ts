@@ -30,7 +30,7 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Graph({
       localGraph: {
         showTags: false,
-        depth: 2,
+        depth: 3,
       },
       globalGraph: {
         showTags: false,
@@ -44,6 +44,7 @@ export const defaultContentPageLayout: PageLayout = {
           grow: true,
         },
         { Component: Component.Darkmode() },
+        { Component: Component.LanguageToggle() },
       ],
     }),
   ],

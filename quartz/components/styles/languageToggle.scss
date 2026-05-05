@@ -1,0 +1,37 @@
+.language-toggle {
+  font-family: var(--bodyFont);
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: none;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  color: var(--darkgray);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+}
+
+.language-toggle .lang-sv,
+.language-toggle .lang-en {
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.language-toggle .lang-sv.active,
+.language-toggle .lang-en.active {
+  opacity: 1;
+  font-weight: 700;
+}
+
+.language-toggle .lang-separator {
+  opacity: 0.3;
+  font-size: 0.75rem;
+}
