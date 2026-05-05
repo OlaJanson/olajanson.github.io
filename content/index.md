@@ -10,3 +10,4 @@ Det här är min **digitala trädgård**: en samling noter, essäer och idéer i
 
 - [[Om mig]]
 - [[Vad är en digital trädgård]]
+- [[varför-digital-garden|Varför digital garden?]]
