@@ -6,10 +6,10 @@
 /* Paper texture background */
 body {
   background-image:
-    radial-gradient(at 20% 10%, color-mix(in oklab, #d4a84a 35%, transparent) 0px, transparent 50%),
-    radial-gradient(at 80% 60%, color-mix(in oklab, #b55a3e 30%, transparent) 0px, transparent 55%),
-    radial-gradient(at 40% 90%, color-mix(in oklab, #5e8c5e 25%, transparent) 0px, transparent 50%),
-    radial-gradient(at 50% 40%, color-mix(in oklab, #e8d5b0 20%, transparent) 0px, transparent 60%);
+    radial-gradient(at 20% 10%, color-mix(in oklab, #d4a84a 45%, transparent) 0px, transparent 50%),
+    radial-gradient(at 80% 60%, color-mix(in oklab, #b55a3e 40%, transparent) 0px, transparent 55%),
+    radial-gradient(at 40% 90%, color-mix(in oklab, #5e8c5e 35%, transparent) 0px, transparent 50%),
+    radial-gradient(at 50% 40%, color-mix(in oklab, #e8d5b0 30%, transparent) 0px, transparent 60%);
   background-attachment: fixed;
 }
 
@@ -22,7 +22,7 @@ body {
   letter-spacing: -0.01em;
 }
 
-.page h1 { font-weight: 900; letter-spacing: -0.02em; }
+.page h1 { font-weight: 650; font-size: 3rem; letter-spacing: -0.02em; }
 .page h2 { font-size: 1.9rem; margin-top: 2.2em; }
 .page h3 { font-size: 1.35rem; font-style: italic; }
 
