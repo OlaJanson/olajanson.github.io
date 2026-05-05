@@ -12,7 +12,7 @@ const config: QuartzConfig = {
     pageTitleSuffix: " — Slumpmässiga tankar från en schweizisk armékniv",
     enableSPA: true,
     enablePopovers: true,
-    locale: "en-US",
+    locale: "sv-SE",
     baseUrl: "olajanson.se",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
