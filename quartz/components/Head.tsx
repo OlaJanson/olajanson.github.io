@@ -86,6 +86,12 @@ export default (() => {
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
 
+        {/* WebMentions */}
+        <link rel="webmention" href="https://webmention.io/olajanson.se/webmention" />
+        <link rel="pingback" href="https://webmention.io/xmlrpc" />
+        {/* IndieAuth – domänverifiering via GitHub */}
+        <link rel="me" href="https://github.com/OlaJanson" />
+
         {css.map((resource) => CSSResourceToStyleElement(resource, true))}
         {js
           .filter((resource) => resource.loadTime === "beforeDOMReady")

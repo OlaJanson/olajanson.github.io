@@ -15,6 +15,9 @@ from pathlib import Path
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "mistral-nemo"
 
+# Mirror .en.md files here for editing in Obsidian (set to None to disable)
+OBSIDIAN_MIRROR = Path.home() / "Dokument/Vaul II/5. Utveckla/digital-garden/publicerat"
+
 PROMPT = """Translate the following Swedish markdown article to natural, fluent English.
 
 Rules:
@@ -65,6 +68,8 @@ def translate_file(src: Path) -> Path:
     translated = translate(content)
     translated = add_en_to_wikilinks(translated)
     en_path.write_text(translated, encoding="utf-8")
+    if OBSIDIAN_MIRROR and OBSIDIAN_MIRROR.exists():
+        (OBSIDIAN_MIRROR / en_path.name).write_text(translated, encoding="utf-8")
     print("✓")
     return en_path
 
