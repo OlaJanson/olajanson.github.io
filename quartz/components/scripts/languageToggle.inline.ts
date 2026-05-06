@@ -12,12 +12,13 @@ function setLang(lang: string) {
   document.querySelectorAll(".lang-sv, .lang-en").forEach((el) => {
     el.classList.toggle("active", el.classList.contains(`lang-${lang}`))
   })
-  // Redirect to appropriate version if .en.md / .sv.md exists
   const slug = document.body.dataset.slug
   if (slug) {
-    const targetSlug = lang === "en" ? `${slug}.en` : slug.replace(/\.en$/, "")
-    if (targetSlug !== slug) {
-      window.history.replaceState(null, "", `/${targetSlug}`)
+    const currentIsEn = slug.endsWith(".en")
+    if (lang === "en" && !currentIsEn) {
+      window.location.href = `/${slug}.en`
+    } else if (lang === "sv" && currentIsEn) {
+      window.location.href = `/${slug.replace(/\.en$/, "")}`
     }
   }
 }
