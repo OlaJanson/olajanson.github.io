@@ -25,7 +25,7 @@ const config: QuartzConfig = {
       cdnCaching: true,
       typography: {
         header: "Labrada",
-        body: "Labrada",
+        body: { name: "Labrada", weights: [300, 400, 700] },
         code: "IBM Plex Mono",
       },
       colors: {
