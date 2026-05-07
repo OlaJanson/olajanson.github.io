@@ -16,6 +16,10 @@ const config: QuartzConfig = {
     baseUrl: "olajanson.se",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
+    analytics: {
+      provider: "google",
+      tagId: "G-4N2T47HE65",
+    },
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
