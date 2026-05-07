@@ -65,6 +65,9 @@ def translate_file(src: Path) -> Path:
     print(f"  {src.name} → {en_path.name} ...", end=" ", flush=True)
     content = src.read_text(encoding="utf-8")
     translated = translate(content)
+    translated = translated.rstrip()
+    if translated.endswith("\n---"):
+        translated = translated[:-4].rstrip()
     translated = add_en_to_wikilinks(translated)
     en_path.write_text(translated, encoding="utf-8")
     if OBSIDIAN_MIRROR and OBSIDIAN_MIRROR.exists():
