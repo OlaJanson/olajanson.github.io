@@ -26,6 +26,18 @@ body {
 .page h2 { font-size: 1.9rem; margin-top: 2.2em; }
 .page h3 { font-size: 1.35rem; font-style: italic; }
 
+/* h5 som bildtext */
+.article-content h5 {
+  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--darkgray);
+  margin: -1em 0 1.5em 0;
+  text-align: center;
+  letter-spacing: 0;
+}
+
 /* Article content */
 .article-content {
   font-family: "Labrada", ui-serif, Georgia, serif;

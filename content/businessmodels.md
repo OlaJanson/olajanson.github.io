@@ -8,7 +8,7 @@ tags:
 ---
 
 ![](mandrake.png)
-Business models, busines schmodels sa Mandrake och gjorde en magisk gest.
+##### Business models, busines schmodels sa Mandrake och gjorde en magisk gest.
 
 > "En **affärsmodell** eller **företagsmodell**, engelska _business model_, är i [företagsekonomi](https://sv.wikipedia.org/wiki/F%C3%B6retagsekonomi "Företagsekonomi") en teoretisk beskrivning av hur ett [företag](https://sv.wikipedia.org/wiki/F%C3%B6retag "Företag"), eller en affärsverksamhet, är tänkt att fungera. Det är ett konceptuellt verktyg som innehåller en uppsättning komponenter och beskriver deras inbördes relationer på ett sådant sätt att affärslogiken för en viss verksamhet konkret kan beskrivas." https://sv.wikipedia.org/wiki/Aff%C3%A4rsmodell
 
