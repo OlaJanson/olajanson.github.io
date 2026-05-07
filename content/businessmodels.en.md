@@ -21,4 +21,3 @@ So-called memory is another feature that is also part of the hidden business mod
 The last example is the various strategies of social media platforms to succeed. You should post x number of times per day, you should post at certain times, you should be easy-going and predictable. Why? Well, it's not for users to have a better experience. You might understand where I'm going with this by now. It's because frequent posting benefits the social media platforms themselves. They want us to believe that this behavior is necessary to succeed but in reality, it's part of a smart business model that generates content for the platform and entices us with promises of virality. Like the American dream but for content creation.
 
 In conclusion: Business models should be transparent. If they're hidden under layers of manipulative user design and packaged as something you have to adapt to, there's a risk that you've been tricked.
----
