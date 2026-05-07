@@ -29,7 +29,6 @@ Rules:
 - Output ONLY the translated text — no explanations, no preamble, nothing else
 
 Article:
----
 {text}"""
 
 
