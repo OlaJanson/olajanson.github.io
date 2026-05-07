@@ -19,7 +19,7 @@ Men detta handlar inte om att vuxna inte låter barn göra kojor (vilket kanske 
 
 Betänk att jag sitter framför min dator och killgissar. Jag skulle som många andra +50 vita män arbeta upp lite tangentbordsvrede och skylla intilliggande moderna fenomen som telefoner, spel, film eller annan skit. Och visst har det säkert att göra med att barn i mindre utsträckning idag rör sig i skog och mark. Allt mer sällan springer i containrar bara för att hitta plankor att bygga livsfarliga träskapelser i träkronor. Ni vet dom där som är fullkomligt livsfarliga men så laddade med barns förväntan och skaparglädje.
 
-!["Treehouse by Bethany Weeks"](treehouse by Bethany Weeks 1.jpg)
+!["Treehouse by Bethany Weeks"](treehouse-bethany.jpg)
 Men jag väljer att tänka att det är en del av enshitification – hur sökningarna av bilder blivit mer strömlinjeformade. Hur algoritmer trycker fram bild efter bild med konformt snömos. Jag väljer att rikta min gubbvrede åt det hållet för jag kan inte leva med tanken på att barn inte längre bygger livsfarliga kojor i träd. 
 
 Not: 
