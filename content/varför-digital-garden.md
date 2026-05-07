@@ -8,7 +8,7 @@ Jag delade ut en läxa i en av kurserna jag just nu håller. Den heter konstnär
 
 En student vars intresserad primärt var inom skrivande delade en sida och sa: "Maggie Appeltons, vars konst/intressen jag inte är särskilt intresserad av, men själva hemsidan är ungefärligt med det jag vill få fram." Sajten studenten delade var https://maggieappleton.com/. Jag insåg med ens att detta var något utöver det vanliga. Det var t ex så att varenda gång en student skickade in något så gjorde jag lite extra research för att se vad personen använt för ramverk — WordPress, Shopify, Squarespace, eller vad fan de använder. Och alla exempel utom just Maggies sida, var gjorda i kommersiella ramverk. Hennes sida var det där någon satt sig ner och funderat på "hur vill jag ha det?" — struntat i mallar, och bara kört. Byggt utifrån sina egna behov, utifrån "så här skulle jag vilja att det var".
 
-Och det fick mig att inse: hur jävla mycket vi sitter fast i andras affärssystem. Och affärsmodeller. Vi sitter fast för att de har övertygat oss om att det här är det enda sättet att göra det — att det är så mycket enklare. Och det anser jag är bevisligen inte sant, speciellt inte nu med hjälp av AI.
+Och det fick mig att inse: hur jävla mycket vi sitter fast i andras [[businessmodels|affärsmodeller]]. Vi sitter fast för att de har övertygat oss om att det här är det enda sättet att göra det — att det är så mycket enklare. Och det anser jag är bevisligen inte sant, speciellt inte nu med hjälp av AI.
 
 Jag läste vidare på Maggies sida. Jag läste hennes artikel om [digital gardens](https://maggieappleton.com/garden-history). Jag blev nästan förbannad men mest på mig själv — hur fan har jag missat det här? Hur har det här gått mig förbi? Why was I not invited to this party?
 
