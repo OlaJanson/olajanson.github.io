@@ -16,3 +16,8 @@ Men vad betyder en mytoman i en lögndetektorfabrik? Det kanske jag skall förkl
 Håll till godo
 
 Ola
+
+## Senaste
+
+- [[businessmodels|Business model enshitification]]
+- [[varför-digital-garden|Varför digital garden?]]
