@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Translate Swedish .md articles to English using mistral-nemo (Janus) via Ollama.
+"""Translate Swedish .md articles to English using gemma4 (Janus) via Ollama.
 
 Usage:
   python translate.py                        # translate all missing .en.md in content/
@@ -13,7 +13,7 @@ import urllib.request
 from pathlib import Path
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "mistral-nemo"
+MODEL = "gemma4:e4b"
 
 # Mirror .en.md files here for editing in Obsidian (set to None to disable)
 OBSIDIAN_MIRROR = Path.home() / "Dokument/Vaul II/5. Utveckla/digital-garden/publicerat"
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         print("All articles already have English versions.")
         sys.exit(0)
 
-    print(f"Translating {len(files)} file(s) with Janus (mistral-nemo)...")
+    print(f"Translating {len(files)} file(s) with Janus (gemma4)...")
     for f in files:
         translate_file(f)
     print("Done.")
