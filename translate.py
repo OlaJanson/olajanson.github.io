@@ -20,13 +20,16 @@ OBSIDIAN_MIRROR = Path.home() / "Dokument/Vaul II/5. Utveckla/digital-garden/pub
 
 PROMPT = """Translate the following Swedish markdown article to natural, fluent English.
 
-Rules:
+CRITICAL RULES — follow exactly:
+- The article begins with YAML frontmatter between --- markers. Output it EXACTLY as-is, only translate the title value. Do NOT convert frontmatter to bold/italic text.
 - Preserve ALL markdown formatting exactly (**, *, #, >, -, [ ], etc.)
 - Preserve ALL wiki-links exactly as-is: [[link|text]] — keep brackets and pipe
 - Preserve ALL URLs unchanged
-- For YAML frontmatter: only translate the title value; keep all keys and other values unchanged
+- Do NOT add --- at the end of the article
+- Keep blank lines between paragraphs and images
+- Translate "konformt snömos" as "generic mush"
 - Keep the author's personal, conversational voice and tone
-- Output ONLY the translated text — no explanations, no preamble, nothing else
+- Output ONLY the translated markdown — no explanations, no preamble, nothing else
 
 Article:
 {text}"""
