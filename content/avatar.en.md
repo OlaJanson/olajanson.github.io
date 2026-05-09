@@ -1,14 +1,7 @@
 ---
 title: Character arcs of Avatar
 stage: seedling
-tags:
-  - storytelling
-  - characterarc
-  - characterdevelopment
-  - avatarthelastaibender
-  - legendofkorra
-feature: unclehiro and zuko.png
----
+feature: unclehiro and zuko.png---
 
 ![](unclehiro%20and%20zuko.png)
 

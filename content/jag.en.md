@@ -1,9 +1,7 @@
 ---
 title: "About me"
 stage: seedling
-tags: [meta]
-feature: arme-dith-trans.png
----
+feature: arme-dith-trans.png---
 
 ![](arme-dith-trans.png)
 
