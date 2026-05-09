@@ -63,18 +63,6 @@ def add_en_to_wikilinks(text: str) -> str:
     return re.sub(r"\[\[([^\]|#]+)(?:\|([^\]]*))?\]\]", replace, text)
 
 
-def strip_tags_from_frontmatter(text: str) -> str:
-    """Remove tags field from YAML frontmatter so .en.md files don't appear on tag pages."""
-    def remove_tags(m):
-        fm = m.group(1)
-        # Remove tags: block (single-line or multi-line list)
-        fm = re.sub(r'^tags:[ \t]*\[.*?\]\n', '', fm, flags=re.MULTILINE)
-        fm = re.sub(r'^tags:[ \t]*\n((?:[ \t]+-[^\n]*\n)+)', '', fm, flags=re.MULTILINE)
-        fm = re.sub(r'^tags:[ \t]*[^\n]*\n', '', fm, flags=re.MULTILINE)
-        return f"---\n{fm}\n---"
-    return re.sub(r'^---\n(.*?)\n---', remove_tags, text, count=1, flags=re.DOTALL)
-
-
 def translate_file(src: Path) -> Path:
     en_path = src.parent / f"{src.stem}.en.md"
     print(f"  {src.name} → {en_path.name} ...", end=" ", flush=True)
@@ -84,7 +72,6 @@ def translate_file(src: Path) -> Path:
     if translated.endswith("\n---"):
         translated = translated[:-4].rstrip()
     translated = add_en_to_wikilinks(translated)
-    translated = strip_tags_from_frontmatter(translated)
     en_path.write_text(translated, encoding="utf-8")
     if OBSIDIAN_MIRROR and OBSIDIAN_MIRROR.exists():
         (OBSIDIAN_MIRROR / en_path.name).write_text(translated, encoding="utf-8")
