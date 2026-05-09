@@ -63,6 +63,21 @@ def add_en_to_wikilinks(text: str) -> str:
     return re.sub(r"\[\[([^\]|#]+)(?:\|([^\]]*))?\]\]", replace, text)
 
 
+def copy_tags_from_sv(sv_text: str, en_text: str) -> str:
+    """Ensure the EN file has the same tags as the SV source."""
+    sv_fm = re.search(r"^---\n(.*?)\n---", sv_text, re.DOTALL | re.MULTILINE)
+    en_fm = re.search(r"^---\n(.*?)\n---", en_text, re.DOTALL | re.MULTILINE)
+    if not sv_fm or not en_fm:
+        return en_text
+    tags_match = re.search(r"^(tags:(?:[^\n]*(?:\n  - [^\n]+)*))", sv_fm.group(1), re.MULTILINE)
+    if not tags_match:
+        return en_text
+    if re.search(r"^tags:", en_fm.group(1), re.MULTILINE):
+        return en_text
+    new_fm = en_fm.group(1) + "\n" + tags_match.group(1)
+    return en_text.replace(en_fm.group(0), f"---\n{new_fm}\n---", 1)
+
+
 def translate_file(src: Path) -> Path:
     en_path = src.parent / f"{src.stem}.en.md"
     print(f"  {src.name} → {en_path.name} ...", end=" ", flush=True)
@@ -72,6 +87,7 @@ def translate_file(src: Path) -> Path:
     if translated.endswith("\n---"):
         translated = translated[:-4].rstrip()
     translated = add_en_to_wikilinks(translated)
+    translated = copy_tags_from_sv(content, translated)
     en_path.write_text(translated, encoding="utf-8")
     if OBSIDIAN_MIRROR and OBSIDIAN_MIRROR.exists():
         (OBSIDIAN_MIRROR / en_path.name).write_text(translated, encoding="utf-8")
