@@ -1,7 +1,9 @@
+
 ---
 title: Character arcs of Avatar
 stage: seedling
-feature: unclehiro and zuko.png---
+feature: unclehiro and zuko.png
+---
 
 ![](unclehiro%20and%20zuko.png)
 

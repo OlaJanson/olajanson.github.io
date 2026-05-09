@@ -71,7 +71,7 @@ def strip_tags_from_frontmatter(text: str) -> str:
         fm = re.sub(r'^tags:[ \t]*\[.*?\]\n', '', fm, flags=re.MULTILINE)
         fm = re.sub(r'^tags:[ \t]*\n((?:[ \t]+-[^\n]*\n)+)', '', fm, flags=re.MULTILINE)
         fm = re.sub(r'^tags:[ \t]*[^\n]*\n', '', fm, flags=re.MULTILINE)
-        return f"---\n{fm}---"
+        return f"---\n{fm}\n---"
     return re.sub(r'^---\n(.*?)\n---', remove_tags, text, count=1, flags=re.DOTALL)
 
 

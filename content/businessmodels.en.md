@@ -1,7 +1,8 @@
+
 ---
 title: Business model enshitification
 stage: evergreen
-  - enshitification---
+---
 
 ![](mandrake.png)
 Business models, business schmodels sa Mandrake and did a magical gesture.

@@ -1,7 +1,8 @@
+
 ---
 title: Why Are There So Few Images of Treehouses Built by Kids?
 stage: budding
-  - algorithm---
+---
 ![](treehouse.png)
 
 What do these treehouses have in common?
