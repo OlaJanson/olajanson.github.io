@@ -19,6 +19,7 @@ Ola
 
 ## Senaste
 
+- [[avatar|Character arcs of Avatar]]
 - [[treehouse|Varför finns det så ont bilder av kojor byggda av barn?]]
 - [[businessmodels|Business model enshitification]]
 - [[varför-digital-garden|Varför digital garden?]]
