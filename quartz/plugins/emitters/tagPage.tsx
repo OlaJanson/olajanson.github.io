@@ -123,11 +123,24 @@ export const TagPage: QuartzEmitterPlugin<Partial<TagPageOptions>> = (userOpts) 
     },
     async *emit(ctx, content, resources) {
       const allFiles = content.map((c) => c[1].data)
+      const svFiles = allFiles.filter((f) => !String(f.slug ?? "").endsWith(".en"))
+      const enFiles = allFiles.filter((f) => String(f.slug ?? "").endsWith(".en"))
       const cfg = ctx.cfg.configuration
       const [tags, tagDescriptions] = computeTagInfo(allFiles, content, cfg.locale)
 
       for (const tag of tags) {
-        yield processTagPage(ctx, tag, tagDescriptions[tag], allFiles, opts, resources)
+        // SV page: only Swedish articles
+        yield processTagPage(ctx, tag, tagDescriptions[tag], svFiles, opts, resources)
+
+        // EN page at tags/<tag>.en: only English articles
+        if (tag !== "index") {
+          const enSlug = joinSegments("tags", tag + ".en") as FullSlug
+          const enDesc = defaultProcessedContent({
+            slug: enSlug,
+            frontmatter: { title: `Tag: ${tag}`, tags: [] },
+          })
+          yield processTagPage(ctx, tag + ".en", enDesc, enFiles, opts, resources)
+        }
       }
     },
     async *partialEmit(ctx, content, resources, changeEvents) {

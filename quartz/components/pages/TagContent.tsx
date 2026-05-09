@@ -29,7 +29,8 @@ export default ((opts?: Partial<TagContentOptions>) => {
       throw new Error(`Component "TagContent" tried to render a non-tag page: ${slug}`)
     }
 
-    const tag = simplifySlug(slug.slice("tags/".length) as FullSlug)
+    let tag = simplifySlug(slug.slice("tags/".length) as FullSlug)
+    if (tag.endsWith(".en")) tag = tag.slice(0, -3)
     const allPagesWithTag = (tag: string) =>
       allFiles.filter((file) =>
         (file.frontmatter?.tags ?? []).flatMap(getAllSegmentPrefixes).includes(tag),
