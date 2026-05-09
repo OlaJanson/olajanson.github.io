@@ -3,6 +3,7 @@
 title: "About me"
 stage: seedling
 feature: arme-dith-trans.png
+tags: [meta]
 ---
 
 ![](arme-dith-trans.png)

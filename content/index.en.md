@@ -3,6 +3,7 @@
 title: "A Mythomaniac in a Lie Detector Factory"
 stage: evergreen
 feature: dithering-effect-hus_trans.png
+tags: [meta, garden]
 ---
 
 ![](dithering-effect-hus_trans.png)
