@@ -3,13 +3,13 @@
 /* Garden-whisperer design — varm papperston, terracotta/moss, Labrada/IBM Plex Mono */
 /* Fonts are loaded via quartz.config.ts -> googleFonts */
 
-/* Paper texture background */
+/* Ambient background gradients — subtle warm glow on very dark base */
 body {
   background-image:
-    radial-gradient(at 20% 10%, color-mix(in oklab, #d4a84a 45%, transparent) 0px, transparent 50%),
-    radial-gradient(at 80% 60%, color-mix(in oklab, #b55a3e 40%, transparent) 0px, transparent 55%),
-    radial-gradient(at 40% 90%, color-mix(in oklab, #5e8c5e 35%, transparent) 0px, transparent 50%),
-    radial-gradient(at 50% 40%, color-mix(in oklab, #1a1a2e 30%, transparent) 0px, transparent 60%);
+    radial-gradient(at 15% 10%, color-mix(in oklab, #3a2010 60%, transparent) 0px, transparent 45%),
+    radial-gradient(at 85% 65%, color-mix(in oklab, #2a1a08 55%, transparent) 0px, transparent 50%),
+    radial-gradient(at 45% 85%, color-mix(in oklab, #1a2a20 40%, transparent) 0px, transparent 50%),
+    radial-gradient(at 55% 30%, color-mix(in oklab, #0a1018 35%, transparent) 0px, transparent 55%);
   background-attachment: fixed;
 }
 
@@ -76,8 +76,8 @@ article.popover-hint code {
 }
 
 article.popover-hint pre {
-  background: #2a2520;
-  color: #e8e0d8;
+  background: #1e1610;
+  color: #D4FCF8;
   padding: 1em 1.2em;
   border-radius: 6px;
   overflow-x: auto;
