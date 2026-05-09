@@ -47,7 +47,12 @@ article.popover-hint {
   color: color-mix(in oklab, var(--darkgray) 60%, var(--light));
 }
 
-article.popover-hint p { margin: 1.1em 0; }
+article.popover-hint p {
+  margin: 1.1em 0;
+  line-height: 1.9;
+}
+
+article.popover-hint li { line-height: 1.9; }
 
 article.popover-hint a {
   color: var(--secondary);
