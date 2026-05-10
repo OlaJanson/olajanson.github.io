@@ -17,6 +17,11 @@ export default ((opts?: Options) => {
           {i18n(cfg.locale).components.footer.createdWith}{" "}
           <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year}
         </p>
+        <p style="margin-top: 0.5rem; font-size: 0.85em;">
+          <a href="https://xn--sr8hvo.ws/previous">←</a>
+          An <a href="https://xn--sr8hvo.ws">IndieWeb Webring</a> 💍
+          <a href="https://xn--sr8hvo.ws/next">→</a>
+        </p>
         <ul>
           {Object.entries(links).map(([text, link]) => (
             <li>
