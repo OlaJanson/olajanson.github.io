@@ -24,6 +24,7 @@ import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import LanguageToggle from "./LanguageToggle"
+import WebmentionMentions from "./WebmentionMentions"
 
 export {
   ArticleTitle,
@@ -52,4 +53,5 @@ export {
   Flex,
   ConditionalRender,
   LanguageToggle,
+  WebmentionMentions,
 }
