@@ -12,7 +12,7 @@ export default (() => {
     return (
       <div class={classNames(displayClass, "backlinks")}>
         <h3>Webmentions</h3>
-        <div id="webmention-mentions" data-page-url={typeof window !== "undefined" ? window.location.href : ""}>
+        <div id="webmention-mentions">
           <p class="loading">Laddar webmentions…</p>
         </div>
       </div>
@@ -24,8 +24,7 @@ export default (() => {
     (function() {
       const container = document.getElementById('webmention-mentions');
       if (!container) return;
-      const url = container.getAttribute('data-page-url');
-      if (!url) return;
+      const url = window.location.href;
 
       fetch('https://webmention.io/api/mentions.jf2?target=' + encodeURIComponent(url))
         .then(function(r) { return r.json(); })
