@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="sv" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mjukvarucanvas för kreatörer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .slider-thumb::-webkit-slider-thumb:hover {
+            background: #818cf8;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
+        <div>
+            <h1 class="text-xl font-bold tracking-tight text-white">Mjukvarucanvas för kreatörer</h1>
+            <p class="text-xs text-slate-400 mt-0.5">Ett kritiskt verktyg för att avtäcka digitala affärsmodeller, kontroll och inlåsningsrisker.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <button onclick="loadTemplate('photoshop')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Photoshop</button>
+            <button onclick="loadTemplate('affinity')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Affinity Suite</button>
+            <button onclick="loadTemplate('canva')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Canva</button>
+            <button onclick="loadTemplate('wix')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Wix</button>
+            <button onclick="loadTemplate('wordpress')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">WordPress</button>
+            <button onclick="loadTemplate('vlc')" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">VLC</button>
+            <button onclick="resetSliders()" class="px-3 py-1.5 text-xs border border-slate-700 hover:bg-slate-800 text-slate-300 rounded transition font-medium">Nollställ</button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-6 space-y-8">
+        <!-- Top Sparring Board -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Input & Info Form -->
+            <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="w-full sm:w-1/2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Verktygets namn</label>
+                        <input type="text" id="toolName" value="Eget verktyg" oninput="updateAnalysis()" class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded px-3 py-2 text-sm text-white focus:outline-none transition">
+                    </div>
+                    <div class="w-full sm:w-1/2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Kategori / Huvudsakligt syfte</label>
+                        <input type="text" id="toolCategory" value="Kreativ produktion" oninput="updateAnalysis()" class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded px-3 py-2 text-sm text-white focus:outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Sliders Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Param 1 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-200">1. Konstnärlig kontroll</span>
+                            <span id="val_control" class="text-xs font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_control" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Mallstyrt fängelse</span>
+                            <span>Total frihet & ägande</span>
+                        </div>
+                    </div>
+
+                    <!-- Param 2 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-200">2. Inlärningströskel</span>
+                            <span id="val_threshold" class="text-xs font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_threshold" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Klicka och kör direkt</span>
+                            <span>Kräver djupstudier</span>
+                        </div>
+                    </div>
+
+                    <!-- Param 3 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-200">3. Affärsmodellens dolda pris</span>
+                            <span id="val_cost" class="text-xs font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_cost" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Datastöld / Prenumerationsfälla</span>
+                            <span>Engångsköp / FOSS</span>
+                        </div>
+                    </div>
+
+                    <!-- Param 4 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-200">4. Portabilitet & Livslängd</span>
+                            <span id="val_ecosystem" class="text-xs font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_ecosystem" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Proprietär / Gyllene bur</span>
+                            <span>Öppna standarder</span>
+                        </div>
+                    </div>
+
+                    <!-- Param 5 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-200">5. Kognitiv ergonomi (UX)</span>
+                            <span id="val_ux" class="text-xs font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_ux" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Frustrerande design</span>
+                            <span>Intuitivt & njutbart</span>
+                        </div>
+                    </div>
+
+                    <!-- Param 6 -->
+                    <div class="space-y-2 bg-slate-950/50 p-4 rounded-lg border border-slate-800/60">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-emerald-400">6. Underhållsfrihet (Gömda timmar)</span>
+                            <span id="val_maintenance" class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-300 rounded">5/10</span>
+                        </div>
+                        <input type="range" id="param_maintenance" min="1" max="10" value="5" oninput="updateAnalysis()" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>Kräver ständig IT-support</span>
+                            <span>Noll underhåll</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Profile & Verdict Panel -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Analys & profil</span>
+                    <h2 id="verdict_title" class="text-2xl font-bold text-white mt-1">Beräknar...</h2>
+                    
+                    <!-- Visualization Area -->
+                    <div class="my-6 bg-slate-950 border border-slate-800 rounded-lg p-4 flex items-center justify-center h-48 relative overflow-hidden">
+                        <svg viewBox="0 0 100 100" class="w-full h-full max-h-40" id="radar_chart">
+                            <!-- Background Circles -->
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" stroke-width="1" />
+                            <circle cx="50" cy="50" r="30" fill="none" stroke="#1e293b" stroke-width="1" />
+                            <circle cx="50" cy="50" r="15" fill="none" stroke="#1e293b" stroke-width="1" />
+                            
+                            <!-- Hexagon Web -->
+                            <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="#334155" stroke-width="0.5" />
+                            
+                            <!-- Static Lines -->
+                            <line x1="50" y1="50" x2="50" y2="5" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+                            <line x1="50" y1="50" x2="95" y2="27.5" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+                            <line x1="50" y1="50" x2="95" y2="72.5" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+                            <line x1="50" y1="50" x2="50" y2="95" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+                            <line x1="50" y1="50" x2="5" y2="72.5" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+                            <line x1="50" y1="50" x2="5" y2="27.5" stroke="#334155" stroke-width="0.5" stroke-dasharray="2,2" />
+
+                            <!-- Active Shape -->
+                            <polygon id="radar_poly" points="" fill="rgba(99, 102, 241, 0.25)" stroke="#6366f1" stroke-width="2" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none text-[8px] font-mono text-slate-500 uppercase">
+                            <div class="flex justify-between">
+                                <span>1. Kontroll</span>
+                                <span>2. Tröskel</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>6. Drift</span>
+                                <span>3. Pris</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>5. UX</span>
+                                <span>4. Port</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="verdict_desc" class="text-sm text-slate-300 leading-relaxed">
+                        Analysera ditt mönster för att se var mjukvaruvalet hamnar i ekosystemet.
+                    </p>
+                </div>
+
+                <div class="mt-6 border-t border-slate-800 pt-4 flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Sårbarhetsrisk</span>
+                        <span id="risk_badge" class="px-2 py-0.5 rounded text-xs font-bold uppercase mt-1 inline-block">Mellan</span>
+                    </div>
+                    <button onclick="copyAnalysis()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded transition flex items-center gap-2">
+                        <span>Kopiera rapport</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytical Questions Section -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-white mb-2">Pedagogiskt diskussionsunderlag (Använd i Miro/Teams)</h3>
+            <p class="text-sm text-slate-400 mb-6">Låt studenterna besvara dessa fem kritiska motfrågor i grupper baserat på deras canvasanalys.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 space-y-3">
+                    <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">01. Den dolda skatten</div>
+                    <h4 class="font-bold text-white text-sm">Vad säljer de egentligen?</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Om produkten marknadsförs som helt kostnadsfri (eller extremt billig), hur ser deras intäktsmodell ut bakom ridån? Betalar du med ditt personliga varumärke, dina studenters integritet, eller tränar du deras nästa AI-modell?</p>
+                </div>
+                
+                <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 space-y-3">
+                    <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">02. FOSS-paradoxen</div>
+                    <h4 class="font-bold text-white text-sm">Valpen kontra gosedjuret?</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Öppen källkod ger total frihet och kontroll, men kräver tekniskt underhåll (uppdateringar, databaser, plugins). Har du utrymme att vara IT-support för dig själv, eller är det billigare i tid att köpa ett gosedjur (SaaS) som bara fungerar?</p>
+                </div>
+
+                <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 space-y-3">
+                    <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">03. Exit-strategin</div>
+                    <h4 class="font-bold text-white text-sm">Kan du flytta boet?</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Om du bestämmer dig för att lämna leverantören i morgon, vad kan du faktiskt ta med dig? Får du ut rådata och öppna filformat, eller är ditt livsverk fastlåst i en sluten molndatabas?</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive Copy Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-emerald-500 text-slate-950 px-4 py-2 rounded-lg text-sm font-bold opacity-0 transition-all duration-300 pointer-events-none transform translate-y-2">
+        Kopierat till urklipp!
+    </div>
+
+    <script>
+        const templates = {
+            photoshop: {
+                name: "Adobe Photoshop",
+                cat: "Kreativ bildbehandling",
+                control: 7,
+                threshold: 8,
+                cost: 2, // Dyrt abonnemang, aggressiv datainsamling
+                ecosystem: 3, // Proprietärt, svårt utanför Adobe Cloud
+                ux: 8, // Mycket bra industrianpassat gränssnitt
+                maintenance: 8 // Uppdateras automatiskt, lågt tekniskt strul
+            },
+            affinity: {
+                name: "Affinity Suite (Designer/Photo)",
+                cat: "Vektor & Bildbehandling",
+                control: 8, // Mycket hög konstnärlig kontroll
+                threshold: 7, // Kräver en del träning, likt Adobe
+                cost: 7, // Engångslicens (inget löpande abonnemang, men INTE gratis!)
+                ecosystem: 6, // Eget format men mycket bra export till öppna industristandarder
+                ux: 8, // Modernt och enhetligt gränssnitt
+                maintenance: 8 // Lokala applikationer, låg risk för serverstrul
+            },
+            canva: {
+                name: "Canva",
+                cat: "Grafisk design i molnet",
+                control: 3, // Extremt mallstyrt, begränsad konstnärlig kontroll
+                threshold: 1, // Klicka och dra, i stort sett noll inlärningströskel
+                cost: 4, // Löpande prenumerationskostnad för Pro-tillgång, aggressivt freemium
+                ecosystem: 2, // Allt sparas i deras moln, platta exporter utan rådataportabilitet
+                ux: 9, // Mycket slipat, låg kognitiv belastning
+                maintenance: 10 // Ingen lokal installation eller underhåll krävs
+            },
+            wix: {
+                name: "Wix",
+                cat: "Webbplatsbyggare",
+                control: 2, // Mycket mallstyrt, extremt låg kodkontroll
+                threshold: 2, // Mycket lätt att starta
+                cost: 3, // Löpande kostnad som låser in dig
+                ecosystem: 1, // Total vendor lock-in. Går inte att flytta.
+                ux: 9, // Intuitiv drag-and-drop
+                maintenance: 10 // Wix sköter servrar, backup och säkerhet helt
+            },
+            wordpress: {
+                name: "WordPress (Egen-hostad)",
+                cat: "Webbpublicering",
+                control: 9, // Total kontroll över källkod och databas
+                threshold: 7, // Kräver förståelse för hosting, teman, PHP
+                cost: 8, // Gratis kärna, du betalar med tid eller billigt webbhotell
+                ecosystem: 9, // Mycket hög portabilitet, lätt att flytta råfiler
+                ux: 5, // Rörig baksida, splittrad upplevelse
+                maintenance: 2 // Ständigt underhåll, pluginkrascher, säkerhetshål
+            },
+            vlc: {
+                name: "VLC Media Player",
+                cat: "Mediaspelare",
+                control: 10, // Fullständig kontroll över uppspelning
+                threshold: 1, // Klicka och spela
+                cost: 10, // FOSS, helt utan spårning eller gömda avgifter
+                ecosystem: 10, // Spelar precis allt, inga dolda formatkrav
+                ux: 6, // Spartanskt men extremt funktionellt
+                maintenance: 9 // Körs lokalt, kräver sällan akut handpåläggning
+            }
+        };
+
+        function loadTemplate(key) {
+            const data = templates[key];
+            if (!data) return;
+
+            document.getElementById('toolName').value = data.name;
+            document.getElementById('toolCategory').value = data.cat;
+            
+            document.getElementById('param_control').value = data.control;
+            document.getElementById('param_threshold').value = data.threshold;
+            document.getElementById('param_cost').value = data.cost;
+            document.getElementById('param_ecosystem').value = data.ecosystem;
+            document.getElementById('param_ux').value = data.ux;
+            document.getElementById('param_maintenance').value = data.maintenance;
+
+            updateAnalysis();
+        }
+
+        function resetSliders() {
+            document.getElementById('toolName').value = "Eget verktyg";
+            document.getElementById('toolCategory').value = "Kreativ produktion";
+            
+            const params = ['control', 'threshold', 'cost', 'ecosystem', 'ux', 'maintenance'];
+            params.forEach(p => {
+                document.getElementById(`param_${p}`).value = 5;
+            });
+            updateAnalysis();
+        }
+
+        function updateAnalysis() {
+            const name = document.getElementById('toolName').value;
+            const category = document.getElementById('toolCategory').value;
+
+            const c = parseInt(document.getElementById('param_control').value);
+            const t = parseInt(document.getElementById('param_threshold').value);
+            const co = parseInt(document.getElementById('param_cost').value);
+            const e = parseInt(document.getElementById('param_ecosystem').value);
+            const u = parseInt(document.getElementById('param_ux').value);
+            const m = parseInt(document.getElementById('param_maintenance').value);
+
+            // Update value badges
+            document.getElementById('val_control').innerText = c + "/10";
+            document.getElementById('val_threshold').innerText = t + "/10";
+            document.getElementById('val_cost').innerText = co + "/10";
+            document.getElementById('val_ecosystem').innerText = e + "/10";
+            document.getElementById('val_ux').innerText = u + "/10";
+            document.getElementById('val_maintenance').innerText = m + "/10";
+
+            // Calculate Radar Poly
+            const values = [c, t, co, e, u, m];
+            const maxVal = 10;
+            const cx = 50;
+            const cy = 50;
+            const maxRadius = 45;
+
+            const points = values.map((val, idx) => {
+                const angle = (idx * 60 - 90) * (Math.PI / 180);
+                const r = (val / maxVal) * maxRadius;
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(' ');
+
+            document.getElementById('radar_poly').setAttribute('points', points);
+
+            // Calculate profiles & classifications
+            let title = "Blandad profil";
+            let desc = "Detta verktyg erbjuder en splittrad bild. Det har inga tydliga styrkor eller svagheter utan tvingar dig till kompromisser på flera fronter samtidigt.";
+            let risk = "Mellan";
+            let riskClass = "bg-amber-950 text-amber-300";
+
+            // Profiles decision matrix
+            if (e <= 3 && co <= 4 && m >= 7) {
+                title = "Den gyllene buren";
+                desc = `${name} tar hand om allt underhåll och är superenkelt att köra, men du sitter i ett hårt vaktat monopol. De kan ändra priset eller stänga av ditt konto när som helst. Du äger ingenting av infrastrukturen.`;
+                risk = "Extrem";
+                riskClass = "bg-rose-950 text-rose-300";
+            } else if (c >= 8 && e >= 8 && m <= 3) {
+                title = "Gör-det-själv-fällan";
+                desc = `Du har fullkomlig frihet och inga dolda avgifter i ${name}, men se upp: du betalar med din egen tid. Det höga tekniska underhållet innebär att du riskerar att lägga mer tid på IT-support än faktiskt skapande.`;
+                risk = "Mellan";
+                riskClass = "bg-amber-950 text-amber-300";
+            } else if (co >= 8 && e >= 8 && c >= 7 && m >= 7) {
+                title = "Den ärliga oasen";
+                desc = `${name} representerar ett moget val för professionella frilansare. Det bygger på öppna standarder, kräver minimalt underhåll och respekterar din integritet samt din rätt att styra över ditt eget material.`;
+                risk = "Låg";
+                riskClass = "bg-emerald-950 text-emerald-300";
+            } else if (t <= 3 && u >= 8 && co <= 4) {
+                title = "Freemium-fällan";
+                desc = `Det ser så lättanvänt ut från början. Men ${name} är designat för att suga in dig och sedan sätta upp betalväggar precis när din export är klar eller när dina studenter har lagt ner 20 timmar i projektet.`;
+                risk = "Hög";
+                riskClass = "bg-rose-950 text-rose-300";
+            }
+
+            document.getElementById('verdict_title').innerText = title;
+            document.getElementById('verdict_desc').innerText = desc;
+            
+            const badge = document.getElementById('risk_badge');
+            badge.innerText = risk;
+            badge.className = `px-2 py-0.5 rounded text-xs font-bold uppercase mt-1 inline-block ${riskClass}`;
+        }
+
+        function copyAnalysis() {
+            const name = document.getElementById('toolName').value;
+            const category = document.getElementById('toolCategory').value;
+            const title = document.getElementById('verdict_title').innerText;
+            const desc = document.getElementById('verdict_desc').innerText;
+            
+            const c = document.getElementById('val_control').innerText;
+            const t = document.getElementById('val_threshold').innerText;
+            const co = document.getElementById('val_cost').innerText;
+            const e = document.getElementById('val_ecosystem').innerText;
+            const u = document.getElementById('val_ux').innerText;
+            const m = document.getElementById('val_maintenance').innerText;
+
+            const text = `MJUKVARUANALYS: ${name} (${category})
+--------------------------------------------------
+Profil: ${title}
+Beskrivning: ${desc}
+
+VÄRDEN (1-10):
+1. Konstnärlig kontroll: ${c}
+2. Inlärningströskel: ${t}
+3. Affärsmodellens dolda pris: ${co}
+4. Portabilitet & Livslängd: ${e}
+5. Kognitiv ergonomi (UX): ${u}
+6. Underhållsfrihet (Gömda timmar): ${m}
+--------------------------------------------------
+Genererat via Mjukvaru-canvasen för kreatörer.`;
+
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('toast');
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 2000);
+            } catch (err) {
+                console.error("Gick inte att kopiera text", err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        window.onload = function() {
+            updateAnalysis();
+        };
+    </script>
+</body>
+</html>
