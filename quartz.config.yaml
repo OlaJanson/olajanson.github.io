@@ -145,7 +145,7 @@ plugins:
       position: right
       priority: 30
   - source: github:quartz-community/article-title
-    enabled: false
+    enabled: true
     layout:
       position: beforeBody
       priority: 10
