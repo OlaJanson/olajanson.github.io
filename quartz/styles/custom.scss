@@ -16,7 +16,7 @@ body {
 .page h1, .page h2, .page h3, .page h4,
 .article-title,
 .section-title {
-  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-family: var(--headerFont);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -27,7 +27,7 @@ body {
 
 /* h5 som bildtext */
 article.popover-hint h5 {
-  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-family: var(--headerFont);
   font-size: 0.95rem;
   font-weight: 700;
   font-style: normal;
@@ -39,7 +39,7 @@ article.popover-hint h5 {
 
 /* Article content */
 article.popover-hint {
-  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-family: var(--headerFont);
   font-size: 1.45rem;
   line-height: 1.8;
   font-weight: 300;
@@ -72,7 +72,7 @@ article.popover-hint blockquote {
 }
 
 article.popover-hint code {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-family: var(--codeFont);
   font-size: 0.9em;
   background: var(--lightgray);
   padding: 0.1em 0.35em;
@@ -98,7 +98,7 @@ article.popover-hint img {
 
 /* Sidebar header */
 .page-title {
-  font-family: "Labrada", ui-serif, Georgia, serif;
+  font-family: var(--headerFont);
   font-weight: 900;
   font-size: 1.4rem;
 }
