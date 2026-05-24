@@ -2,7 +2,7 @@
 publish: true
 title: Vikten av att ha en enastående premiss
 created: 2026-05-24T17:32:29.941+02:00
-modified: 2026-05-24T19:13:41.990+02:00
+modified: 2026-05-24T19:44:17.402+02:00
 tags:
   - "#storytelling"
   - "#premiss"
@@ -21,4 +21,4 @@ När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för 
 Jag har ett par egna premisser som inte slutar att leverera. Som jag nästan måste hindra mig själv från inte fortsätta jobba med. I det allra senaste är det premissen i Infernal Ventures: i en överindustrialiserad sekelskiftesvärld så är helvetet själv den sista oexploaterade utposten. Spela specialförband som rekryterats för att skydda "The Sanctuary" där industrimagnaterna valt att sätta upp sin verksamhet.
 Den andra som jag aldrig gjort riktigt klart men som på något sätt ständigt finns där premissen som också är namnet på denna sajten "En mytoman i en lögndetektorfabrik". Du är en tvångsmässig lögnare som jobbar i fabriken som producerar den tekniska artefakt som faktiskt kan avslöja dig. Kul kan man tycka.
 
-Förresten. Sa någon [Severance](https://www.youtube.com/watch?v=3v8AsTHfAG0). Vilka strålande premisser har jag glömt?
+Förresten. Sa någon [Severance](https://www.imdb.com/title/tt11280740/). Vilka strålande premisser har jag glömt?
