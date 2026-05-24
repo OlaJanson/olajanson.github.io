@@ -1,11 +1,11 @@
 ---
 publish: true
-title: Välkommen till min digitala trädgård
+title: En mytoman i en lögndetektorfabrik
 created: 2026-05-05T11:43:51.768+02:00
-modified: 2026-05-24T19:22:00.663+02:00
+modified: 2026-05-24T19:29:03.412+02:00
 tags:
-  - meta
-  - garden
+  - "#meta"
+  - "#garden"
 ---
 
 ![[6. Verktyg/Attached/dithering-effect-hus_trans.png]]
