@@ -1,0 +1,34 @@
+name: Auto-translate Swedish → English
+
+on:
+  push:
+    branches:
+      - v5
+    paths:
+      - 'content/**.md'
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip translate]')"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Translate new/updated content
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 scripts/translate.py
+
+      - name: Commit translations
+        run: |
+          git config user.name "quartz-translate[bot]"
+          git config user.email "bot@olajanson.se"
+          git diff --quiet && echo "Nothing to commit" && exit 0
+          git add content/
+          git commit -m "auto: translate to English [skip translate]"
+          git push

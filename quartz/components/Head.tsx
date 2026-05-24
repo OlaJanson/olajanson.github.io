@@ -97,6 +97,7 @@ export default (() => {
             return resource
           }
         })}
+        <script src={`${baseDir}/static/language-toggle.js`} defer></script>
       </head>
     )
   }
