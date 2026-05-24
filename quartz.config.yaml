@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: "En mytomaniens lögndetektorfabrik"
+  pageTitle: En mytomaniens lögndetektorfabrik
   pageTitleSuffix: " — Slumpmässiga tankar från en schweizisk armékniv"
   enableSPA: true
   enablePopovers: true
@@ -17,16 +17,16 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Labrada
-      body: Labrada
+      header: Fraunces
+      body: Fraunces
       code: IBM Plex Mono
     colors:
       lightMode:
         light: "#d4c8b8"
         lightgray: "#e5ddd0"
         gray: "#c2b8a8"
-        darkgray: "#6b6258"
-        dark: "#3d352e"
+        darkgray: "#0a0d19"
+        dark: "#100b1e"
         secondary: "#b55a3e"
         tertiary: "#5e8c5e"
         highlight: rgba(181, 90, 62, 0.15)
