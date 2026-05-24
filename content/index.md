@@ -1,25 +1,21 @@
 ---
-title: "En mytoman i en lögndetektorfabrik"
-stage: evergreen
-tags: [meta, garden]
-feature: dithering-effect-hus_trans.png
+publish: true
+title: Välkommen till min digitala trädgård
+created: 2026-05-05T11:43:51.768+02:00
+modified: 2026-05-24T19:22:00.663+02:00
+tags:
+  - meta
+  - garden
 ---
 
-![](dithering-effect-hus_trans.png)
+![[6. Verktyg/Attached/dithering-effect-hus_trans.png]]
 
-Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral eller göra något som skulle lämpa sig på linjära plattformar eller sociala medier. Här har jag full kontroll. Här kan jag till exempel skriva om [[treehouse|kojor]] eller [[businessmodels|affärsmodeller]] för att jag vill det.
+Här skriver [[jag]] saker om det som faller mig in och iland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral eller göra något som skulle lämpa sig på linjära plattformar eller social medier. Här har jag full kontroll. Har kan jag till exempel skriva om [[treehouse|kojor]] eller [[businesschmodels|affärsmodeller]] för att jag vill det.
 
 Sidan är strukturerad som en [[varför-digital-garden|digital trädgård]], en samling noter, essäer och idéer i olika mognadsstadier sammanlänkade med hyperlänkar – en mystisk mutation av en blogg och en wiki.
 
-Men vad betyder en mytoman i en lögndetektorfabrik? Det kanske jag skall förklara. Men inte nu.
+Med vad betyder en mytoman i lögndetektorfabrik? Skriver lite om det [[premiss|här]].
 
 Håll till godo
 
 Ola
-
-## Senaste
-
-- [[avatar|Character arcs of Avatar]]
-- [[treehouse|Varför finns det så ont bilder av kojor byggda av barn?]]
-- [[businessmodels|Business model enshitification]]
-- [[varför-digital-garden|Varför digital garden?]]
