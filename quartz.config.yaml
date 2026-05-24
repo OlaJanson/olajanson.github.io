@@ -122,7 +122,7 @@ plugins:
   - source: github:quartz-community/tag-page
     enabled: true
   - source: github:quartz-community/explorer
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 50
@@ -145,7 +145,7 @@ plugins:
       position: right
       priority: 30
   - source: github:quartz-community/article-title
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 10
