@@ -1,51 +1,73 @@
-// Language toggle — SV/EN
+// Language toggle — navigates between /slug (SV) and /slug.en (EN)
 (function () {
   const STORAGE_KEY = "preferred-lang";
 
-  function applyLang(lang) {
-    if (lang === "en") {
-      document.body.classList.add("lang-en");
-    } else {
-      document.body.classList.remove("lang-en");
+  function getCurrentLang() {
+    return window.location.pathname.endsWith(".en") ? "en" : "sv";
+  }
+
+  function getOppositeUrl() {
+    const path = window.location.pathname.replace(/\/$/, "");
+    if (path.endsWith(".en")) {
+      return path.slice(0, -3) || "/";
     }
+    return path + ".en";
   }
 
   function injectButton() {
     if (document.querySelector(".language-toggle")) return;
 
-    const hasBothLangs =
-      document.querySelector(".lang-sv") && document.querySelector(".lang-en");
-    if (!hasBothLangs) return;
+    const oppositeUrl = getOppositeUrl();
 
-    const btn = document.createElement("button");
-    btn.className = "language-toggle";
-    btn.setAttribute("aria-label", "Växla språk");
-    btn.innerHTML = '<span class="lang-sv">SV/EN</span><span class="lang-en">EN/SV</span>';
+    // Only show button if opposite-language version exists
+    fetch(oppositeUrl, { method: "HEAD" }).then((res) => {
+      if (!res.ok) return;
 
-    btn.addEventListener("click", () => {
-      const isEn = document.body.classList.contains("lang-en");
-      const next = isEn ? "sv" : "en";
-      localStorage.setItem(STORAGE_KEY, next);
-      applyLang(next);
-    });
+      const currentLang = getCurrentLang();
+      const btn = document.createElement("button");
+      btn.className = "language-toggle";
+      btn.setAttribute("aria-label", "Växla språk / Toggle language");
+      btn.textContent = currentLang === "sv" ? "EN" : "SV";
 
-    // Insert in toolbar (right sidebar) or fallback to body
-    const toolbar = document.querySelector(".right > .toolbar, header, nav");
-    const target = toolbar || document.querySelector(".page-header") || document.body;
-    target.appendChild(btn);
+      btn.addEventListener("click", () => {
+        const pref = currentLang === "sv" ? "en" : "sv";
+        localStorage.setItem(STORAGE_KEY, pref);
+        window.location.href = oppositeUrl;
+      });
+
+      const target =
+        document.querySelector(".right > .toolbar") ||
+        document.querySelector(".page-header") ||
+        document.querySelector("header") ||
+        document.body;
+      target.appendChild(btn);
+    }).catch(() => {/* no opposite version */});
   }
 
-  // Apply saved preference immediately
-  const saved = localStorage.getItem(STORAGE_KEY) || "sv";
-  applyLang(saved);
+  // On load: redirect to preferred language if a different version exists
+  function applyPreference() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    const current = getCurrentLang();
+    if (saved === current) return;
 
-  // Inject button after DOM is ready
+    const target = getOppositeUrl();
+    fetch(target, { method: "HEAD" }).then((res) => {
+      if (res.ok) window.location.replace(target);
+    }).catch(() => {});
+  }
+
+  applyPreference();
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", injectButton);
   } else {
     injectButton();
   }
 
-  // Re-inject on SPA navigation
-  document.addEventListener("nav", injectButton);
+  // Re-inject on Quartz SPA navigation
+  document.addEventListener("nav", () => {
+    document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
+    injectButton();
+  });
 })();
