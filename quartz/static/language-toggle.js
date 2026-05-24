@@ -35,12 +35,7 @@
         window.location.href = oppositeUrl;
       });
 
-      const target =
-        document.querySelector(".right > .toolbar") ||
-        document.querySelector(".page-header") ||
-        document.querySelector("header") ||
-        document.body;
-      target.appendChild(btn);
+      document.body.appendChild(btn);
     }).catch(() => {/* no opposite version */});
   }
 
