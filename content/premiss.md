@@ -2,11 +2,11 @@
 publish: true
 title: Vikten av att ha en enastående premiss
 created: 2026-05-24T17:32:29.941+02:00
-modified: 2026-05-24T19:44:17.402+02:00
+modified: 2026-05-24T23:26:11.733+02:00
 tags:
-  - "#storytelling"
-  - "#premiss"
-  - "#storyarc"
+  - storytelling
+  - premiss
+  - storyarc
 ---
 
 ![[6. Verktyg/Attached/there is no picture.png]]
@@ -16,7 +16,7 @@ För mig som kreatör är premissen egentligen det som får mig att ständigt ko
 
 Det mesta av mitt kreativa skapande kretsar sedan ett tag tillbaka runt rollspelskampanjer eller egna spel. Det har hänt att jag likt en irriterande dominant regissör skickat tillbaka karaktärskoncept för att det inte adderat tillräckligt till en intressant premiss. Det är inte alltid jag kan sätta fingret på vad som saknas men det är något som gör att jag undrar vad som kommer att hända med den karaktären, vilket i sin förlängning inte gjort att jag känner någon lust att utforska berättelsen alls.
 
-När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för att man skall spendera ett år av återkommande spelträffar. Någon form av character arc känns viktigt för mig att det sker. Men det är som bekant helt upp till den enskilde spelaren ifall det sker eller inte. Jag kan locka, provocera och utmana spelaren men jag kan inte tvinga en spelare att spela sin karaktär och utmana. Och missförstå mig rätt – det handlar inte om att det är min syn på hur karaktären förändras som är viktig – det är bara det att det sker någon form av förändring som jag känner spelar roll. Men detta tål att utvecklas i en egen post.
+När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för att man skall spendera ett år av återkommande spelträffar. Någon form av [[avatar|character arc]] känns viktigt för mig att det sker. Men det är som bekant helt upp till den enskilde spelaren ifall det sker eller inte. Jag kan locka, provocera och utmana spelaren men jag kan inte tvinga en spelare att spela sin karaktär och utmana. Och missförstå mig rätt – det handlar inte om att det är min syn på hur karaktären förändras som är viktig – det är bara det att det sker någon form av förändring som jag känner spelar roll. Men detta tål att utvecklas i en egen post.
 
 Jag har ett par egna premisser som inte slutar att leverera. Som jag nästan måste hindra mig själv från inte fortsätta jobba med. I det allra senaste är det premissen i Infernal Ventures: i en överindustrialiserad sekelskiftesvärld så är helvetet själv den sista oexploaterade utposten. Spela specialförband som rekryterats för att skydda "The Sanctuary" där industrimagnaterna valt att sätta upp sin verksamhet.
 Den andra som jag aldrig gjort riktigt klart men som på något sätt ständigt finns där premissen som också är namnet på denna sajten "En mytoman i en lögndetektorfabrik". Du är en tvångsmässig lögnare som jobbar i fabriken som producerar den tekniska artefakt som faktiskt kan avslöja dig. Kul kan man tycka.

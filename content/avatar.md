@@ -2,13 +2,13 @@
 publish: true
 title: Character arcs of Avatar
 created: 2026-05-09T09:09:12.204+02:00
-modified: 2026-05-09T11:16:01.786+02:00
+modified: 2026-05-24T22:55:02.278+02:00
 tags:
-  - storytelling
-  - characterarc
-  - characterdevelopment
-  - avatarthelastaibender
-  - legendofkorra
+  - "#storytelling"
+  - "#characterarc"
+  - "#characterdevelopment"
+  - "#avatarthelastaibender"
+  - "#legendofkorra"
 ---
 
 ![[6. Verktyg/Attached/unclehiro and zuko.png]]
