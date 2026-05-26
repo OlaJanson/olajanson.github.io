@@ -17,8 +17,12 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Fraunces
-      body: Fraunces
+      header:
+        name: Fraunces
+        weights: [300, 400, 700, 900]
+      body:
+        name: Fraunces
+        weights: [200, 300, 400]
       code: IBM Plex Mono
     colors:
       lightMode:
