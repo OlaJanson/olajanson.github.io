@@ -114,21 +114,21 @@ article.popover-hint img {
   color: var(--light);
 }
 
-/* Language toggle — fixed position top-right */
+/* Language toggle — inline i toolbar (bredvid sök och darkmode) */
 .language-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 9999;
   cursor: pointer;
   font-family: var(--bodyFont);
-  font-size: 0.85rem;
-  background: var(--light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: none;
   border: 1px solid var(--gray);
   border-radius: 4px;
-  padding: 0.25em 0.7em;
+  padding: 0.2em 0.55em;
   color: var(--darkgray);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  height: 1.8rem;
+  display: inline-flex;
+  align-items: center;
   transition: border-color 0.2s, color 0.2s;
 }
 .language-toggle:hover {

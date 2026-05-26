@@ -1,4 +1,4 @@
-// Language toggle — navigates between /slug (SV) and /slug.en (EN)
+// Language toggle — URL-based SV/EN navigation + tag page filtering
 (function () {
   const STORAGE_KEY = "preferred-lang";
 
@@ -8,10 +8,25 @@
 
   function getOppositeUrl() {
     const path = window.location.pathname.replace(/\/$/, "");
-    if (path.endsWith(".en")) {
-      return path.slice(0, -3) || "/";
-    }
+    if (path.endsWith(".en")) return path.slice(0, -3) || "/";
     return path + ".en";
+  }
+
+  function filterListingPages(lang) {
+    // On tag/folder listing pages: hide articles in wrong language
+    const items = document.querySelectorAll(".section-li");
+    if (!items.length) return;
+    items.forEach((item) => {
+      const link = item.querySelector("a[href]");
+      if (!link) return;
+      const href = link.getAttribute("href") || "";
+      const isEnglish = href.endsWith(".en");
+      item.style.display = (lang === "en") === isEnglish ? "" : "none";
+    });
+  }
+
+  function applyLang(lang) {
+    filterListingPages(lang);
   }
 
   function injectButton() {
@@ -19,50 +34,57 @@
 
     const oppositeUrl = getOppositeUrl();
 
-    // Only show button if opposite-language version exists
-    fetch(oppositeUrl, { method: "HEAD" }).then((res) => {
-      if (!res.ok) return;
+    fetch(oppositeUrl, { method: "HEAD" })
+      .then((res) => {
+        if (!res.ok) return;
 
-      const currentLang = getCurrentLang();
-      const btn = document.createElement("button");
-      btn.className = "language-toggle";
-      btn.setAttribute("aria-label", "Växla språk / Toggle language");
-      btn.textContent = currentLang === "sv" ? "EN" : "SV";
+        const currentLang = getCurrentLang();
+        const btn = document.createElement("button");
+        btn.className = "language-toggle";
+        btn.setAttribute("aria-label", "Växla språk / Toggle language");
+        btn.textContent = currentLang === "sv" ? "EN" : "SV";
 
-      btn.addEventListener("click", () => {
-        const pref = currentLang === "sv" ? "en" : "sv";
-        localStorage.setItem(STORAGE_KEY, pref);
-        window.location.href = oppositeUrl;
-      });
+        btn.addEventListener("click", () => {
+          const pref = currentLang === "sv" ? "en" : "sv";
+          localStorage.setItem(STORAGE_KEY, pref);
+          window.location.href = oppositeUrl;
+        });
 
-      document.body.appendChild(btn);
-    }).catch(() => {/* no opposite version */});
+        // Inject into toolbar (same row as search + darkmode)
+        const toolbar = document.querySelector(".toolbar");
+        const target = toolbar || document.body;
+        target.appendChild(btn);
+      })
+      .catch(() => {});
   }
 
-  // On load: redirect to preferred language if a different version exists
   function applyPreference() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
     const current = getCurrentLang();
+    applyLang(saved);
     if (saved === current) return;
-
     const target = getOppositeUrl();
-    fetch(target, { method: "HEAD" }).then((res) => {
-      if (res.ok) window.location.replace(target);
-    }).catch(() => {});
+    fetch(target, { method: "HEAD" })
+      .then((res) => { if (res.ok) window.location.replace(target); })
+      .catch(() => {});
   }
 
   applyPreference();
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", injectButton);
+    document.addEventListener("DOMContentLoaded", () => {
+      injectButton();
+      applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
+    });
   } else {
     injectButton();
+    applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
   }
 
-  // Re-inject on Quartz SPA navigation
   document.addEventListener("nav", () => {
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
     injectButton();
+    applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
   });
 })();
