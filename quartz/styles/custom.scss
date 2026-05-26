@@ -54,6 +54,7 @@ article.popover-hint p {
 article.popover-hint li { line-height: 1.9; }
 
 article.popover-hint a {
+  font-weight: 300;
   color: var(--secondary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -62,6 +63,11 @@ article.popover-hint a {
   transition: text-decoration-color 0.2s;
 }
 article.popover-hint a:hover { text-decoration-color: var(--secondary); }
+
+article.popover-hint strong,
+article.popover-hint b {
+  font-weight: 500;
+}
 
 article.popover-hint blockquote {
   border-left: 3px solid var(--secondary);

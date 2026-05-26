@@ -13,7 +13,6 @@
   }
 
   function filterListingPages(lang) {
-    // On tag/folder listing pages: hide articles in wrong language
     const items = document.querySelectorAll(".section-li");
     if (!items.length) return;
     items.forEach((item) => {
@@ -25,44 +24,51 @@
     });
   }
 
-  function applyLang(lang) {
-    filterListingPages(lang);
-  }
-
   function injectButton() {
     if (document.querySelector(".language-toggle")) return;
 
-    const oppositeUrl = getOppositeUrl();
+    const currentLang = getCurrentLang();
+    const savedLang = localStorage.getItem(STORAGE_KEY) || "sv";
 
-    fetch(oppositeUrl, { method: "HEAD" })
-      .then((res) => {
-        if (!res.ok) return;
+    const btn = document.createElement("button");
+    btn.className = "language-toggle";
+    btn.setAttribute("aria-label", "Växla språk / Toggle language");
+    btn.textContent = currentLang === "sv" ? "EN" : "SV";
 
-        const currentLang = getCurrentLang();
-        const btn = document.createElement("button");
-        btn.className = "language-toggle";
-        btn.setAttribute("aria-label", "Växla språk / Toggle language");
-        btn.textContent = currentLang === "sv" ? "EN" : "SV";
+    btn.addEventListener("click", () => {
+      const next = currentLang === "sv" ? "en" : "sv";
+      localStorage.setItem(STORAGE_KEY, next);
 
-        btn.addEventListener("click", () => {
-          const pref = currentLang === "sv" ? "en" : "sv";
-          localStorage.setItem(STORAGE_KEY, pref);
-          window.location.href = oppositeUrl;
+      const opposite = getOppositeUrl();
+      fetch(opposite, { method: "HEAD" })
+        .then((res) => {
+          if (res.ok) {
+            window.location.href = opposite;
+          } else {
+            // Listing page (tag/folder): filter in place, no navigation
+            btn.textContent = next === "sv" ? "EN" : "SV";
+            filterListingPages(next);
+          }
+        })
+        .catch(() => {
+          btn.textContent = next === "sv" ? "EN" : "SV";
+          filterListingPages(next);
         });
+    });
 
-        // Inject into toolbar (same row as search + darkmode)
-        const toolbar = document.querySelector(".toolbar");
-        const target = toolbar || document.body;
-        target.appendChild(btn);
-      })
-      .catch(() => {});
+    // Inject into the toolbar flex group in the right sidebar
+    const target =
+      document.querySelector(".right .flex-component") ||
+      document.querySelector(".right.sidebar") ||
+      document.body;
+    target.appendChild(btn);
   }
 
   function applyPreference() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
+    filterListingPages(saved);
     const current = getCurrentLang();
-    applyLang(saved);
     if (saved === current) return;
     const target = getOppositeUrl();
     fetch(target, { method: "HEAD" })
@@ -75,16 +81,16 @@
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       injectButton();
-      applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
+      filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
     });
   } else {
     injectButton();
-    applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
+    filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
   }
 
   document.addEventListener("nav", () => {
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
     injectButton();
-    applyLang(localStorage.getItem(STORAGE_KEY) || "sv");
+    filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
   });
 })();
