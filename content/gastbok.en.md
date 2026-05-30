@@ -1,6 +1,7 @@
 ---
 title: "Guestbook"
 tags: [meta]
+unlisted: true
 ---
 
 Leave a trace. Write whatever — what you were thinking about, what you found here, or just hello.

@@ -1,8 +1,8 @@
-
 ---
 title: "Why a digital garden?"
 stage: budding
 tags: [gardening, meta]
+unlisted: true
 ---
 
 I assigned some homework in one of the courses I'm currently teaching — it's called Artistic Realization in Digital Environments. My students were asked to find digital role models — not to focus on the content, but on *how* they do it. How they communicate things. The framework for communication.

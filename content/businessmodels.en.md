@@ -1,4 +1,3 @@
-
 ---
 title: Business model enshitification
 stage: evergreen
@@ -6,6 +5,7 @@ tags:
   - garden
   - businessmodells
   - enshitification
+unlisted: true
 ---
 
 ![](mandrake.png)

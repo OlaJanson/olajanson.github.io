@@ -1,4 +1,3 @@
-
 ---
 title: Why Are There So Few Images of Treehouses Built by Kids?
 stage: budding
@@ -6,6 +5,7 @@ tags:
   - enshitification
   - designprocess
   - algorithm
+unlisted: true
 ---
 ![](treehouse.png)
 

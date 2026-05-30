@@ -9,6 +9,7 @@ tags:
   - storyarc
 feature: 6. Verktyg/Attached/there is no picture.png
 thumbnail: thumbnails/resized/adb4cd6873c27aeb7a412c14420b2a9a_86cf658e.webp
+unlisted: true
 ---
 ![[there is no picture.png]]
 In some of all the literature I read and used when I worked as a game design teacher, I picked up the simple formula: **premise=theme+conditions+conflict**. A formula I still come back to even today. However, it only tells what a premise is and not what a *good* premise is.
