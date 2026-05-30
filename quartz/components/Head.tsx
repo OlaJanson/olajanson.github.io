@@ -90,6 +90,7 @@ export default (() => {
         {js
           .filter((resource) => resource.loadTime === "beforeDOMReady")
           .map((res) => JSResourceToScriptElement(res, true))}
+        <script src={`${baseDir}/static/language-toggle.js`} defer></script>
         {additionalHead.map((resource) => {
           if (typeof resource === "function") {
             return resource(fileData)
