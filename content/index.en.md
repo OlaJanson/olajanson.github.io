@@ -16,7 +16,7 @@ Here [[I]] write things about what comes to mind and sometimes I draw too. I res
 
 The page is structured as a [[varför-digital-garden|digital garden]], a collection of notes, essays, and ideas in various stages of maturity interlinked with hyperlinks – a mysterious mutation of a blog and a wiki.
 
-But what does a mythomaniac mean in a lie detector factory? I write a little about it [[premiss|here]].
+But what does a mythomaniac mean in a lie detector factory? I write a little about it [[premiss.en|here]].
 
 Enjoy
 

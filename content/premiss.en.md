@@ -11,7 +11,7 @@ feature: 6. Verktyg/Attached/there is no picture.png
 thumbnail: thumbnails/resized/adb4cd6873c27aeb7a412c14420b2a9a_86cf658e.webp
 unlisted: true
 ---
-![[there is no picture.png]]
+![[there is no picture.png|300]]
 In some of all the literature I read and used when I worked as a game design teacher, I picked up the simple formula: **premise=theme+conditions+conflict**. A formula I still come back to even today. However, it only tells what a premise is and not what a *good* premise is.
 
 For me as a creator, the premise is really what makes me constantly come back and continue to develop, twist and turn. Simply because the premise for the story/game is so good. Some examples that in relatively recent times have nailed an excellent premise are the TV series [Pluribus](https://www.imdb.com/title/tt22202452/) or the book [There Is No Antimemetics Division](https://en.wikipedia.org/wiki/There_Is_No_Antimemetics_Division) and also the first book in [N.K Jemisin's Broken Earth series](https://en.wikipedia.org/wiki/N._K._Jemisin#Broken_Earth_series). I imagine it must have been a joy to work on the stories after having chiseled out such outstanding premises.
