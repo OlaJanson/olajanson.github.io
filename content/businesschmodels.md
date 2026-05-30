@@ -1,18 +1,21 @@
 ---
 title: Business model enshitification
 stage: evergreen
+publish:
+  - live
 tags:
   - garden
   - businessmodells
   - enshitification
+feature: 6. Verktyg/Attached/mandrake.png
+thumbnail: thumbnails/resized/f4f7cd6c4871bf9633f06ffe45cdca6b_86cf658e.webp
 ---
-
-![](mandrake.png)
+![[mandrake.png]]
 ##### Business models, busines schmodels sa Mandrake och gjorde en magisk gest.
 
 > "En **affärsmodell** eller **företagsmodell**, engelska _business model_, är i [företagsekonomi](https://sv.wikipedia.org/wiki/F%C3%B6retagsekonomi "Företagsekonomi") en teoretisk beskrivning av hur ett [företag](https://sv.wikipedia.org/wiki/F%C3%B6retag "Företag"), eller en affärsverksamhet, är tänkt att fungera. Det är ett konceptuellt verktyg som innehåller en uppsättning komponenter och beskriver deras inbördes relationer på ett sådant sätt att affärslogiken för en viss verksamhet konkret kan beskrivas." https://sv.wikipedia.org/wiki/Aff%C3%A4rsmodell
 
-Det ovanstående är näppeligen något anmärkningsvärt. Klart alla företag skall ha rätten att bestämma hur de tjänar sina pengar. Denna lilla rant handlar istället om frustrationen av att känna sig lurad eller åtminstone förförd av en affärsmodell. Förmodligen för att den aldrig presenterades som just en affärsmodell utan som det enda självklara sättet att göra något.
+Det ovanstående är näppeligen något anmärkningsvärt. Klart alla företag skall ha rätten att bestämma hur de tjänar sina pengar. Denna lilla rant handlar istället om frustrationen av att känna sig lurad eller åtminstone [[saxophone_cheese|förförd]] av en affärsmodell. Förmodligen för att den aldrig presenterades som just en affärsmodell utan som det enda självklara sättet att göra något.
 
 Exempel ett av dessa modeller är chattbotten och som vi chattar med i ett dialogfönster. Åtminstone gör det flesta av oss det. Jaha, nu får jag lydigt sitta och copy och pasta det som Ai:n säger till mig att skriva, göra eller säga. Men som många redan listat ut så är inte detta det bästa sättet att använda språkmodeller. Att låta dom skriva rakt in i de dokument du vill ändra i självklart oerhört mycket mer logiskt och effektivt. Eller det kände i alla fall jag när Claude co-work fyllde i en rad blanketter inför deklarationen åt mig. Men varför har denna feature tagit så lång tid? Självklart för att det är viktigt att vi fortsätter att betala för tjänsten som innehåller chatfönstret och sedan en sammanhållen upplevelse på ai-leverantörens sajt. Risken är att om du lämnar sajten där du pratar och vaggas in föreställningen om att Ai:n känner mig. Risken är att du upptäcker att det endaste är ett fåtal användar case där dialogruta med en inställsam chatbot är det bästa sättet att lösa detta.
 
