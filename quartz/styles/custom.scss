@@ -12,6 +12,15 @@ body {
   background-attachment: fixed;
 }
 
+/* Utopia fluid typography — viewport 375px→1200px */
+:root {
+  --step--1: clamp(0.88rem, 0.82rem + 0.3vw,  1.00rem);
+  --step-0:  clamp(1.10rem, 0.80rem + 0.9vw,  1.45rem);
+  --step-1:  clamp(1.40rem, 1.17rem + 1.0vw,  1.90rem);
+  --step-2:  clamp(1.75rem, 1.25rem + 1.8vw,  2.60rem);
+  --step-3:  clamp(2.00rem, 1.09rem + 3.9vw,  4.00rem);
+}
+
 /* Typography */
 .page h1, .page h2, .page h3, .page h4,
 .article-title,
@@ -21,14 +30,14 @@ body {
   letter-spacing: -0.01em;
 }
 
-.page h1 { font-weight: 900; font-size: 4rem; letter-spacing: -0.02em; }
-.page h2 { font-size: 1.9rem; margin-top: 2.2em; }
-.page h3 { font-size: 1.35rem; font-style: italic; }
+.page h1 { font-weight: 900; font-size: var(--step-3); letter-spacing: -0.02em; }
+.page h2 { font-size: var(--step-1); margin-top: 2.2em; }
+.page h3 { font-size: var(--step-0); font-style: italic; }
 
 /* h5 som bildtext */
 article.popover-hint h5 {
   font-family: "Labrada", ui-serif, Georgia, serif;
-  font-size: 0.95rem;
+  font-size: var(--step--1);
   font-weight: 700;
   font-style: normal;
   color: var(--darkgray);
@@ -40,7 +49,7 @@ article.popover-hint h5 {
 /* Article content */
 article.popover-hint {
   font-family: "Labrada", ui-serif, Georgia, serif;
-  font-size: 1.45rem;
+  font-size: var(--step-0);
   line-height: 1.8;
   font-weight: 300;
   color: color-mix(in oklab, var(--darkgray) 60%, var(--light));
