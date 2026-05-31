@@ -11,7 +11,7 @@ thumbnail: thumbnails/resized/a0a87df948776d5e64a0f2ba835fe629_86cf658e.webp
 ---
 ![[dithering-effect-hus_trans.png]]
 
-Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral, eller att göra något som skulle lämpa sig på linjära plattformar. Sidan är strukturerad som en [[varför-digital-garden|digital trädgård]] — en samling noter, essäer och idéer i olika mognadsstadier.
+Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral, eller att göra något som skulle lämpa sig på linjära plattformar. Sidan är strukturerad som en [[varfor-digital-garden|digital trädgård]] — en samling noter, essäer och idéer i olika mognadsstadier.
 
 ## Storytelling
 
@@ -71,7 +71,7 @@ Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också.
 <div class="card-desc">Bokklubb via e-post, politiska ställningstaganden och en påfallande ärlighet. En kort lista på varför jag respekterar honom.</div>
 </a>
 
-<a class="garden-card" href="varför-digital-garden">
+<a class="garden-card" href="varfor-digital-garden">
 <div class="card-meta"><span class="card-stage">🌿</span><span class="card-tags">#digital-trädgård #meta</span></div>
 <div class="card-title">Varför en digital trädgård?</div>
 <div class="card-desc">En students länktips ledde till Maggie Appleton, som ledde till insikten om hur djupt vi fastnat i andras affärssystem — och vad som faktiskt är möjligt.</div>

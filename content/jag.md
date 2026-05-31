@@ -19,7 +19,7 @@ Hos en schweizisk armékniv är mångfalden dess främsta unika egenskap. Det en
 
 Nej, jag tror snarare att jag kanske skall beskriva mig som en verktygslåda. Men den bildliga metaforen har inte samma genomslag. Den är för generell. Men den får  duga för nu. Men vad innehåller verktygslådan? 
 
-Pedagogik skulle jag vilja hävda är ett väl använt verktyg. Jag har jobbat från och till som lärare, främst inom yrkeshögskola men också på universitet och grundskola. Jag är jobbar efter bästa förmåga med [[formativ bedömning]]. Just nu uteslutande i online-kurser.  
+Pedagogik skulle jag vilja hävda är ett väl använt verktyg. Jag har jobbat från och till som lärare, främst inom yrkeshögskola men också på universitet och grundskola. Jag är jobbar efter bästa förmåga med [[formativ-bedomning]]. Just nu uteslutande i online-kurser.  
 
 [[Designprocess]] och kreativa processer är något jag också spenderat många yrkesår med. Senast som creative director på SKF. Men dessförinnan som affärsutvecklare på HiQ. 
 
