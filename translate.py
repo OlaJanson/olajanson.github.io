@@ -54,10 +54,6 @@ def main():
         # Try the standard pattern: file.md -> file.en.md
         en_path = src.parent / (src.stem + ".en.md")
 
-    if en_path.exists():
-        print(f"  {en_path.name} already exists — skipping translation")
-        sys.exit(0)
-
     print(f"  Translating {src.name} → {en_path.name}...")
     try:
         translated = translate_with_gemini(src.read_text(), src)

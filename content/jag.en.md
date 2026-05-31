@@ -1,24 +1,28 @@
+```markdown
 ---
-title: "About me"
+title: Fragment
 stage: seedling
-feature: arme-dith-trans.png
-tags: [meta]
+tags:
+  - meta
+  - cv
+publish:
+  - "false"
+feature: 6. Verktyg/Attached/arme-dith-trans.png
+thumbnail: thumbnails/resized/3674eac48546a6cf8b9055b90d279d7b_86cf658e.webp
 ---
 
-![](arme-dith-trans.png)
+![[arme-dith-trans.png]]
+I am a Swiss Army knife, I usually say.
 
-I'm a Swiss Army knife, I usually say.
+Or perhaps that's not a perfect description of what I am?
 
-Or maybe that's not a perfect description of what I am?
+For a Swiss Army knife, its diversity is its foremost unique characteristic. The individual tool isn't that impressive, but fitting all of them into one red unit is unique. And that's probably where I feel the analogy falls short. I remember as a child how irritated I was that this red multi-tool couldn't be used in my treehouses – how the small saw included was useless for cutting branches. How virtually every tool was frustratingly poor compared to its single-purpose variant.
 
-The Swiss Army knife's main selling point is its versatility. The individual tools aren't that impressive, but cramming them all into one little red unit is something unique. And that's where I feel the analogy starts to limp. I remember as a child how irritated I was with that red multi-tool — how the tiny saw was useless for cutting branches in my tree forts. How virtually every tool was frustratingly inferior compared to its single-purpose counterpart.
+No, I think I should rather describe myself as a toolbox. But that figurative metaphor doesn't have the same impact. It's too general. But it will have to do for now. But what does the toolbox contain?
 
-No, I think I'd rather describe myself as a toolbox. The metaphor doesn't have the same ring to it. It's too generic. But it'll do for now. So what's in the toolbox?
+Pedagogy, I would argue, is a well-used tool. I have worked on and off as a teacher, mainly in vocational colleges but also at universities and primary schools. I work to the best of my ability with [[formativ bedömning]]. Currently exclusively in online courses.
 
-Pedagogy, I'd argue, is a well-used tool. I've worked on and off as a teacher — primarily in vocational higher education, but also at university and primary school.
+[[Designprocess]] and creative processes are something I have also spent many professional years with. Most recently as creative director at SKF. But before that as a business developer at HiQ.
 
-Design process and creative processes are something else I've spent many professional years on. Most recently as Creative Director at SKF.
-
-Game design. I've designed games — digital, board games, and tabletop RPGs. More on that later.
-
-Three tools. Maybe not that impressive. But I'll write more later.
+[[Speldesign]]. I have designed games - digital, board games, and role-playing games. Right now, it's mostly role-playing games. I constantly have a game project going but rarely finish.
+```
