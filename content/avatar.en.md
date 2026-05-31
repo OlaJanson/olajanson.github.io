@@ -11,7 +11,6 @@ publish:
   - "true"
 feature: 6. Verktyg/Attached/unclehiro and zuko.png
 thumbnail: thumbnails/resized/ed9f0bbe8d6520ed1013ccd7ce4f8ed2_86cf658e.webp
-unlisted: true
 ---
 ![[unclehiro and zuko.png]]
 

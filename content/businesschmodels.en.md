@@ -5,7 +5,6 @@ tags:
   - garden
   - businessmodells
   - enshitification
-unlisted: true
 ---
 
 ![](mandrake.png)

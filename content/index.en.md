@@ -8,7 +8,6 @@ tags:
   - garden
 feature: 6. Verktyg/Attached/dithering-effect-hus_trans.png
 thumbnail: thumbnails/resized/a0a87df948776d5e64a0f2ba835fe629_86cf658e.webp
-unlisted: true
 ---
 ![[dithering-effect-hus_trans.png]]
 

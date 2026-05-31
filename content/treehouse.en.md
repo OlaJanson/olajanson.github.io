@@ -5,7 +5,6 @@ tags:
   - enshitification
   - designprocess
   - algorithm
-unlisted: true
 ---
 ![](treehouse.png)
 
