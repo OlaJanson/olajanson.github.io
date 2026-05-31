@@ -1,41 +1,4 @@
 // Language toggle — URL-based SV/EN navigation + tag page filtering
-// Patch: spegla svenska länkgrafen till engelska sidor i contentIndex
-// Körs omedelbart (synkront) för att hinna patcha window.fetch innan grafen initieras
-(function () {
-  function patchContentIndex(data) {
-    for (const [slug, entry] of Object.entries(data)) {
-      if (!slug.endsWith(".en")) continue;
-      if (entry.links && entry.links.length > 0) continue;
-      const svSlug = slug.slice(0, -3);
-      const svLinks = data[svSlug]?.links;
-      if (!svLinks || svLinks.length === 0) continue;
-      entry.links = svLinks.map((l) => (data[l + ".en"] ? l + ".en" : l));
-    }
-    return data;
-  }
-
-  const _origFetch = window.fetch;
-  window.fetch = function (...args) {
-    const url = typeof args[0] === "string" ? args[0] : (args[0]?.url || "");
-    if (url.includes("contentIndex")) {
-      return _origFetch.apply(this, args).then((res) => {
-        return res.text().then((text) => {
-          try {
-            const data = patchContentIndex(JSON.parse(text));
-            return new Response(JSON.stringify(data), {
-              status: res.status,
-              headers: { "content-type": "application/json" },
-            });
-          } catch (e) {
-            return new Response(text, { status: res.status, headers: { "content-type": "application/json" } });
-          }
-        });
-      });
-    }
-    return _origFetch.apply(this, args);
-  };
-})();
-
 (function () {
   const STORAGE_KEY = "preferred-lang";
 
