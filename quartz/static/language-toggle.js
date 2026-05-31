@@ -39,8 +39,15 @@
   }
 
   function getOppositeUrl() {
-    const path = window.location.pathname.replace(/\/$/, "");
-    if (path.endsWith(".en")) return path.slice(0, -3) || "/";
+    // Använd data-slug från body om tillgängligt (mer pålitligt än pathname)
+    const slug = document.body?.dataset?.slug || "";
+    if (slug) {
+      if (slug.endsWith(".en")) return "/" + slug.slice(0, -3).replace(/^index$/, "") || "/";
+      return "/" + slug + ".en";
+    }
+    // Fallback: pathname-baserat
+    const path = window.location.pathname.replace(/\/$/, "") || "/index";
+    if (path.endsWith(".en")) return path.slice(0, -3).replace(/\/index$/, "/") || "/";
     return path + ".en";
   }
 
