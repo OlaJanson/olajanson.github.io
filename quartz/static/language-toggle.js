@@ -28,16 +28,24 @@
     if (document.querySelector(".language-toggle")) return;
 
     const currentLang = getCurrentLang();
-    const savedLang = localStorage.getItem(STORAGE_KEY) || "sv";
+    let savedLang = localStorage.getItem(STORAGE_KEY) || "sv";
 
     const btn = document.createElement("button");
     btn.className = "language-toggle";
     btn.setAttribute("aria-label", "Växla språk / Toggle language");
-    btn.textContent = currentLang === "sv" ? "EN" : "SV";
+    // Visa vad man KAN byta TILL — baserat på sparad preferens, inte URL
+    btn.textContent = savedLang === "sv" ? "EN" : "SV";
 
     btn.addEventListener("click", () => {
-      const next = currentLang === "sv" ? "en" : "sv";
+      const next = savedLang === "sv" ? "en" : "sv";
       localStorage.setItem(STORAGE_KEY, next);
+      savedLang = next;
+
+      if (next === currentLang) {
+        btn.textContent = next === "sv" ? "EN" : "SV";
+        filterListingPages(next);
+        return;
+      }
 
       const opposite = getOppositeUrl();
       fetch(opposite, { method: "HEAD" })
@@ -45,7 +53,7 @@
           if (res.ok) {
             window.location.href = opposite;
           } else {
-            // Listing page (tag/folder): filter in place, no navigation
+            // Listing page (tag/folder) eller sida utan översättning: filtrera på plats
             btn.textContent = next === "sv" ? "EN" : "SV";
             filterListingPages(next);
           }
