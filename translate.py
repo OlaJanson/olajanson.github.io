@@ -104,11 +104,30 @@ def main():
     try:
         translated = translate_with_gemini(src.read_text(), src)
         if translated:
-            # Strip markdown code fences that Gemini sometimes adds anyway
+            # Strip markdown code fences that Gemini sometimes adds
             translated = translated.strip()
             if translated.startswith("```"):
                 lines = translated.splitlines()
                 translated = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
+                translated = translated.strip()
+
+            # Fix missing frontmatter delimiters
+            # If file starts with a YAML key instead of ---, Gemini dropped the opening ---
+            lines = translated.splitlines()
+            if lines and ":" in lines[0] and not lines[0].startswith("---"):
+                # Find where frontmatter ends: first ``` line or first blank line after YAML
+                fm_end = None
+                for i, line in enumerate(lines):
+                    if line.strip() == "```":
+                        fm_end = i
+                        break
+                if fm_end is not None:
+                    # Replace the ``` with --- and add opening ---
+                    lines[fm_end] = "---"
+                    translated = "---\n" + "\n".join(lines)
+                else:
+                    # No ``` found — just add opening ---
+                    translated = "---\n" + translated
 
             # Fix wiki-links: add .en suffix to known internal slugs
             known_slugs = get_known_slugs()
