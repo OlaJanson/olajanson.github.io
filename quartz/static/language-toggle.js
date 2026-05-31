@@ -1,4 +1,36 @@
 // Language toggle — URL-based SV/EN navigation + tag page filtering
+// Patch: spegla svenska länkgrafen till engelska sidor i contentIndex
+(function () {
+  const _origFetch = window.fetch;
+  window.fetch = function (...args) {
+    const url = typeof args[0] === "string" ? args[0] : (args[0]?.url || "");
+    if (url.includes("contentIndex")) {
+      return _origFetch.apply(this, args).then((res) => {
+        const clone = res.clone();
+        return clone.json().then((data) => {
+          let patched = false;
+          for (const [slug, entry] of Object.entries(data)) {
+            if (!slug.endsWith(".en")) continue;
+            if (entry.links && entry.links.length > 0) continue;
+            const svSlug = slug.slice(0, -3);
+            const svLinks = data[svSlug]?.links;
+            if (!svLinks || svLinks.length === 0) continue;
+            entry.links = svLinks.map((l) => (data[l + ".en"] ? l + ".en" : l));
+            patched = true;
+          }
+          if (!patched) return res;
+          return new Response(JSON.stringify(data), {
+            status: res.status,
+            statusText: res.statusText,
+            headers: res.headers,
+          });
+        }).catch(() => res);
+      });
+    }
+    return _origFetch.apply(this, args);
+  };
+})();
+
 (function () {
   const STORAGE_KEY = "preferred-lang";
 
