@@ -1,30 +1,35 @@
 // Language toggle — URL-based SV/EN navigation + tag page filtering
 // Patch: spegla svenska länkgrafen till engelska sidor i contentIndex
+// Körs omedelbart (synkront) för att hinna patcha window.fetch innan grafen initieras
 (function () {
+  function patchContentIndex(data) {
+    for (const [slug, entry] of Object.entries(data)) {
+      if (!slug.endsWith(".en")) continue;
+      if (entry.links && entry.links.length > 0) continue;
+      const svSlug = slug.slice(0, -3);
+      const svLinks = data[svSlug]?.links;
+      if (!svLinks || svLinks.length === 0) continue;
+      entry.links = svLinks.map((l) => (data[l + ".en"] ? l + ".en" : l));
+    }
+    return data;
+  }
+
   const _origFetch = window.fetch;
   window.fetch = function (...args) {
     const url = typeof args[0] === "string" ? args[0] : (args[0]?.url || "");
     if (url.includes("contentIndex")) {
       return _origFetch.apply(this, args).then((res) => {
-        const clone = res.clone();
-        return clone.json().then((data) => {
-          let patched = false;
-          for (const [slug, entry] of Object.entries(data)) {
-            if (!slug.endsWith(".en")) continue;
-            if (entry.links && entry.links.length > 0) continue;
-            const svSlug = slug.slice(0, -3);
-            const svLinks = data[svSlug]?.links;
-            if (!svLinks || svLinks.length === 0) continue;
-            entry.links = svLinks.map((l) => (data[l + ".en"] ? l + ".en" : l));
-            patched = true;
+        return res.text().then((text) => {
+          try {
+            const data = patchContentIndex(JSON.parse(text));
+            return new Response(JSON.stringify(data), {
+              status: res.status,
+              headers: { "content-type": "application/json" },
+            });
+          } catch (e) {
+            return new Response(text, { status: res.status, headers: { "content-type": "application/json" } });
           }
-          if (!patched) return res;
-          return new Response(JSON.stringify(data), {
-            status: res.status,
-            statusText: res.statusText,
-            headers: res.headers,
-          });
-        }).catch(() => res);
+        });
       });
     }
     return _origFetch.apply(this, args);
@@ -67,24 +72,16 @@
     if (document.querySelector(".language-toggle")) return;
 
     const currentLang = getCurrentLang();
-    let savedLang = localStorage.getItem(STORAGE_KEY) || "sv";
 
     const btn = document.createElement("button");
     btn.className = "language-toggle";
     btn.setAttribute("aria-label", "Växla språk / Toggle language");
-    // Visa vad man KAN byta TILL — baserat på sparad preferens, inte URL
-    btn.textContent = savedLang === "sv" ? "EN" : "SV";
+    // Visa alltid vad man kan byta TILL baserat på aktuell sida
+    btn.textContent = currentLang === "sv" ? "EN" : "SV";
 
     btn.addEventListener("click", () => {
-      const next = savedLang === "sv" ? "en" : "sv";
+      const next = currentLang === "sv" ? "en" : "sv";
       localStorage.setItem(STORAGE_KEY, next);
-      savedLang = next;
-
-      if (next === currentLang) {
-        btn.textContent = next === "sv" ? "EN" : "SV";
-        filterListingPages(next);
-        return;
-      }
 
       const opposite = getOppositeUrl();
       fetch(opposite, { method: "HEAD" })
