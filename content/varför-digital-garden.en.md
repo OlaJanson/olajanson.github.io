@@ -9,7 +9,7 @@ I assigned some homework in one of the courses I'm currently teaching — it's c
 
 One student whose primary interest was writing shared a site and said: "Maggie Appleton — her art and interests don't particularly speak to me, but the website itself is roughly what I want to achieve." The site was https://maggieappleton.com/. I immediately realized this was something out of the ordinary. Every time a student submitted something, I'd do a little extra research to see what framework they'd used — WordPress, Shopify, Squarespace, or whatever. Every example except Maggie's was built on a commercial platform. Her site was one where someone had sat down and thought: "How do I actually want this?" — ignored the templates and just built. From their own needs, from "this is how I'd want it to be."
 
-And that made me realize how deeply we're stuck inside other people's [[businessmodels.en|business models]]. We're stuck because they've convinced us this is the only way — that it's so much easier. Which I firmly believe is demonstrably not true, especially now with the help of AI.
+And that made me realize how deeply we're stuck inside other people's [[businesschmodels.en|business models]]. We're stuck because they've convinced us this is the only way — that it's so much easier. Which I firmly believe is demonstrably not true, especially now with the help of AI.
 
 I kept reading Maggie's site. I read her essay on [digital gardens](https://maggieappleton.com/garden-history). I was almost furious — mostly at myself. How the hell had I missed this? How had this passed me by? Why was I not invited to this party?
 
