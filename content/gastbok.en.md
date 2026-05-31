@@ -1,4 +1,3 @@
----
 title: "Guestbook"
 tags: [meta]
 ---
@@ -20,4 +19,4 @@ The posts are stored as [GitHub Issues](https://github.com/OlaJanson/olajanson.g
 
 ---
 
-*Do you prefer to write without an account? Send a [webmention](https://indieweb.org/Webmention) to `https://olajanson.se/gastbok` from your own site, or email [ola.janson@gmail.com](mailto:ola.janson@gmail.com).*
+*Prefer to write without an account? Send a [webmention](https://indieweb.org/Webmention) to `https://olajanson.se/gastbok` from your own site, or email [ola.janson@gmail.com](mailto:ola.janson@gmail.com).*
