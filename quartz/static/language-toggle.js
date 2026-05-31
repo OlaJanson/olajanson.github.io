@@ -134,6 +134,7 @@
 
   document.addEventListener("nav", () => {
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
+    applyPreference();
     injectButton();
     filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
   });
