@@ -58,6 +58,12 @@ def main():
     try:
         translated = translate_with_gemini(src.read_text(), src)
         if translated:
+            # Strip markdown code fences that Gemini sometimes adds
+            translated = translated.strip()
+            if translated.startswith("```"):
+                lines = translated.splitlines()
+                # Remove first line (```markdown or ```) and last line (```)
+                translated = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
             en_path.write_text(translated)
             print(f"  ✓ {en_path.name} created")
         else:
