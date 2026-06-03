@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ola Janson</title>
+    <style>
+        @font-face {
+            font-family: 'Magic Romance';
+            src: url('./fonts/magic-romance.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Fraunces';
+            src: url('./fonts/fraunces.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'SKF Sans';
+            src: url('./fonts/skfsans.otf') format('opentype');
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #12100e;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.08) 3px,
+                rgba(0,0,0,0.08) 4px
+            );
+            color: #e0e0e0;
+            font-family: 'Fraunces', Georgia, serif;
+        }
+
+        /* HERO */
+        .hero {
+            width: 100%;
+            height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: visible;
+            padding-bottom: 0;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('./dithering-effect-hus_trans.png');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(80%) contrast(1.2);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to bottom, transparent, #12100e);
+        }
+        .hero-title {
+            font-family: 'Magic Romance', serif;
+            font-size: 64px;
+            color: #d7be00;
+            text-align: left;
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.9);
+            position: relative;
+            z-index: 200;
+            line-height: 1.15;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 24px;
+            margin-bottom: -18px;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            width: 100%;
+            background-color: #181c1e;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            font-family: 'SKF Sans', sans-serif;
+        }
+        .topbar input[type="search"] {
+            flex: 0 0 auto;
+            width: 180px;
+            margin-left: auto;
+            border: 1px solid #333;
+            border-radius: 20px;
+            background: #0e0e0e;
+            color: #e0e0e0;
+            padding: 6px 14px;
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+        .topbar input[type="search"]::placeholder { color: #666; }
+        .topbar-toggle {
+            cursor: pointer;
+            font-size: 18px;
+            color: #e0e0e0;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+        }
+        .topbar-lang {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #e0e0e0;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* INTRO */
+        .intro-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 48px;
+            padding: 56px 24px;
+        }
+        .intro-text {
+            font-size: 28px;
+            line-height: 1.85;
+            color: #e0e0e0;
+        }
+        .intro-text a {
+            color: #5fd7ff;
+            text-decoration: none;
+        }
+        .intro-text a:hover { text-decoration: underline; }
+        .graf-container {
+            border: 1px solid #2e2e2e;
+            border-radius: 8px;
+            padding: 16px;
+            background: #181c1e;
+            min-height: 220px;
+        }
+
+        /* CATEGORIES */
+        .categories {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px 64px;
+        }
+        .category-section {
+            margin-bottom: 48px;
+        }
+        .category-title {
+            font-family: 'Magic Romance', serif;
+            font-size: 42px;
+            color: #d7be00;
+            margin-bottom: 24px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+        .card {
+            background: #181c1e;
+            border: 1px dashed #000;
+            border-radius: 6px;
+            padding: 28px 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            min-height: 170px;
+        }
+        .card-icon {
+            color: #5fd7ff;
+            font-size: 20px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        .card-body {}
+        .card-title {
+            font-family: 'Fraunces', serif;
+            font-weight: bold;
+            font-size: 22px;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .card-sub {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 13px;
+            color: #e0e0e0;
+            opacity: 0.65;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <h1 class="hero-title">En mytoman i en lögndetektorfabrik</h1>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <input type="search" placeholder="Sök...">
+    <button class="topbar-toggle" title="Växla tema">☀</button>
+    <div class="topbar-lang">🌐 ENGLISH ▾</div>
+</div>
+
+<!-- INTRO -->
+<section class="intro-section">
+    <div class="intro-text">
+        <p>Här skriver <a href="#">jag</a> saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral eller göra något som skulle lämpa sig på linjära plattformar eller sociala medier. Här har jag full kontroll. Här kan jag till exempel skriva om <a href="#">kojor</a> eller <a href="#">affärsmodeller</a> för att jag vill det.</p>
+        <br>
+        <p>Sidan är strukturerad som en <a href="#">digital trädgård</a>, en samling noter, essäer och idéer i olika mognadsstadier sammanlänkade med hyperlänkar – en mystisk mutation av en blogg och en wiki.</p>
+        <br>
+        <p>Men vad betyder en mytoman i en lögndetektorfabrik? Det kanske jag skall förklara. Men inte nu.</p>
+        <br>
+        <p>Håll till godo<br>Ola</p>
+    </div>
+    <div class="graf-container">
+        <div style="font-family:'SKF Sans',sans-serif; font-size:11px; color:#888; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.08em;">Grafvy</div>
+        <svg width="100%" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- Edges from index -->
+            <line x1="150" y1="110" x2="80"  y2="55"  stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="220" y2="60"  stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="70"  y2="155" stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="230" y2="155" stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="150" y2="185" stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="55"  y2="100" stroke="#3a3a3a" stroke-width="1.5"/>
+            <line x1="150" y1="110" x2="245" y2="105" stroke="#3a3a3a" stroke-width="1.5"/>
+            <!-- Secondary edges -->
+            <line x1="80"  y1="55"  x2="30"  y2="30"  stroke="#2a2a2a" stroke-width="1"/>
+            <line x1="220" y1="60"  x2="270" y2="30"  stroke="#2a2a2a" stroke-width="1"/>
+            <line x1="70"  y1="155" x2="25"  y2="185" stroke="#2a2a2a" stroke-width="1"/>
+            <line x1="230" y1="155" x2="275" y2="185" stroke="#2a2a2a" stroke-width="1"/>
+            <!-- Outer nodes -->
+            <circle cx="30"  cy="30"  r="5" fill="#444"/>
+            <circle cx="270" cy="30"  r="5" fill="#444"/>
+            <circle cx="25"  cy="185" r="5" fill="#444"/>
+            <circle cx="275" cy="185" r="5" fill="#444"/>
+            <!-- Connected nodes with labels -->
+            <circle cx="80"  cy="55"  r="8" fill="#5aad6b"/>
+            <text x="80" y="44" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">premiss</text>
+            <circle cx="220" cy="60"  r="8" fill="#5aad6b"/>
+            <text x="220" y="49" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">avatar</text>
+            <circle cx="70"  cy="155" r="8" fill="#5aad6b"/>
+            <text x="70" y="171" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">treehouse</text>
+            <circle cx="230" cy="155" r="8" fill="#5aad6b"/>
+            <text x="230" y="171" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">anthony</text>
+            <circle cx="150" cy="185" r="8" fill="#5aad6b"/>
+            <text x="150" y="201" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">trädgård</text>
+            <circle cx="55"  cy="100" r="8" fill="#5aad6b"/>
+            <text x="55" y="89" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">saxophone</text>
+            <circle cx="245" cy="105" r="8" fill="#5aad6b"/>
+            <text x="245" y="94" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">business</text>
+            <!-- Central node -->
+            <circle cx="150" cy="110" r="13" fill="#e07a30"/>
+            <text x="150" y="129" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">index</text>
+        </svg>
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories">
+
+    <section class="category-section">
+        <h2 class="category-title">Storytelling</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Vikten av att ha en enastående premiss</div>
+                    <div class="card-sub">Premissen är det som gör att jag ständigt kommer tillbaka och fortsätter utveckla. Formeln är enkel — men vad gör en premiss verkligt bra?</div>
+                </div>
+            </div>
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Karaktärsutveckling i Avatar</div>
+                    <div class="card-sub">Vad Avatar: The Last Airbender och Legend of Korra gör rätt — och fel — med karaktärsutveckling och förändring över tid.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section">
+        <h2 class="category-title">Enshitifiering</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Affärsmodeller, affärschmodeller</div>
+                    <div class="card-sub">Om frustration när affärsmodeller är dolda under lager av manipulativ UX — chatbottar, sociala medier, och illusionen av att detta är det enda sättet.</div>
+                </div>
+            </div>
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Varför finns det så få bilder på kojor byggda av barn?</div>
+                    <div class="card-sub">En besk tanke om hur algoritmer och enshitification har gjort det svårt att hitta det äkta och operfekta på internet.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section">
+        <h2 class="category-title">AI</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Medan jag väntar på klarhet dansar jag tveksamt mot ruinens brant</div>
+                    <div class="card-sub">AI-tjänster förför oss med ett sliskigt 80-talssaxofonsolo. Jag ser det och ser det inte — allt blandas samman av affärsmodellernas besvärjelser.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section">
+        <h2 class="category-title">Övrigt</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Jag gillar verkligen Anthony Jeselnik</div>
+                    <div class="card-sub">Bokklubb via e-post, politiska ställningstaganden och en påfallande ärlighet. En kort lista på varför jag respekterar honom.</div>
+                </div>
+            </div>
+            <div class="card">
+                <span class="card-icon">▸</span>
+                <div class="card-body">
+                    <div class="card-title">Varför en digital trädgård?</div>
+                    <div class="card-sub">En students länktips ledde till Maggie Appleton, som ledde till insikten om hur djupt vi fastnat i andras affärssystem — och vad som faktiskt är möjligt.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
