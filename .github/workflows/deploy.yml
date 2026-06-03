@@ -41,6 +41,11 @@ jobs:
       - run: npm ci
       - run: npx quartz plugin install
       - run: npx quartz build
+      - name: Copy static HTML files to public
+        run: |
+          cp content/index2.html public/index2.html
+          mkdir -p public/fonts
+          cp content/fonts/* public/fonts/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
