@@ -190,16 +190,20 @@
         }
         .card {
             background: #181c1e;
-            border: 1px dashed #2a2a2a;
+            border: none;
             border-radius: 6px;
             padding: 24px 20px;
             display: flex; gap: 14px;
             align-items: flex-start;
             min-height: 160px;
             text-decoration: none;
-            transition: border-color 0.2s;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
-        .card:hover { border-color: #d7be00; }
+        .card:hover {
+            transform: translateY(-5px);
+            background: #232b2f !important;
+            box-shadow: 0 8px 28px rgba(215, 190, 0, 0.15), 0 2px 8px rgba(0,0,0,0.5);
+        }
         .card-icon { color: #5fd7ff; font-size: 18px; margin-top: 3px; flex-shrink: 0; }
         .card-title {
             font-family: 'Fraunces', serif;
