@@ -80,12 +80,17 @@
         .topbar {
             width: 100%;
             background: #181c1e;
+        }
+        .topbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            align-items: center;
-            padding: 10px 24px;
+            justify-content: flex-end;
+            padding: 10px 0;
         }
         .topbar-controls {
-            margin-left: auto;
+            width: 280px;
+            padding-right: 24px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -243,6 +248,7 @@
 
 <!-- TOPBAR -->
 <div class="topbar">
+<div class="topbar-inner">
 <div class="topbar-controls">
     <div class="search">
         <button class="search-button">
@@ -257,6 +263,7 @@
     <button class="language-toggle" aria-label="Växla språk">
         <span class="lang-sv active">SV</span><span class="lang-separator">/</span><span class="lang-en">EN</span>
     </button>
+</div>
 </div>
 </div>
 
