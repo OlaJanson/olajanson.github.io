@@ -82,11 +82,15 @@
             background: #181c1e;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
             padding: 10px 24px;
         }
-        .topbar .search { display: flex; align-items: center; }
+        .topbar-controls {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .topbar-controls .search { display: flex; align-items: center; flex: none; }
 
         /* ── TREDELAD LAYOUT ── */
         .page-layout {
@@ -239,6 +243,7 @@
 
 <!-- TOPBAR -->
 <div class="topbar">
+<div class="topbar-controls">
     <div class="search">
         <button class="search-button">
             <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg>
@@ -252,6 +257,7 @@
     <button class="language-toggle" aria-label="Växla språk">
         <span class="lang-sv active">SV</span><span class="lang-separator">/</span><span class="lang-en">EN</span>
     </button>
+</div>
 </div>
 
 <!-- TREDELAD LAYOUT -->
