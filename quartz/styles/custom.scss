@@ -268,11 +268,12 @@ body::before {
 /* Artikelrubrik — Magic Romance, stor */
 h1.article-title {
   font-family: 'Magic Romance', serif !important;
-  font-size: clamp(2.4rem, 4vw + 1rem, 4.2rem) !important;
+  font-size: clamp(2rem, 4vw + 1rem, 4.2rem) !important;
   line-height: 1.1 !important;
   font-weight: normal !important;
   letter-spacing: -0.01em;
   margin-bottom: 0.6em;
+  overflow-wrap: break-word;
 }
 
 /* Gul rubrikfärg i dark mode */
@@ -334,11 +335,13 @@ article.popover-hint {
   border-bottom-color: #2a2a2a;
 }
 
-/* Sidebars: account for topbar height when sticky */
-#quartz-body .sidebar.left,
-#quartz-body .sidebar.right {
-  top: var(--topbar-height);
-  height: calc(100vh - var(--topbar-height));
+/* Sidebars: account for topbar height when sticky — desktop/tablet only */
+@media (min-width: 800px) {
+  #quartz-body .sidebar.left,
+  #quartz-body .sidebar.right {
+    top: var(--topbar-height);
+    height: calc(100vh - var(--topbar-height));
+  }
 }
 
 /* Reduce page-header top margin (was $topSpacing = 6rem) */
