@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vikten av att ha en enastående premiss — Ola Janson</title>
+    <link href="./index.css" rel="stylesheet" type="text/css">
+    <script src="./prescript.js" type="module"></script>
+    <style>
+        @font-face {
+            font-family: 'Magic Romance';
+            src: url('./fonts/magic-romance.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Fraunces';
+            src: url('./fonts/fraunces.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'SKF Sans';
+            src: url('./fonts/skfsans.otf') format('opentype');
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #12100e !important;
+            background-image: repeating-linear-gradient(
+                0deg, transparent, transparent 3px,
+                rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+            ) !important;
+            color: #e0e0e0 !important;
+            font-family: 'Fraunces', Georgia, serif !important;
+            max-width: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* ── GEMENSAM GRID-BREDD ── */
+        .grid-inner {
+            display: grid;
+            grid-template-columns: 240px 1fr 280px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ── TITELSEKTION ── */
+        .title-section {
+            padding-top: 80px;
+            position: relative;
+            z-index: 101;
+        }
+        .title-left  { /* tom */ }
+        .title-main  { padding: 0 48px 0 48px; }
+        .title-right { /* tom */ }
+
+        .page-title {
+            font-family: 'Magic Romance', serif;
+            font-size: 52px;
+            color: #d7be00;
+            line-height: 1.15;
+            margin-bottom: -15px;
+        }
+
+        /* ── TOPBAR (full bredd, sticky) ── */
+        .topbar {
+            width: 100%;
+            background: #181c1e;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0;
+        }
+        .topbar-controls {
+            width: 280px;
+            padding-right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .search-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            color: #888;
+            padding: 4px 12px;
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .search-button svg { width: 12px; height: 12px; stroke: #888; fill: none; }
+        .darkmode-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 3px; display: flex; align-items: center;
+            margin-left: auto;
+        }
+        .darkmode-btn svg { width: 18px; height: 18px; fill: #888; }
+        .nightIcon { display: none; }
+        [saved-theme="dark"] .dayIcon  { display: none; }
+        [saved-theme="dark"] .nightIcon{ display: block; }
+        .language-toggle {
+            background: none; border: none; cursor: pointer;
+            color: #888; font-family: 'SKF Sans', sans-serif;
+            font-size: 12px; padding: 3px 6px; white-space: nowrap;
+        }
+        .lang-separator { margin: 0 1px; opacity: 0.3; }
+        .lang-sv, .lang-en { opacity: 0.4; }
+        .lang-sv.active, .lang-en.active { opacity: 1; color: #e0e0e0; }
+
+        /* ── INNEHÅLLSLAYOUT ── */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr 280px;
+            grid-template-areas: "left main right";
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 32px;
+            align-items: start;
+        }
+        .sidebar-left  { grid-area: left; }
+        .main-col      { grid-area: main; padding: 0 48px 80px 48px; }
+        .sidebar-right { grid-area: right; padding: 0 24px 0 0; position: sticky; top: 44px; }
+
+        /* ── PROPERTIES ── */
+        .title-divider {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin-bottom: 14px;
+        }
+        .properties {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+        .prop-icon { color: #555; font-size: 13px; flex-shrink: 0; }
+        .prop-label {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 11px; color: #555;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            flex-shrink: 0;
+        }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 12px; color: #888; text-decoration: none;
+        }
+        .tag:hover { color: #d7be00; }
+
+        /* ── ARTIKELBRÖDTEXT ── */
+        .article-body { font-size: 19px; line-height: 2.1; color: #d4d0c8; }
+        .article-body p { margin-bottom: 1.4em; }
+        .article-body p:last-child { margin-bottom: 0; }
+        .article-body a { color: #5fd7ff; text-decoration: none; }
+        .article-body a:hover { text-decoration: underline; }
+        .article-body strong { color: #e0e0e0; font-weight: 700; }
+        .article-body em { font-style: italic; }
+        .article-body img {
+            display: block; max-width: 300px;
+            border-radius: 4px; margin: 0 0 1.6em 0; opacity: 0.9;
+        }
+
+        /* ── HÖGERSIDEBAR ── */
+        .graph { all: unset; display: block; margin-bottom: 28px; }
+        .graph h3, .backlinks h3 {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 10px; color: #666;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .graph-outer {
+            width: 100%; height: 240px;
+            border: 1px solid #222; border-radius: 6px;
+            background: #181c1e; overflow: hidden; position: relative;
+        }
+        .graph-container { width: 100%; height: 100%; }
+        .global-graph-icon {
+            position: absolute; bottom: 8px; right: 8px;
+            background: none; border: none; cursor: pointer;
+            color: #555; padding: 4px;
+        }
+        .global-graph-icon svg { width: 14px; height: 14px; }
+        .global-graph-outer { display: none; }
+        .global-graph-outer.active { display: block; }
+
+        .backlinks ul { list-style: none; padding: 0; margin: 0; }
+        .backlinks ul li { margin-bottom: 6px; }
+        .backlinks ul li a {
+            font-family: 'Fraunces', serif;
+            font-size: 14px; color: #888;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .backlinks ul li a:hover { color: #d7be00; }
+
+        /* ── TILLBAKA-LÄNK ── */
+        .back-link {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 12px; color: #555;
+            text-decoration: none; padding-left: 24px;
+            display: inline-block; padding-top: 4px;
+        }
+        .back-link:hover { color: #888; }
+    </style>
+</head>
+<body>
+
+<!-- 1. RUBRIK -->
+<div class="title-section">
+    <div class="grid-inner">
+        <div class="title-left"></div>
+        <div class="title-main">
+            <h1 class="page-title">Vikten av att ha en<br>enastående premiss</h1>
+        </div>
+        <div class="title-right"></div>
+    </div>
+</div>
+
+<!-- 2. TOPBAR — full bredd, sticky -->
+<div class="topbar">
+    <div class="topbar-inner">
+        <div class="topbar-controls">
+            <button class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7" role="img"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"/><circle cx="8" cy="8" r="7"/></svg>
+                Sök
+            </button>
+            <button class="darkmode-btn" style="margin-left:auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="dayIcon" viewBox="0 0 35 35"><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="nightIcon" viewBox="0 0 100 100"><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"/></svg>
+            </button>
+            <button class="language-toggle" aria-label="Växla språk">
+                <span class="lang-sv active">SV</span><span class="lang-separator">/</span><span class="lang-en">EN</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. INNEHÅLL -->
+<div class="page-layout">
+
+    <div class="sidebar-left">
+        <a class="back-link" href="./index2">← Tillbaka</a>
+    </div>
+
+    <main class="main-col">
+        <hr class="title-divider">
+        <div class="properties">
+            <span class="prop-icon">◈</span>
+            <span class="prop-label">Properties</span>
+            <div class="tags">
+                <a class="tag" href="#">#storytelling</a>
+                <a class="tag" href="#">#premiss</a>
+                <a class="tag" href="#">#story arc</a>
+            </div>
+        </div>
+
+        <article class="article-body">
+            <img src="./there is no picture.png" alt="There Is No Antimemetics Division — bokomslag">
+
+            <p>I någon av all litteratur som jag läste och använde när jag jobbade som lärare i speldesign så plockade jag upp den enkla formeln: <strong>premiss=tema+förutsättningar+konflikt</strong>. En formel som jag fortfarande kommer tillbaka till än i dag. Den berättar dock bara vad en premiss är och inte vad en <em>bra</em> premiss är.</p>
+
+            <p>För mig som kreatör är premissen egentligen det som får mig att ständigt komma tillbaka och fortsätta utveckla, vrida och vända. Enbart för att premissen för berättelsen/spelet är så bra. Några exempel som i relativ närtid har spikat en utmärkt premiss är tv-serien <a href="https://www.imdb.com/title/tt22202452/">Pluribus</a> eller boken <a href="https://en.wikipedia.org/wiki/There_Is_No_Antimemetics_Division">There Is No Antimemetics Division</a> och även första boken i <a href="https://en.wikipedia.org/wiki/N._K._Jemisin#Broken_Earth_series">N.K Jemisins Broken Earth series</a>. Jag föreställer mig att det måste varit en fröjd att jobba fram berättelserna efter att ha mejslat fram så enastående premisser.</p>
+
+            <p>Det mesta av mitt kreativa skapande kretsar sedan ett tag tillbaka runt rollspelskampanjer eller egna spel. Det har hänt att jag likt en irriterande dominant regissör skickat tillbaka karaktärskoncept för att det inte adderat tillräckligt till en intressant premiss. Det är inte alltid jag kan sätta fingret på vad som saknas men det är något som gör att jag undrar vad som kommer att hända med den karaktären, vilket i sin förlängning inte gjort att jag känner någon lust att utforska berättelsen alls.</p>
+
+            <p>När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för att man skall spendera ett år av återkommande spelträffar. Någon form av <a href="./avatar">character arc</a> känns viktigt för mig att det sker. Men det är som bekant helt upp till den enskilde spelaren ifall det sker eller inte. Jag kan locka, provocera och utmana spelaren men jag kan inte tvinga en spelare att spela sin karaktär och utmana. Och missförstå mig rätt – det handlar inte om att det är min syn på hur karaktären förändras som är viktig – det är bara det att det sker någon form av förändring som jag känner spelar roll. Men detta tål att utvecklas i en egen post.</p>
+
+            <p>Jag har ett par egna premisser som inte slutar att leverera. Som jag nästan måste hindra mig själv från att inte fortsätta jobba med. I det allra senaste är det premissen i <em>Infernal Ventures</em>: i en överindustrialiserad sekelskiftesvärld så är helvetet självt den sista oexploaterade utposten. Spela specialförband som rekryterats för att skydda "The Sanctuary" där industrimagnaterna valt att sätta upp sin verksamhet.</p>
+
+            <p>Den andra som jag aldrig gjort riktigt klart men som på något sätt ständigt finns där – premissen som också är namnet på denna sajten: <em>"En mytoman i en lögndetektorfabrik"</em>. Du är en tvångsmässig lögnare som jobbar i fabriken som producerar den tekniska artefakt som faktiskt kan avslöja dig. Kul kan man tycka.</p>
+
+            <p>Förresten. Sa någon <a href="https://www.imdb.com/title/tt11280740/">Severance</a>. Vilka strålande premisser har jag glömt?</p>
+        </article>
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="graph">
+            <h3>Grafvy</h3>
+            <div class="graph-outer">
+                <div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:3,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:false,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div>
+                <button class="global-graph-icon" aria-label="Global Graph">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55" fill="currentColor"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z"/></svg>
+                </button>
+            </div>
+            <div class="global-graph-outer">
+                <div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:false,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div>
+            </div>
+        </div>
+
+        <div class="backlinks">
+            <h3>Backlinks</h3>
+            <ul>
+                <li><a href="./index2">En mytoman i en lögndetektorfabrik</a></li>
+            </ul>
+        </div>
+    </aside>
+
+</div>
+
+<script src="./postscript.js" type="module"></script>
+</body>
+</html>
