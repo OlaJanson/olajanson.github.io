@@ -1,5 +1,28 @@
 @use "./variables.scss" as *;
 
+/* ── ANPASSADE FONTER ── */
+@font-face {
+  font-family: 'Magic Romance';
+  src: url('./fonts/magic-romance.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url('./fonts/fraunces.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SKF Sans';
+  src: url('./fonts/skfsans.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Garden-whisperer design — varm papperston, terracotta/moss, Labrada/IBM Plex Mono */
 
 /* Ambient background gradients */
@@ -223,4 +246,107 @@ article.popover-hint img {
   color: color-mix(in oklab, var(--darkgray) 80%, var(--light));
   line-height: 1.65;
   font-weight: 200;
+}
+
+/* ══════════════════════════════════════════════
+   NY DESIGN — index2 / premiss
+   ══════════════════════════════════════════════ */
+
+/* Bakgrundstextur (skanlinjerat) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+  );
+}
+
+/* Artikelrubrik — Magic Romance, stor */
+h1.article-title {
+  font-family: 'Magic Romance', serif !important;
+  font-size: clamp(2.4rem, 4vw + 1rem, 4.2rem) !important;
+  line-height: 1.1 !important;
+  font-weight: normal !important;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6em;
+}
+
+/* Gul rubrikfärg i dark mode */
+:root[saved-theme="dark"] h1.article-title,
+.dark h1.article-title {
+  color: #d7be00 !important;
+}
+
+/* Brödtext — Fraunces */
+article.popover-hint {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: var(--step-0);
+  line-height: 2.0;
+  font-weight: 200;
+}
+
+/* Sidebartitel — SKF Sans */
+.page-title {
+  font-family: 'SKF Sans', sans-serif !important;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem !important;
+}
+
+/* ── STICKY TOPBAR ── */
+:root {
+  --topbar-height: 52px;
+}
+
+.quartz-topbar {
+  grid-area: grid-topbar;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  background: var(--light);
+  border-bottom: 1px solid var(--lightgray);
+}
+
+.quartz-topbar-title {
+  font-family: 'SKF Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dark);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  &:hover { opacity: 1; color: var(--secondary); }
+}
+
+:root[saved-theme="dark"] .quartz-topbar,
+.dark .quartz-topbar {
+  background: #181c1e;
+  border-bottom-color: #2a2a2a;
+}
+
+/* Sidebars: account for topbar height when sticky */
+#quartz-body .sidebar.left,
+#quartz-body .sidebar.right {
+  top: var(--topbar-height);
+  height: calc(100vh - var(--topbar-height));
+}
+
+/* Reduce page-header top margin (was $topSpacing = 6rem) */
+#quartz-body .page-header {
+  margin-top: 1.5rem;
+}
+
+/* Toolbar (search + darkmode) alignment */
+.sidebar.right {
+  padding-top: 1.2rem;
 }

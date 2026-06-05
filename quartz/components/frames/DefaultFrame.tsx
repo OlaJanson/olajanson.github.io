@@ -1,5 +1,6 @@
 import { PageFrame, PageFrameProps } from "./types"
 import HeaderConstructor from "../Header"
+import { pathToRoot } from "../../util/path"
 
 const Header = HeaderConstructor()
 
@@ -21,8 +22,14 @@ export const DefaultFrame: PageFrame = {
     right,
     footer: Footer,
   }: PageFrameProps) {
+    const baseDir = pathToRoot(componentData.fileData.slug!)
+    const siteTitle = componentData.cfg?.pageTitle ?? ""
+
     return (
       <>
+        <div class="quartz-topbar">
+          <a href={baseDir} class="quartz-topbar-title">{siteTitle}</a>
+        </div>
         <div class="left sidebar">
           {left.map((BodyComponent) => (
             <BodyComponent {...componentData} />
