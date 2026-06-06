@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vikten av att ha en enastående premiss — Ola Janson</title>
-    <link href="./index.css" rel="stylesheet" type="text/css">
-    <script src="./prescript.js" type="application/javascript" data-persist="true"></script>
-    <script type="application/javascript" data-persist="true">const fetchData = fetch("./static/contentIndex.json").then(data => data.json())</script>
+    <link href="/index.css" rel="stylesheet" type="text/css">
+    <script src="/prescript.js" type="application/javascript" data-persist="true"></script>
+    <script type="application/javascript" data-persist="true">const fetchData = fetch("/static/contentIndex.json").then(data => data.json())</script>
     <style>
         @font-face {
             font-family: 'Magic Romance';
-            src: url('./fonts/magic-romance.ttf') format('truetype');
+            src: url('/fonts/magic-romance.ttf') format('truetype');
         }
         @font-face {
             font-family: 'Fraunces';
-            src: url('./fonts/fraunces.ttf') format('truetype');
+            src: url('/fonts/fraunces.ttf') format('truetype');
         }
         @font-face {
             font-family: 'SKF Sans';
-            src: url('./fonts/skfsans.otf') format('opentype');
+            src: url('/fonts/skfsans.otf') format('opentype');
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -241,7 +241,7 @@
 
     <!-- Vänster: bokomslag -->
     <aside class="sidebar-left">
-        <img class="book-cover" src="./there is no picture.png" alt="There Is No Antimemetics Division — bokomslag">
+        <img class="book-cover" src="/there%20is%20no%20picture.png" alt="There Is No Antimemetics Division — bokomslag">
     </aside>
 
     <!-- Mitten: rubrik, properties, artikel, backlinks -->
@@ -277,7 +277,7 @@
         <div class="backlinks">
             <h3>Backlinks</h3>
             <ul>
-                <li><a href="./">En mytoman i en lögndetektorfabrik</a></li>
+                <li><a href="/">En mytoman i en lögndetektorfabrik</a></li>
             </ul>
         </div>
     </main>
@@ -300,6 +300,6 @@
 
 </div>
 
-<script src="./postscript.js" type="module" data-persist="true"></script>
+<script src="/postscript.js" type="module" data-persist="true"></script>
 </body>
 </html>
