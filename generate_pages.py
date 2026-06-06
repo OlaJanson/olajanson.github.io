@@ -8,7 +8,7 @@ PAGES = {
     "anthony": {
         "title": "Jag gillar verkligen Anthony Jesilnek",
         "tags": ["#comedian", "#likeablepersons"],
-        "image": "/Anthony.jpg",
+        "image": "/anthony.jpg",
         "image_alt": "Anthony Jesilnek",
         "body": """<p>I den nu påhittade serien personer jag gillar så inleder jag med sagda komiker. Men vem är Anthony Jeselinik kanske du säger? Han är en komiker som kanske mest är känd för sina stundtals mörka skämt. Och innan du viftar bort det så vill jag bara säga att det är inte är därför jag gillar honom. Jo, men visst, han är kul. Men här är en liten lista varför jag respekterar honom:</p>
 <ul>
@@ -22,7 +22,7 @@ PAGES = {
     "avatar": {
         "title": "Character arcs of Avatar",
         "tags": ["#storytelling", "#characterarc", "#avatarthelastaibender"],
-        "image": "/unclehiro%20and%20zuko.png",
+        "image": "/unclehiro-and-zuko.png",
         "image_alt": "Uncle Iroh och Zuko",
         "body": """<h5>Villkorslös kärlek</h5>
 <p>Jag sitter med min 10 åring och gör vår lördags binge förmiddagar av Avatar the last airbender. Eller vi har kommit så lång som slutet på säsongsfinalen av anda säsongen av legend of Korra.</p>
@@ -31,7 +31,7 @@ PAGES = {
 <p>Om jag skulle plocka upp en sak som båda the last airbender och legend of Korra gör ofantligt bra så är det character development. Karaktärer som vi vanligtvis skulle beskriva som arketyper för det goda eller onda tillåts tas längs med lååånga arcs för att till slut hamna på en plats där du i hemlighet alltid önskat att de var.</p>
 <p>I the last airbender är prins Zuko det absolut starkaste exemplet, men i legend of Korra skulle jag säga att det är Tenzin. Kanske är det för att han precis som jag är far till många barn. Jag blev verkligen berörd av bördan av ansvar som den siste av sin sort och bördan av föräldraskap.</p>
 <p>Jag säger som Eska: <em>"You will always hold a special place in the organ that pumps my blood."</em></p>
-<img src="/Eska.png" alt="Eska — Legend of Korra">""",
+<img src="/eska.png" alt="Eska — Legend of Korra">""",
         "backlinks": [("/premiss", "Vikten av att ha en enastående premiss"), ("/", "En mytoman i en lögndetektorfabriken")],
     },
     "businesschmodels": {
