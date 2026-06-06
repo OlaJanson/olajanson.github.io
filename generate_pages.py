@@ -30,7 +30,8 @@ PAGES = {
 <p>Legend of Korra var inte lika imponerande till en början. Lite för mycket silly, lite för mycket soap opera romance. Hantverket var mästerligt men kanske en lite för stor överdos av spektakulära krafter. Men halvvägs in i säsong två reste den sig till en grad att jag allvarligt funderade på att stanna inne och kolla resten hela dagen.</p>
 <p>Om jag skulle plocka upp en sak som båda the last airbender och legend of Korra gör ofantligt bra så är det character development. Karaktärer som vi vanligtvis skulle beskriva som arketyper för det goda eller onda tillåts tas längs med lååånga arcs för att till slut hamna på en plats där du i hemlighet alltid önskat att de var.</p>
 <p>I the last airbender är prins Zuko det absolut starkaste exemplet, men i legend of Korra skulle jag säga att det är Tenzin. Kanske är det för att han precis som jag är far till många barn. Jag blev verkligen berörd av bördan av ansvar som den siste av sin sort och bördan av föräldraskap.</p>
-<p>Jag säger som Eska: <em>"You will always hold a special place in the organ that pumps my blood."</em></p>""",
+<p>Jag säger som Eska: <em>"You will always hold a special place in the organ that pumps my blood."</em></p>
+<img src="/Eska.png" alt="Eska — Legend of Korra">""",
         "backlinks": [("/premiss", "Vikten av att ha en enastående premiss"), ("/", "En mytoman i en lögndetektorfabriken")],
     },
     "businesschmodels": {
@@ -87,9 +88,11 @@ PAGES = {
         "image_alt": "Koja byggd av vuxna",
         "body": """<p>Vad har dessa kojor gemensamt?</p>
 <p>Ingen av dem är byggda av barn.</p>
+<img src="/treehouse-1.png" alt="Kojor sökta på 'treehouse made by kids'">
 <p>Men låt oss ändra sökningen till "treehouse made by kids". Yeah right. Inte ens exemplaret tredje från vänster har den vuxne lyckats hålla sina kontrollerande fingrar i styr. Alldeles för rakt och tillrättalagt.</p>
 <p>Men detta handlar inte om att vuxna inte låter barn göra kojor — utan varför det är så otroligt svårt att hitta bilder på det. Jag minns att jag gjorde en sökning för kanske tio år sedan och att det då fanns fler bilder av barns kojor.</p>
 <p>Betänk att jag sitter framför min dator och killgissar. Jag skulle som många andra +50 vita män kunna arbeta upp lite tangentbordsvrede och skylla på telefoner, spel, film eller annan skit. Och visst har det säkert att göra med att barn i mindre utsträckning idag rör sig i skog och mark. Springer i containrar bara för att hitta plankor att bygga livsfarliga träskapelser i träkronor — dom där som är fullkomligt livsfarliga men så laddade med barns förväntan och skaparglädje.</p>
+<img src="/treehouse-bethany.jpg" alt="Treehouse by Bethany Weeks">
 <p>Men jag väljer att tänka att det är en del av enshitification — hur sökningarna av bilder blivit mer strömlinjeformade. Hur algoritmer trycker fram bild efter bild med konformt snömos. Jag väljer att rikta min gubbvrede åt det hållet för jag kan inte leva med tanken på att barn inte längre bygger livsfarliga kojor i träd.</p>""",
         "backlinks": [("/", "En mytoman i en lögndetektorfabriken")],
     },
@@ -312,6 +315,23 @@ TEMPLATE = '''<!DOCTYPE html>
         .article-body a:hover {{ color: #F2D024; }}
         .article-body strong {{ color: #ffffff; }}
         .article-body hr {{ border-color: #2a2a2a; margin: 32px 0; }}
+        .article-body img {{
+            max-width: 100%;
+            border-radius: 6px;
+            display: block;
+            margin: 40px 0;
+            opacity: 0.92;
+        }}
+        .article-body figure {{
+            margin: 40px 0;
+        }}
+        .article-body figcaption {{
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 13px;
+            color: #9E9A91;
+            margin-top: 8px;
+            font-style: italic;
+        }}
 
         .backlinks {{ margin-bottom: 32px; }}
         .backlinks h3 {{
