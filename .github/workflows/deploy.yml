@@ -45,6 +45,7 @@ jobs:
         run: |
           cp content/index2.html public/index2.html
           cp content/index2.html public/index.html
+          rm -rf public/premiss
           mkdir -p public/premiss
           cp content/premiss.html public/premiss/index.html
           mkdir -p public/fonts
