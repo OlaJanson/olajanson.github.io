@@ -36,6 +36,31 @@
             margin: 0 !important;
         }
 
+        /* ── HJÄLPKLASS: 3-kolumns grid (återanvänds) ── */
+        .grid-row {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 720px) 280px;
+            gap: 0 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ── RUBRIKBAND (ovanför topbar) ── */
+        .title-band {
+            width: 100%;
+            padding-top: 48px;
+        }
+        .title-band .col-left  { grid-column: 1; }
+        .title-band .col-main  { grid-column: 2; }
+        .title-band .col-right { grid-column: 3; }
+        .page-title {
+            font-family: 'Magic Romance', serif;
+            font-size: 96px;
+            color: #F2D024;
+            line-height: 0.9;
+            margin-bottom: 8px;
+        }
+
         /* ── TOPBAR ── */
         .topbar {
             width: 100%;
@@ -44,6 +69,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            margin-top: 24px;
         }
         .topbar-inner {
             max-width: 1400px;
@@ -91,28 +117,30 @@
         .lang-sv, .lang-en { opacity: 0.4; }
         .lang-sv.active, .lang-en.active { opacity: 1; color: #EAE6DA; }
 
-        /* ── LAYOUT ── */
+        /* ── INNEHÅLLSGRID ── */
         .page-layout {
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 280px minmax(0, 720px) 280px;
             grid-template-areas: "left main right";
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-top: 64px;
             gap: 0 48px;
+            padding-top: 32px;
             align-items: start;
         }
-        .sidebar-left  { grid-area: left; padding-left: 24px; }
-        .main-col      { grid-area: main; padding-bottom: 100px; }
+        .sidebar-left  { grid-area: left;  padding-left: 24px; }
+        .main-col      { grid-area: main;  padding-bottom: 100px; }
         .sidebar-right { grid-area: right; padding-right: 24px; position: sticky; top: 56px; }
 
-        /* ── TITEL ── */
-        .page-title {
-            font-family: 'Magic Romance', serif;
-            font-size: 96px;
-            color: #F2D024;
-            line-height: 0.9;
-            margin-bottom: 40px;
+        /* ── BOKOMSLAG ── */
+        .book-cover {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 4px;
+            opacity: 0.9;
+            display: block;
+            margin-left: auto;
+            margin-top: 8px;
         }
 
         /* ── PROPERTIES ── */
@@ -125,7 +153,7 @@
             display: flex;
             align-items: baseline;
             gap: 10px;
-            margin-bottom: 60px;
+            margin-bottom: 48px;
         }
         .prop-icon { color: #555; font-size: 13px; flex-shrink: 0; }
         .prop-label {
@@ -142,39 +170,27 @@
         }
         .tag:hover { color: #F2D024; }
 
-        /* ── BOKOMSLAG (vänstermarginal) ── */
-        .book-cover {
-            width: 100%;
-            max-width: 200px;
-            border-radius: 4px;
-            opacity: 0.9;
-            margin-top: 180px;
-            display: block;
-            margin-left: auto;
-        }
-
         /* ── ARTIKELBRÖDTEXT ── */
         .article-body { font-size: 20px; line-height: 1.7; color: #EAE6DA; }
         .article-body p { margin-bottom: 32px; }
         .article-body p:last-child { margin-bottom: 0; }
         .article-body a { color: #EAE6DA; text-decoration: underline; text-underline-offset: 3px; }
         .article-body a:hover { color: #F2D024; }
-        .article-body strong { color: #ffffff; font-weight: 700; }
-        .article-body em { font-style: italic; }
+        .article-body strong { color: #ffffff; }
 
-        /* ── BACKLINKS ── */
-        .backlinks { margin-top: 64px; }
+        /* ── BACKLINKS (höger sidebar) ── */
+        .backlinks { margin-bottom: 32px; }
         .backlinks h3 {
-            font-family: 'Fraunces', serif;
-            font-style: italic;
-            font-size: 16px; color: #EAE6DA;
-            margin-bottom: 12px;
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 10px; color: #666;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 10px;
         }
-        .backlinks ul { list-style: none; padding: 0; margin: 0; }
+        .backlinks ul { list-style: none; }
         .backlinks ul li { margin-bottom: 6px; }
         .backlinks ul li a {
             font-family: 'Fraunces', serif;
-            font-size: 16px; color: #9E9A91;
+            font-size: 14px; color: #9E9A91;
             text-decoration: underline; text-underline-offset: 3px;
         }
         .backlinks ul li a:hover { color: #F2D024; }
@@ -188,7 +204,7 @@
             margin-bottom: 8px;
         }
         .graph-outer {
-            width: 100%; height: 240px;
+            width: 100%; height: 200px;
             border: 1px solid #222; border-radius: 6px;
             background: #181c1e; overflow: hidden; position: relative;
         }
@@ -200,7 +216,6 @@
         }
         .global-graph-icon svg { width: 14px; height: 14px; }
         .global-graph-outer { display: none; }
-        .global-graph-outer.active { display: block; }
 
         /* ── SÖK ── */
         .search-container { display: none; }
@@ -208,15 +223,27 @@
 
         /* ── RESPONSIVITET ── */
         @media (max-width: 900px) {
-            .page-layout {
+            .grid-row {
                 grid-template-columns: 1fr;
-                grid-template-areas: "main";
-                padding-top: 32px;
             }
-            .sidebar-left, .sidebar-right { display: none; }
-            .main-col { padding: 0 16px 60px; }
+            .title-band .col-left,
+            .title-band .col-right { display: none; }
+            .title-band .col-main { padding: 0 16px; }
             .page-title { font-size: 56px; }
             .topbar-controls { width: auto; }
+
+            .page-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "main"
+                    "right";
+            }
+            .sidebar-left { display: none; }
+            .sidebar-right {
+                position: static;
+                padding: 0 16px 40px;
+            }
+            .main-col { padding: 0 16px 48px; }
         }
         @media (max-width: 480px) {
             .page-title { font-size: 40px; }
@@ -226,7 +253,18 @@
 </head>
 <body>
 
-<!-- TOPBAR -->
+<!-- RUBRIK (ovanför topbar, som i referensen) -->
+<div class="title-band">
+    <div class="grid-row">
+        <div class="col-left"></div>
+        <div class="col-main">
+            <h1 class="page-title">Vikten av att ha en enastående premiss</h1>
+        </div>
+        <div class="col-right"></div>
+    </div>
+</div>
+
+<!-- TOPBAR (sticky, under rubrik) -->
 <div class="topbar">
     <div class="topbar-inner">
         <div class="topbar-controls">
@@ -253,7 +291,7 @@
     </div>
 </div>
 
-<!-- INNEHÅLL -->
+<!-- INNEHÅLL: 3 kolumner -->
 <div class="page-layout">
 
     <!-- Vänster: bokomslag -->
@@ -261,9 +299,8 @@
         <img class="book-cover" src="/there%20is%20no%20picture.png" alt="There Is No Antimemetics Division — bokomslag">
     </aside>
 
-    <!-- Mitten: rubrik, properties, artikel, backlinks -->
+    <!-- Mitten: properties + artikel -->
     <main class="main-col">
-        <h1 class="page-title">Vikten av att ha en<br>enastående premiss</h1>
         <hr class="title-divider">
         <div class="properties">
             <span class="prop-icon">◈</span>
@@ -282,7 +319,7 @@
 
             <p>Det mesta av mitt kreativa skapande kretsar sedan ett tag tillbaka runt rollspelskampanjer eller egna spel. Det har hänt att jag likt en irriterande dominant regissör skickat tillbaka karaktärskoncept för att det inte adderat tillräckligt till en intressant premiss. Det är inte alltid jag kan sätta fingret på vad som saknas men det är något som gör att jag undrar vad som kommer att hända med den karaktären, vilket i sin förlängning inte gjort att jag känner någon lust att utforska berättelsen alls.</p>
 
-            <p>När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för att man skall spendera ett år av återkommande spelträffar. Någon form av <a href="./avatar">character arc</a> känns viktigt för mig att det sker. Men det är som bekant helt upp till den enskilde spelaren ifall det sker eller inte. Jag kan locka, provocera och utmana spelaren men jag kan inte tvinga en spelare att spela sin karaktär och utmana. Och missförstå mig rätt – det handlar inte om att det är min syn på hur karaktären förändras som är viktig – det är bara det att det sker någon form av förändring som jag känner spelar roll. Men detta tål att utvecklas i en egen post.</p>
+            <p>När jag spelar rollspel med mina vänner räcker dock inte en bra premiss för att man skall spendera ett år av återkommande spelträffar. Någon form av <a href="/avatar">character arc</a> känns viktigt för mig att det sker. Men det är som bekant helt upp till den enskilde spelaren ifall det sker eller inte. Jag kan locka, provocera och utmana spelaren men jag kan inte tvinga en spelare att spela sin karaktär och utmana. Och missförstå mig rätt – det handlar inte om att det är min syn på hur karaktären förändras som är viktig – det är bara det att det sker någon form av förändring som jag känner spelar roll. Men detta tål att utvecklas i en egen post.</p>
 
             <p>Jag har ett par egna premisser som inte slutar att leverera. Som jag nästan måste hindra mig själv från att inte fortsätta jobba med. I det allra senaste är det premissen i <em>Infernal Ventures</em>: i en överindustrialiserad sekelskiftesvärld så är helvetet självt den sista oexploaterade utposten. Spela specialförband som rekryterats för att skydda "The Sanctuary" där industrimagnaterna valt att sätta upp sin verksamhet.</p>
 
@@ -290,17 +327,16 @@
 
             <p>Förresten. Sa någon <a href="https://www.imdb.com/title/tt11280740/">Severance</a>. Vilka strålande premisser har jag glömt?</p>
         </article>
+    </main>
 
+    <!-- Höger: backlinks + grafvy -->
+    <aside class="sidebar-right">
         <div class="backlinks">
             <h3>Backlinks</h3>
             <ul>
-                <li><a href="/">En mytoman i en lögndetektorfabrik</a></li>
+                <li><a href="/">En mytoman i en lögndetektorfabriken</a></li>
             </ul>
         </div>
-    </main>
-
-    <!-- Höger: grafvy -->
-    <aside class="sidebar-right">
         <div class="graph">
             <h3>Grafvy</h3>
             <div class="graph-outer">
