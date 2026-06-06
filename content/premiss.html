@@ -205,6 +205,23 @@
         /* ── SÖK ── */
         .search-container { display: none; }
         .search-container.active { display: block; }
+
+        /* ── RESPONSIVITET ── */
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "main";
+                padding-top: 32px;
+            }
+            .sidebar-left, .sidebar-right { display: none; }
+            .main-col { padding: 0 16px 60px; }
+            .page-title { font-size: 56px; }
+            .topbar-controls { width: auto; }
+        }
+        @media (max-width: 480px) {
+            .page-title { font-size: 40px; }
+            .article-body { font-size: 18px; }
+        }
     </style>
 </head>
 <body>

@@ -241,6 +241,25 @@
             font-size: 12px; color: #e0e0e0;
             opacity: 0.6; line-height: 1.6;
         }
+
+        /* ── RESPONSIVITET ── */
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "main";
+            }
+            .sidebar-left, .sidebar-right { display: none; }
+            .main-col { padding: 0 16px 60px; }
+            .hero-title { font-size: 36px; padding: 0 16px; margin-bottom: -10px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .topbar-controls { width: auto; }
+        }
+        @media (max-width: 480px) {
+            .hero { height: 45vh; }
+            .hero-title { font-size: 28px; }
+            .category-title { font-size: 28px; }
+            .card { min-height: auto; }
+        }
     </style>
 </head>
 <body>
