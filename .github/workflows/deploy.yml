@@ -56,6 +56,16 @@ jobs:
           cp content/jag.html public/jag.html
           cp content/treehouse.html public/treehouse.html
           cp content/varfor-digital-garden.html public/varfor-digital-garden.html
+          rm -f public/premiss.en.html public/anthony.en.html public/avatar.en.html public/businesschmodels.en.html public/gastbok.en.html public/jag.en.html public/treehouse.en.html public/varfor-digital-garden.en.html
+          rm -rf public/premiss.en public/anthony.en public/avatar.en public/businesschmodels.en public/gastbok.en public/jag.en public/treehouse.en public/varfor-digital-garden.en
+          cp content/premiss.en.html public/premiss.en.html
+          cp content/anthony.en.html public/anthony.en.html
+          cp content/avatar.en.html public/avatar.en.html
+          cp content/businesschmodels.en.html public/businesschmodels.en.html
+          cp content/gastbok.en.html public/gastbok.en.html
+          cp content/jag.en.html public/jag.en.html
+          cp content/treehouse.en.html public/treehouse.en.html
+          cp content/varfor-digital-garden.en.html public/varfor-digital-garden.en.html
           mkdir -p public/fonts
           cp content/fonts/* public/fonts/
           cp "content/there is no picture.png" "public/there is no picture.png"

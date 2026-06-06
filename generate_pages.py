@@ -540,3 +540,129 @@ for slug, page in PAGES.items():
     print(f"✓ {out_path}")
 
 print("Klart!")
+
+# ─── ENGELSKA SIDOR ───────────────────────────────────────────────────────────
+
+EN_PAGES = {
+    "anthony": {
+        "title": "I really like Anthony Jeselnik",
+        "tags": ["#comedian", "#likeablepersons"],
+        "image": "/anthony.jpg",
+        "image_alt": "Anthony Jeselnik",
+        "body": """<p>In the now made-up series of people I like, I'm starting with the aforementioned comedian. But who is Anthony Jeselnik, you might ask? He is a comedian perhaps best known for his at times dark jokes. And before you dismiss that, I just want to say that's not why I like him. Yes, but he is funny, of course. But here's a small list of why I respect him:</p>
+<ul>
+<li>His TikTok feed is taken up by his book club, which you can join if you send him an email. You read one book a month.</li>
+<li>Despite his abrupt jokes, he has several times taken a stand against comedians who engage in "bullying", especially on the right wing.</li>
+<li>He comes across as an incredibly honest person.</li>
+</ul>
+<p>I could be wrong. It might all just be fake. But that's how it feels to me.</p>""",
+        "backlinks": [("/", "A mythomaniac in a lie detector factory")],
+    },
+    "avatar": {
+        "title": "Character arcs of Avatar",
+        "tags": ["#storytelling", "#characterarc", "#avatarthelastaibender"],
+        "image": "/unclehiro-and-zuko.png",
+        "image_alt": "Uncle Iroh and Zuko",
+        "body": """<h5>Unconditional love</h5>
+<p>I'm sitting with my 10-year-old, doing our Saturday binge mornings of Avatar the Last Airbender. Or rather, we've gotten as far as the end of the season finale of the second season of Legend of Korra.</p>
+<p>Avatar the Last Airbender, the animated series from Nickelodeon, is in my eyes a 10/10. I can't think of a single episode that made me doze off and lose focus. This also applies to my children, all four of them I would say, even though they watched the series in its entirety at completely different times. If you are a parent with children approaching their ten-year-old age, this is a perfect introduction to next-level storytelling.</p>
+<p>Legend of Korra was not as impressive at first. A little too silly, a little too much soap opera romance. The craftsmanship was masterful, but perhaps a slightly too great overdose of spectacular powers. But halfway through season two, it rose to such a degree that I'm now seriously considering staying inside and watching the rest.</p>
+<p>If I were to pick one thing that both The Last Airbender and Legend of Korra do immensely well, it's character development. Characters we would typically describe as archetypes for good or evil are allowed to be taken along loooong arcs to finally end up in a place where you secretly always wished they were. In The Last Airbender, Prince Zuko is the absolute strongest example, but in Legend of Korra, I would say it's Tenzin. Perhaps it's because, just like me, he is a father to many children. But I was truly moved by the burden of responsibility as the last of his kind and the burden of parenthood.</p>
+<p>I say like Eska: <em>"You will always hold a special place in the organ that pumps my blood."</em></p>
+<img src="/eska.png" alt="Eska — Legend of Korra">""",
+        "backlinks": [("/premiss.en", "The importance of having an outstanding premise"), ("/", "A mythomaniac in a lie detector factory")],
+    },
+    "businesschmodels": {
+        "title": "Business model enshitification",
+        "tags": ["#businessmodels", "#enshitification"],
+        "image": "/mandrake.png",
+        "image_alt": "Mandrake",
+        "body": """<h5>Business models, business schmodels said Mandrake and made a magical gesture.</h5>
+<blockquote><p>"A business model or company model is a theoretical description of how a company, or a business activity, is intended to function."</p></blockquote>
+<p>The above is hardly anything remarkable. Of course, all companies should have the right to decide how they earn their money. This little rant is instead about the frustration of feeling deceived by a business model. Probably because it was never presented as just a business model but as the only obvious way to do something.</p>
+<p>One example of these models is the chatbot, which we chat with in a dialogue window. Letting models write directly into the documents you want to edit is, of course, immensely more logical and efficient. But why has this feature taken so long? Of course, because it's important that we continue to pay for the service that includes the chat window and a cohesive experience on the AI provider's site.</p>
+<p>So-called memory is another feature that is part of a hidden business model. What we call memory in a chat GPT simulates human behavior to make us feel warmer towards the service. It's manipulative brand magic. In fact, every time you send a chat message, you are talking to a language model with a completely blank memory.</p>
+<p>The last example is the various strategies of social media to succeed in breaking through. You should post x number of times per day, post at certain times, be easily digestible and predictable. It's not for users to get a better experience — it's part of a smart business model that generates content for the platform.</p>
+<p>In summary: Business models should be transparent. If they are hidden under layers of manipulative user design and packaged as something you must adapt to, there is a high risk that you have been deceived.</p>""",
+        "backlinks": [("/varfor-digital-garden.en", "Why digital garden?"), ("/", "A mythomaniac in a lie detector factory")],
+    },
+    "gastbok": {
+        "title": "Guestbook",
+        "tags": ["#meta"],
+        "image": None,
+        "image_alt": None,
+        "body": """<p>Leave a trace. Write what you want — what you were thinking about, what you found here, or just hello.</p>
+<p>The posts are stored as <a href="https://github.com/OlaJanson/olajanson.github.io/issues">GitHub Issues</a> and displayed directly below. You need a GitHub account to write.</p>
+<hr style="border-color:#2a2a2a; margin: 32px 0;">
+<script src="https://utteranc.es/client.js"
+        repo="OlaJanson/olajanson.github.io"
+        issue-term="pathname"
+        label="gästbok"
+        theme="dark-blue"
+        crossorigin="anonymous"
+        async>
+</script>
+<hr style="border-color:#2a2a2a; margin: 32px 0;">
+<p><em>Prefer to write without an account? Email <a href="mailto:ola.janson@gmail.com">ola.janson@gmail.com</a>.</em></p>""",
+        "backlinks": [("/", "A mythomaniac in a lie detector factory")],
+    },
+    "jag": {
+        "title": "Fragment",
+        "tags": ["#meta", "#cv"],
+        "image": "/arme-dith-trans.png",
+        "image_alt": "Arme-dith",
+        "body": """<p>I am a Swiss army knife, I usually say.</p>
+<p>Or perhaps it's not a perfect description of what I am? With a Swiss army knife, its primary unique characteristic is its versatility. The individual tool isn't that impressive, but fitting them all into one single red unit is unique. And that's probably where I feel the analogy falls short. I remember as a child how annoyed I was that this red multi-tool couldn't be used in my treehouses — how the small saw was useless for cutting branches.</p>
+<p>No, I rather think I should describe myself as a toolbox. But what does the toolbox contain?</p>
+<p>Pedagogy, I would argue, is a well-used tool. I have worked on and off as a teacher, mainly in vocational colleges but also at universities and primary schools. I work to the best of my ability with formative assessment. Currently exclusively in online courses.</p>
+<p>Design process and creative processes are something I have also spent many professional years with. Most recently as creative director at SKF. But before that, as a business developer at HiQ.</p>
+<p>Game design. I have designed games — digital, board games, and role-playing games. Right now, it's mostly role-playing games. I constantly have a game project going but rarely finish it.</p>""",
+        "backlinks": [("/varfor-digital-garden.en", "Why digital garden?"), ("/", "A mythomaniac in a lie detector factory")],
+    },
+    "treehouse": {
+        "title": "Why are there so few pictures of treehouses built by children?",
+        "tags": ["#enshitification", "#designprocess", "#algorithm"],
+        "image": "/treehouse.png",
+        "image_alt": "Treehouse built by adults",
+        "body": """<p>What do these treehouses have in common?</p>
+<p>None of them are built by children.</p>
+<img src="/treehouse-1.png" alt="Treehouses searched for 'treehouse made by kids'">
+<p>But let's change the search to "treehouse made by kids". Yeah right. Not even the example third from the left has the adult managed to keep their controlling fingers in check. Far too straight and tidy.</p>
+<p>But this isn't about adults not letting children build treehouses — but why it's so incredibly difficult to find pictures of it. I remember doing a search maybe ten years ago and there were more pictures of children's treehouses then.</p>
+<p>Consider that I'm sitting in front of my computer speculating wildly. Like many other +50 white men, I could work up some keyboard rage and blame adjacent modern phenomena. And sure, it probably has to do with children moving less in forests and fields today.</p>
+<img src="/treehouse-bethany.jpg" alt="Treehouse by Bethany Weeks">
+<p>But I choose to think that it's part of enshitification — how image searches have become more streamlined. How algorithms push forward picture after picture with conformist mush. I choose to direct my old man rage in that direction because I can't live with the thought that children no longer build deadly treehouses.</p>""",
+        "backlinks": [("/", "A mythomaniac in a lie detector factory")],
+    },
+    "varfor-digital-garden": {
+        "title": "Why digital garden?",
+        "tags": ["#digitalgararden", "#webb"],
+        "image": None,
+        "image_alt": None,
+        "body": """<p>I gave an assignment in one of the courses I'm currently teaching. It's called artistic realization in digital environments. My students were tasked with finding digital role models — but not focusing on the content, but on <em>how</em> they do it.</p>
+<p>A student whose primary interest was in writing shared a page and said: "Maggie Appleton's, whose art/interests I'm not particularly interested in, but the website itself is roughly what I want to achieve." I immediately realized this was something out of the ordinary. Her site was where someone had sat down and thought, "how do I want it?" — disregarded templates, and just went for it. Built based on their own needs.</p>
+<p>And that made me realize: how damn much we are stuck in other people's <a href="/businesschmodels.en">business models</a>. We are stuck because they have convinced us that this is the only way to do it.</p>
+<p>I read on Maggie's page. I read her article on <a href="https://maggieappleton.com/garden-history">digital gardens</a>. I almost got angry, but mostly at myself — how the hell did I miss this? Why was I not invited to this party?</p>
+<p>It precisely put its finger on what I've felt is missing in web contexts. Social media is about selling your content to someone else and being entirely in the hands of someone else's business model. Where you have zero control unless you are incredibly compliant and constantly trying to hack the code to go viral.</p>
+<p>The advice if you're going to start a channel on any social media is always to find a concept. Only talk about one thing. And <a href="/jag.en">I</a> am broad and want to talk about everything. With my ADHD brain, everything is connected. It's part of the same cloud of concepts that always relate to each other.</p>
+<p>In short — digital gardening is made for me. Then I don't know if it will just become another graveyard on the internet. Time will tell.</p>""",
+        "backlinks": [("/", "A mythomaniac in a lie detector factory")],
+    },
+}
+
+for slug, page in EN_PAGES.items():
+    html = TEMPLATE.format(
+        title=page["title"],
+        slug=slug,
+        tags_html=make_tags_html(page["tags"]),
+        body=page["body"],
+        backlinks_html=make_backlinks_html(page["backlinks"]),
+        sidebar_left=make_sidebar_left(page.get("image"), page.get("image_alt", "")),
+        mobile_image=make_mobile_image(page.get("image"), page.get("image_alt", "")),
+    )
+    out_path = os.path.join(CONTENT_DIR, f"{slug}.en.html")
+    with open(out_path, "w") as f:
+        f.write(html)
+    print(f"✓ {out_path}")
+
+print("Engelska sidor klara!")
