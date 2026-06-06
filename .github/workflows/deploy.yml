@@ -46,8 +46,8 @@ jobs:
           cp content/index2.html public/index2.html
           cp content/index2.html public/index.html
           rm -rf public/premiss
-          mkdir -p public/premiss
-          cp content/premiss.html public/premiss/index.html
+          rm -f public/premiss.html
+          cp content/premiss.html public/premiss.html
           mkdir -p public/fonts
           cp content/fonts/* public/fonts/
           cp "content/there is no picture.png" "public/there is no picture.png"
