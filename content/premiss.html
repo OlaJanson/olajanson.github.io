@@ -24,49 +24,23 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: #12100e !important;
+            background-color: #14120e !important;
             background-image: repeating-linear-gradient(
                 0deg, transparent, transparent 3px,
                 rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
             ) !important;
-            color: #e0e0e0 !important;
+            color: #EAE6DA !important;
             font-family: 'Fraunces', Georgia, serif !important;
             max-width: none !important;
             padding: 0 !important;
             margin: 0 !important;
         }
 
-        /* ── GEMENSAM GRID-BREDD ── */
-        .grid-inner {
-            display: grid;
-            grid-template-columns: 240px 1fr 280px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* ── TITELSEKTION ── */
-        .title-section {
-            padding-top: 80px;
-            position: relative;
-            z-index: 101;
-        }
-        .title-left  { /* tom */ }
-        .title-main  { padding: 0 48px 0 48px; }
-        .title-right { /* tom */ }
-
-        .page-title {
-            font-family: 'Magic Romance', serif;
-            font-size: 52px;
-            color: #d7be00;
-            line-height: 1.15;
-            margin-bottom: -15px;
-        }
-
-        /* ── TOPBAR (full bredd, sticky) ── */
+        /* ── TOPBAR ── */
         .topbar {
             width: 100%;
             background: #181c1e;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #2a2a2a;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -115,64 +89,99 @@
         }
         .lang-separator { margin: 0 1px; opacity: 0.3; }
         .lang-sv, .lang-en { opacity: 0.4; }
-        .lang-sv.active, .lang-en.active { opacity: 1; color: #e0e0e0; }
+        .lang-sv.active, .lang-en.active { opacity: 1; color: #EAE6DA; }
 
-        /* ── INNEHÅLLSLAYOUT ── */
+        /* ── LAYOUT ── */
         .page-layout {
             display: grid;
-            grid-template-columns: 240px 1fr 280px;
+            grid-template-columns: 280px minmax(0, 720px) 280px;
             grid-template-areas: "left main right";
             max-width: 1400px;
             margin: 0 auto;
-            padding-top: 32px;
+            padding-top: 64px;
+            gap: 0 48px;
             align-items: start;
         }
-        .sidebar-left  { grid-area: left; }
-        .main-col      { grid-area: main; padding: 0 48px 80px 48px; }
-        .sidebar-right { grid-area: right; padding: 0 24px 0 0; position: sticky; top: 44px; }
+        .sidebar-left  { grid-area: left; padding-left: 24px; }
+        .main-col      { grid-area: main; padding-bottom: 100px; }
+        .sidebar-right { grid-area: right; padding-right: 24px; position: sticky; top: 56px; }
+
+        /* ── TITEL ── */
+        .page-title {
+            font-family: 'Magic Romance', serif;
+            font-size: 96px;
+            color: #F2D024;
+            line-height: 0.9;
+            margin-bottom: 40px;
+        }
 
         /* ── PROPERTIES ── */
         .title-divider {
             border: none;
             border-top: 1px solid #2a2a2a;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
         .properties {
             display: flex;
             align-items: baseline;
             gap: 10px;
-            margin-bottom: 32px;
+            margin-bottom: 60px;
         }
         .prop-icon { color: #555; font-size: 13px; flex-shrink: 0; }
         .prop-label {
-            font-family: 'SKF Sans', sans-serif;
-            font-size: 11px; color: #555;
-            text-transform: uppercase; letter-spacing: 0.08em;
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 16px; color: #EAE6DA;
             flex-shrink: 0;
         }
         .tags { display: flex; flex-wrap: wrap; gap: 6px; }
         .tag {
             font-family: 'SKF Sans', sans-serif;
-            font-size: 12px; color: #888; text-decoration: none;
+            font-size: 14px; color: #9E9A91; text-decoration: none;
+            letter-spacing: 0.03em;
         }
-        .tag:hover { color: #d7be00; }
+        .tag:hover { color: #F2D024; }
+
+        /* ── BOKOMSLAG (vänstermarginal) ── */
+        .book-cover {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 4px;
+            opacity: 0.9;
+            margin-top: 180px;
+            display: block;
+            margin-left: auto;
+        }
 
         /* ── ARTIKELBRÖDTEXT ── */
-        .article-body { font-size: 19px; line-height: 2.1; color: #d4d0c8; }
-        .article-body p { margin-bottom: 1.4em; }
+        .article-body { font-size: 20px; line-height: 1.7; color: #EAE6DA; }
+        .article-body p { margin-bottom: 32px; }
         .article-body p:last-child { margin-bottom: 0; }
-        .article-body a { color: #5fd7ff; text-decoration: none; }
-        .article-body a:hover { text-decoration: underline; }
-        .article-body strong { color: #e0e0e0; font-weight: 700; }
+        .article-body a { color: #EAE6DA; text-decoration: underline; text-underline-offset: 3px; }
+        .article-body a:hover { color: #F2D024; }
+        .article-body strong { color: #ffffff; font-weight: 700; }
         .article-body em { font-style: italic; }
-        .article-body img {
-            display: block; max-width: 300px;
-            border-radius: 4px; margin: 0 0 1.6em 0; opacity: 0.9;
-        }
 
-        /* ── HÖGERSIDEBAR ── */
-        .graph { all: unset; display: block; margin-bottom: 28px; }
-        .graph h3, .backlinks h3 {
+        /* ── BACKLINKS ── */
+        .backlinks { margin-top: 64px; }
+        .backlinks h3 {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 16px; color: #EAE6DA;
+            margin-bottom: 12px;
+        }
+        .backlinks ul { list-style: none; padding: 0; margin: 0; }
+        .backlinks ul li { margin-bottom: 6px; }
+        .backlinks ul li a {
+            font-family: 'Fraunces', serif;
+            font-size: 16px; color: #9E9A91;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .backlinks ul li a:hover { color: #F2D024; }
+
+        /* ── GRAFVY ── */
+        .graph { all: unset; display: block; }
+        .graph h3 {
             font-family: 'SKF Sans', sans-serif;
             font-size: 10px; color: #666;
             text-transform: uppercase; letter-spacing: 0.1em;
@@ -193,39 +202,14 @@
         .global-graph-outer { display: none; }
         .global-graph-outer.active { display: block; }
 
-        .backlinks ul { list-style: none; padding: 0; margin: 0; }
-        .backlinks ul li { margin-bottom: 6px; }
-        .backlinks ul li a {
-            font-family: 'Fraunces', serif;
-            font-size: 14px; color: #888;
-            text-decoration: underline; text-underline-offset: 3px;
-        }
-        .backlinks ul li a:hover { color: #d7be00; }
-
-        /* ── TILLBAKA-LÄNK ── */
-        .back-link {
-            font-family: 'SKF Sans', sans-serif;
-            font-size: 12px; color: #555;
-            text-decoration: none; padding-left: 24px;
-            display: inline-block; padding-top: 4px;
-        }
-        .back-link:hover { color: #888; }
+        /* ── SÖK ── */
+        .search-container { display: none; }
+        .search-container.active { display: block; }
     </style>
 </head>
 <body>
 
-<!-- 1. RUBRIK -->
-<div class="title-section">
-    <div class="grid-inner">
-        <div class="title-left"></div>
-        <div class="title-main">
-            <h1 class="page-title">Vikten av att ha en<br>enastående premiss</h1>
-        </div>
-        <div class="title-right"></div>
-    </div>
-</div>
-
-<!-- 2. TOPBAR — full bredd, sticky -->
+<!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-inner">
         <div class="topbar-controls">
@@ -252,14 +236,17 @@
     </div>
 </div>
 
-<!-- 3. INNEHÅLL -->
+<!-- INNEHÅLL -->
 <div class="page-layout">
 
-    <div class="sidebar-left">
-        <a class="back-link" href="./">← Tillbaka</a>
-    </div>
+    <!-- Vänster: bokomslag -->
+    <aside class="sidebar-left">
+        <img class="book-cover" src="./there is no picture.png" alt="There Is No Antimemetics Division — bokomslag">
+    </aside>
 
+    <!-- Mitten: rubrik, properties, artikel, backlinks -->
     <main class="main-col">
+        <h1 class="page-title">Vikten av att ha en<br>enastående premiss</h1>
         <hr class="title-divider">
         <div class="properties">
             <span class="prop-icon">◈</span>
@@ -272,8 +259,6 @@
         </div>
 
         <article class="article-body">
-            <img src="./there is no picture.png" alt="There Is No Antimemetics Division — bokomslag">
-
             <p>I någon av all litteratur som jag läste och använde när jag jobbade som lärare i speldesign så plockade jag upp den enkla formeln: <strong>premiss=tema+förutsättningar+konflikt</strong>. En formel som jag fortfarande kommer tillbaka till än i dag. Den berättar dock bara vad en premiss är och inte vad en <em>bra</em> premiss är.</p>
 
             <p>För mig som kreatör är premissen egentligen det som får mig att ständigt komma tillbaka och fortsätta utveckla, vrida och vända. Enbart för att premissen för berättelsen/spelet är så bra. Några exempel som i relativ närtid har spikat en utmärkt premiss är tv-serien <a href="https://www.imdb.com/title/tt22202452/">Pluribus</a> eller boken <a href="https://en.wikipedia.org/wiki/There_Is_No_Antimemetics_Division">There Is No Antimemetics Division</a> och även första boken i <a href="https://en.wikipedia.org/wiki/N._K._Jemisin#Broken_Earth_series">N.K Jemisins Broken Earth series</a>. Jag föreställer mig att det måste varit en fröjd att jobba fram berättelserna efter att ha mejslat fram så enastående premisser.</p>
@@ -288,8 +273,16 @@
 
             <p>Förresten. Sa någon <a href="https://www.imdb.com/title/tt11280740/">Severance</a>. Vilka strålande premisser har jag glömt?</p>
         </article>
+
+        <div class="backlinks">
+            <h3>Backlinks</h3>
+            <ul>
+                <li><a href="./">En mytoman i en lögndetektorfabrik</a></li>
+            </ul>
+        </div>
     </main>
 
+    <!-- Höger: grafvy -->
     <aside class="sidebar-right">
         <div class="graph">
             <h3>Grafvy</h3>
@@ -302,13 +295,6 @@
             <div class="global-graph-outer">
                 <div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:false,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div>
             </div>
-        </div>
-
-        <div class="backlinks">
-            <h3>Backlinks</h3>
-            <ul>
-                <li><a href="./index2">En mytoman i en lögndetektorfabrik</a></li>
-            </ul>
         </div>
     </aside>
 
