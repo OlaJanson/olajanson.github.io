@@ -43,6 +43,7 @@ jobs:
       - run: npx quartz build
       - name: Copy static HTML files to public
         run: |
+          python3 generate_tags.py
           cp content/index2.html public/index2.html
           cp content/index2.html public/index.html
           rm -f public/premiss.html public/anthony.html public/avatar.html public/businesschmodels.html public/gastbok.html public/jag.html public/treehouse.html public/varfor-digital-garden.html
@@ -58,6 +59,9 @@ jobs:
           mkdir -p public/fonts
           cp content/fonts/* public/fonts/
           cp "content/there is no picture.png" "public/there is no picture.png"
+          rm -rf public/tags
+          mkdir -p public/tags
+          cp content/tags/*.html public/tags/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
