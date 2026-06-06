@@ -274,6 +274,11 @@ h1.article-title {
   letter-spacing: -0.01em;
   margin-bottom: 0.6em;
   overflow-wrap: break-word;
+
+  /* Lägg H1 ovanpå stickymenyn; sänk texten så baslinjen vilar på menyns överkant */
+  position: relative;
+  z-index: 101;
+  margin-top: calc(-0.8 * clamp(2rem, 4vw + 1rem, 4.2rem)) !important;
 }
 
 /* Gul rubrikfärg i dark mode */
@@ -344,9 +349,9 @@ article.popover-hint {
   }
 }
 
-/* Reduce page-header top margin (was $topSpacing = 6rem) */
+/* page-header: ingen marginal mot stickymenyn — H1 hanterar positioneringen */
 #quartz-body .page-header {
-  margin-top: 1.5rem;
+  margin-top: 0;
 }
 
 /* Toolbar (search + darkmode) alignment */
