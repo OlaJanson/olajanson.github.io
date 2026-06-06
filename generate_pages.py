@@ -486,6 +486,11 @@ TEMPLATE = '''<!DOCTYPE html>
     var isEn = path.endsWith('.en');
     var svEl = document.getElementById('lang-sv');
     var enEl = document.getElementById('lang-en');
+    var storedLang = localStorage.getItem('lang');
+    if (storedLang && storedLang !== (isEn ? 'en' : 'sv')) {{
+        window.location.replace(isEn ? path.substring(0, path.length - 3) : path + '.en');
+        return;
+    }}
     if (isEn) {{
         enEl.classList.add('active'); svEl.classList.remove('active');
     }} else {{
@@ -493,8 +498,10 @@ TEMPLATE = '''<!DOCTYPE html>
     }}
     document.getElementById('lang-btn').addEventListener('click', function() {{
         if (isEn) {{
+            localStorage.setItem('lang', 'sv');
             window.location.href = '/' + slug;
         }} else {{
+            localStorage.setItem('lang', 'en');
             window.location.href = '/' + slug + '.en';
         }}
     }});
