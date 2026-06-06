@@ -46,6 +46,9 @@ jobs:
           python3 generate_tags.py
           cp content/index2.html public/index2.html
           cp content/index2.html public/index.html
+          rm -f public/index.en.html
+          rm -rf public/index.en
+          cp content/index.en.html public/index.en.html
           rm -f public/premiss.html public/anthony.html public/avatar.html public/businesschmodels.html public/gastbok.html public/jag.html public/treehouse.html public/varfor-digital-garden.html
           rm -rf public/premiss public/anthony public/avatar public/businesschmodels public/gastbok public/jag public/treehouse public/varfor-digital-garden
           cp content/premiss.html public/premiss.html
