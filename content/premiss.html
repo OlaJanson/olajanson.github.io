@@ -54,11 +54,13 @@
         .title-band .col-main  { grid-column: 2; }
         .title-band .col-right { grid-column: 3; }
         .page-title {
-            font-family: 'Magic Romance', serif;
-            font-size: 96px;
-            color: #F2D024;
-            line-height: 0.9;
+            font-family: 'Magic Romance', serif !important;
+            font-size: 96px !important;
+            font-weight: 400 !important;
+            color: #F2D024 !important;
+            line-height: 0.9 !important;
             margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
 
         /* ── TOPBAR ── */
@@ -140,7 +142,7 @@
             opacity: 0.9;
             display: block;
             margin-left: auto;
-            margin-top: 8px;
+            margin-top: 96px;
         }
 
         /* ── PROPERTIES ── */
@@ -229,7 +231,7 @@
             .title-band .col-left,
             .title-band .col-right { display: none; }
             .title-band .col-main { padding: 0 16px; }
-            .page-title { font-size: 56px; }
+            .page-title { font-size: 56px !important; }
             .topbar-controls { width: auto; }
 
             .page-layout {
@@ -243,6 +245,7 @@
                 position: static;
                 padding: 0 16px 40px;
             }
+            .sidebar-right .graph { display: none; }
             .main-col { padding: 0 16px 48px; }
         }
         @media (max-width: 480px) {
