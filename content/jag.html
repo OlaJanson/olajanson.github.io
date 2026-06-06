@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragment — Ola Janson</title>
+    <link href="/index.css" rel="stylesheet" type="text/css">
+    <script src="/prescript.js" type="application/javascript" data-persist="true"></script>
+    <script type="application/javascript" data-persist="true">const fetchData = fetch("/static/contentIndex.json").then(data => data.json())</script>
+    <style>
+        @font-face {
+            font-family: 'Magic Romance';
+            src: url('/fonts/magic-romance.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Fraunces';
+            src: url('/fonts/fraunces.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'SKF Sans';
+            src: url('/fonts/skfsans.otf') format('opentype');
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            overflow-x: clip !important;
+            overflow-y: auto !important;
+        }
+        body {
+            overflow: visible !important;
+            background-color: #14120e !important;
+            background-image: repeating-linear-gradient(
+                0deg, transparent, transparent 3px,
+                rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+            ) !important;
+            color: #EAE6DA !important;
+            font-family: 'Fraunces', Georgia, serif !important;
+            max-width: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 720px) 280px;
+            gap: 0 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .title-band {
+            width: 100%;
+            padding-top: 80px;
+            padding-bottom: 0;
+        }
+        .title-band .col-left  { grid-column: 1; }
+        .title-band .col-main  { grid-column: 2; }
+        .title-band .col-right { grid-column: 3; }
+        .page-title {
+            font-family: 'Magic Romance', serif !important;
+            font-size: clamp(2.8rem, 6vw + 1rem, 6rem) !important;
+            font-weight: 400 !important;
+            color: #F2D024 !important;
+            line-height: 0.9 !important;
+            margin-bottom: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .topbar {
+            width: 100%;
+            background: #181c1e;
+            border-bottom: 1px solid #2a2a2a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-top: 0;
+        }
+        .topbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0;
+        }
+        .topbar-controls {
+            width: 280px;
+            padding-right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .search-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            color: #888;
+            padding: 4px 12px;
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .search-button svg { width: 12px; height: 12px; stroke: #888; fill: none; }
+        .darkmode-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 3px; display: flex; align-items: center;
+            margin-left: auto;
+        }
+        .darkmode-btn svg { width: 18px; height: 18px; fill: #888; }
+        .nightIcon { display: none; }
+        [saved-theme="dark"] .dayIcon  { display: none; }
+        [saved-theme="dark"] .nightIcon{ display: block; }
+        .language-toggle {
+            background: none; border: none; cursor: pointer;
+            color: #888; font-family: 'SKF Sans', sans-serif;
+            font-size: 12px; padding: 3px 6px; white-space: nowrap;
+        }
+        .lang-separator { margin: 0 1px; opacity: 0.3; }
+        .lang-sv, .lang-en { opacity: 0.4; }
+        .lang-sv.active, .lang-en.active { opacity: 1; color: #EAE6DA; }
+
+        .page-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px minmax(0, 720px) 280px;
+            grid-template-areas: "left main right";
+            gap: 0 48px;
+            padding-top: 32px;
+            align-items: start;
+        }
+        .sidebar-left  { grid-area: left;  padding-left: 24px; }
+        .main-col      { grid-area: main;  padding-bottom: 100px; }
+        .sidebar-right { grid-area: right; padding-right: 24px; position: sticky; top: 56px; }
+
+        .book-cover-mobile {
+            display: none;
+            width: 140px;
+            border-radius: 4px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+        .book-cover {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 4px;
+            opacity: 0.9;
+            display: block;
+            margin-left: auto;
+            margin-top: 96px;
+        }
+
+        .title-divider {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin-bottom: 16px;
+        }
+        .properties {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
+        .prop-icon { color: #555; font-size: 13px; flex-shrink: 0; }
+        .prop-label {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 16px; color: #EAE6DA;
+            flex-shrink: 0;
+        }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 14px; color: #9E9A91; text-decoration: none;
+            letter-spacing: 0.03em;
+        }
+        .tag:hover { color: #F2D024; }
+
+        .article-body { font-size: 20px; line-height: 2.0; color: #EAE6DA; }
+        .article-body p { margin-bottom: 32px; }
+        .article-body p:last-child { margin-bottom: 0; }
+        .article-body ul, .article-body ol { margin-bottom: 32px; padding-left: 1.5em; }
+        .article-body li { margin-bottom: 8px; }
+        .article-body h5 {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 18px; color: #EAE6DA;
+            margin-bottom: 16px; margin-top: 40px;
+        }
+        .article-body blockquote {
+            border-left: 3px solid #2a2a2a;
+            padding-left: 20px;
+            margin-bottom: 32px;
+            color: #9E9A91;
+            font-style: italic;
+        }
+        .article-body a { color: #EAE6DA; text-decoration: underline; text-underline-offset: 3px; }
+        .article-body a:hover { color: #F2D024; }
+        .article-body strong { color: #ffffff; }
+        .article-body hr { border-color: #2a2a2a; margin: 32px 0; }
+
+        .backlinks { margin-bottom: 32px; }
+        .backlinks h3 {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 10px; color: #666;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+        .backlinks ul { list-style: none; }
+        .backlinks ul li { margin-bottom: 6px; }
+        .backlinks ul li a {
+            font-family: 'Fraunces', serif;
+            font-size: 14px; color: #9E9A91;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
+        .backlinks ul li a:hover { color: #F2D024; }
+
+        .graph { all: unset; display: block; }
+        .graph h3 {
+            font-family: 'SKF Sans', sans-serif;
+            font-size: 10px; color: #666;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .graph-outer {
+            width: 100%; height: 200px;
+            border: 1px solid #222; border-radius: 6px;
+            background: #181c1e; overflow: hidden; position: relative;
+        }
+        .graph-container { width: 100%; height: 100%; }
+        .global-graph-icon {
+            position: absolute; bottom: 8px; right: 8px;
+            background: none; border: none; cursor: pointer;
+            color: #555; padding: 4px;
+        }
+        .global-graph-icon svg { width: 14px; height: 14px; }
+        .global-graph-outer { display: none; }
+
+        .search-container { display: none; }
+        .search-container.active { display: block; }
+
+        @media (max-width: 900px) {
+            .grid-row { grid-template-columns: 1fr; }
+            .title-band .col-left,
+            .title-band .col-right { display: none; }
+            .title-band .col-main { padding: 0 16px; }
+            .page-title { font-size: clamp(2.2rem, 8vw, 3.5rem) !important; }
+            .topbar-controls { width: auto; }
+            .page-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "main" "right";
+            }
+            .sidebar-left { display: none; }
+            .book-cover-mobile { display: block; }
+            .sidebar-right { position: static; padding: 0 16px 40px; }
+            .sidebar-right .graph { display: none; }
+            .main-col { padding: 0 16px 48px; }
+        }
+        @media (max-width: 480px) {
+            .page-title { font-size: 40px !important; }
+            .article-body { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="title-band">
+    <div class="grid-row">
+        <div class="col-left"></div>
+        <div class="col-main">
+            <h1 class="page-title">Fragment</h1>
+        </div>
+        <div class="col-right"></div>
+    </div>
+</div>
+
+<div class="topbar">
+    <div class="topbar-inner">
+        <div class="topbar-controls">
+            <div class="search">
+                <button class="search-button" aria-label="Search" aria-expanded="false">
+                    <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg>
+                    Sök
+                </button>
+                <div class="search-container">
+                    <div class="search-space">
+                        <input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Sök efter något..." placeholder="Sök efter något..."/>
+                        <div class="search-layout" data-preview="true" data-field-priority="[&quot;title&quot;,&quot;content&quot;,&quot;tags&quot;]"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="darkmode-btn" style="margin-left:auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="dayIcon" viewBox="0 0 35 35"><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="nightIcon" viewBox="0 0 100 100"><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"/></svg>
+            </button>
+            <button class="language-toggle" aria-label="Växla språk">
+                <span class="lang-sv active">SV</span><span class="lang-separator">/</span><span class="lang-en">EN</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="page-layout">
+
+    <aside class="sidebar-left">
+        <img class="book-cover" src="/arme-dith-trans.png" alt="Arme-dith">
+    </aside>
+
+    <main class="main-col">
+        <img class="book-cover-mobile" src="/arme-dith-trans.png" alt="Arme-dith">
+        <hr class="title-divider">
+        <div class="properties">
+            <span class="prop-icon">◈</span>
+            <span class="prop-label">Properties</span>
+            <div class="tags">
+                <a class="tag" href="#">#meta</a>
+                <a class="tag" href="#">#cv</a>
+            </div>
+        </div>
+        <article class="article-body">
+            <p>Jag är en schweizisk armékniv, brukar jag säga.</p>
+<p>Eller det kanske inte är en perfekt beskrivning av vad jag är? Hos en schweizisk armékniv är mångfalden dess främsta unika egenskap. Det enskilda verktyget är inte så imponerande men att klämma in alla i en och samma röda enhet är unikt. Och det är nog där jag känner att liknelsen haltar. Jag minns som barn hur irriterad jag var över hur detta röda multiverktyg inte gick att använda i mina träkojor — hur den lilla sågen var värdelös på att kapa grenar.</p>
+<p>Nej, jag tror snarare att jag kanske skall beskriva mig som en verktygslåda. Men vad innehåller verktygslådan?</p>
+<p>Pedagogik skulle jag vilja hävda är ett väl använt verktyg. Jag har jobbat från och till som lärare, främst inom yrkeshögskola men också på universitet och grundskola. Jag arbetar efter bästa förmåga med formativ bedömning. Just nu uteslutande i online-kurser.</p>
+<p>Designprocess och kreativa processer är något jag också spenderat många yrkesår med. Senast som creative director på SKF. Men dessförinnan som affärsutvecklare på HiQ.</p>
+<p>Speldesign. Jag har designat spel — digitala, brädspel och rollspel. Just nu blir det mest rollspel. Jag har konstant ett spelprojekt igång men blir sällan klar.</p>
+        </article>
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="backlinks">
+            <h3>Backlinks</h3>
+            <ul>
+                <li><a href="/varfor-digital-garden">Varför digital garden?</a></li>
+                <li><a href="/">En mytoman i en lögndetektorfabriken</a></li>
+            </ul>
+        </div>
+        <div class="graph">
+            <h3>Grafvy</h3>
+            <div class="graph-outer">
+                <div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:3,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:false,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div>
+                <button class="global-graph-icon" aria-label="Global Graph">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55" fill="currentColor"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z"/></svg>
+                </button>
+            </div>
+            <div class="global-graph-outer">
+                <div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:false,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div>
+            </div>
+        </div>
+    </aside>
+
+</div>
+
+<script src="/postscript.js" type="module" data-persist="true"></script>
+</body>
+</html>
