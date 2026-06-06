@@ -44,6 +44,8 @@ jobs:
       - name: Copy static HTML files to public
         run: |
           cp content/index2.html public/index2.html
+          cp content/index2.html public/index.html
+          cp content/premiss.html public/premiss.html
           mkdir -p public/fonts
           cp content/fonts/* public/fonts/
       - uses: actions/upload-pages-artifact@v3
