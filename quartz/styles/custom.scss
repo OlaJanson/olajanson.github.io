@@ -280,6 +280,11 @@ h1.article-title {
   z-index: 101;
 }
 
+/* Kompensera för breadcrumbs-höjden på undersidor — matchar index-sidans avstånd till topbar */
+.breadcrumb-container ~ h1.article-title {
+  margin-top: 0 !important;
+}
+
 /* Gul rubrikfärg i dark mode */
 :root[saved-theme="dark"] h1.article-title,
 .dark h1.article-title {
