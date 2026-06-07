@@ -364,3 +364,76 @@ article.popover-hint {
 .sidebar.right {
   padding-top: 1.2rem;
 }
+
+/* ══════════════════════════════════════════════
+   NY DESIGN SOM QUARTZ-DEFAULT
+   Gäller alla .md-sidor (t.ex. publicerade via Obsidian-pluginet),
+   så de matchar de handgjorda custom-HTML-sidorna utan extra steg.
+   ══════════════════════════════════════════════ */
+
+/* Dark mode = den faktiska custom-paletten (creme/guld i stället för cyan) */
+:root[saved-theme="dark"] {
+  --light: #14120e;       /* sidbakgrund */
+  --lightgray: #2a2a2a;   /* kantlinjer */
+  --gray: #666666;        /* sidebar-rubriker */
+  --darkgray: #9E9A91;    /* dämpad text */
+  --dark: #EAE6DA;        /* brödtext */
+  --secondary: #F2D024;   /* guld accent / hover */
+  --tertiary: #F2D024;
+  --bodyFont: 'SKF Sans', sans-serif;  /* PIXI-grafen läser denna för nodtext */
+}
+
+/* H1 — guld med mjuk skugga (matchar index hero-title) */
+h1.article-title {
+  text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* Brödtext — full creme, Fraunces; länkar creme → guld vid hover */
+:root[saved-theme="dark"] article.popover-hint { color: #EAE6DA; }
+article.popover-hint a {
+  color: var(--dark);
+  text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
+}
+article.popover-hint a:hover { color: #F2D024; text-decoration-color: #F2D024; }
+article.popover-hint strong,
+article.popover-hint b { color: #ffffff; }
+
+/* Sidebar-sektioner (Backlinks, Graph View) — liten SKF Sans versal grå */
+.backlinks > h3,
+.graph > h3 {
+  font-family: 'SKF Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #666666 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  font-style: normal !important;
+}
+.backlinks ul li a {
+  font-family: 'SKF Sans', sans-serif;
+  font-size: 14px;
+  color: #9E9A91;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.backlinks ul li a:hover { color: #F2D024; }
+
+/* Graf-ruta */
+.graph-outer {
+  background: #181c1e !important;
+  border: 1px solid #222222 !important;
+}
+
+/* Properties — helt i SKF Sans */
+.note-properties,
+.note-properties-title,
+.note-properties-key,
+.note-properties-value,
+.note-properties-tags,
+.note-properties-count {
+  font-family: 'SKF Sans', sans-serif !important;
+}
+.note-properties-title { color: #EAE6DA; font-weight: 600; }
+.note-properties-tags a { color: #9E9A91; text-decoration: none; }
+.note-properties-tags a:hover { color: #F2D024; }
