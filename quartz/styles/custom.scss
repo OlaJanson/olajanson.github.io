@@ -285,10 +285,11 @@ h1.article-title {
   margin-top: 0 !important;
 }
 
-/* Gul rubrikfärg i dark mode */
+/* Gul rubrikfärg (matchar subsidornas #F2D024) */
 :root[saved-theme="dark"] h1.article-title,
+:root[saved-theme="light"] h1.article-title,
 .dark h1.article-title {
-  color: #d7be00 !important;
+  color: #F2D024 !important;
 }
 
 /* Brödtext — Fraunces */
@@ -371,8 +372,11 @@ article.popover-hint {
    så de matchar de handgjorda custom-HTML-sidorna utan extra steg.
    ══════════════════════════════════════════════ */
 
-/* Dark mode = den faktiska custom-paletten (creme/guld i stället för cyan) */
-:root[saved-theme="dark"] {
+/* Custom-paletten tvingas oavsett tema-växlare — custom-HTML-sidorna är
+   alltid mörka (hårdkodad bakgrund), så Quartz-sidorna måste också vara det,
+   annars hamnar Obsidian-publicerade .md i ljust pappers-tema = matchar inte. */
+:root[saved-theme="dark"],
+:root[saved-theme="light"] {
   --light: #14120e;       /* sidbakgrund */
   --lightgray: #2a2a2a;   /* kantlinjer */
   --gray: #666666;        /* sidebar-rubriker */
@@ -383,13 +387,14 @@ article.popover-hint {
   --bodyFont: 'SKF Sans', sans-serif;  /* PIXI-grafen läser denna för nodtext */
 }
 
-/* H1 — guld med mjuk skugga (matchar index hero-title) */
+/* H1 — guld med mjuk skugga (matchar index hero-title), oavsett tema */
 h1.article-title {
+  color: #F2D024 !important;
   text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
 }
 
 /* Brödtext — full creme, Fraunces; länkar creme → guld vid hover */
-:root[saved-theme="dark"] article.popover-hint { color: #EAE6DA; }
+article.popover-hint { color: #EAE6DA; }
 article.popover-hint a {
   color: var(--dark);
   text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
