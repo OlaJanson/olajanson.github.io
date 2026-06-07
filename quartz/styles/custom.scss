@@ -353,9 +353,11 @@ article.popover-hint {
   }
 }
 
-/* page-header: ingen marginal mot stickymenyn — H1 hanterar positioneringen */
+/* page-header: placeras ovanpå stickymenyn i z-led */
 #quartz-body .page-header {
   margin-top: 0;
+  position: relative;
+  z-index: 101;
 }
 
 /* Toolbar (search + darkmode) alignment */
