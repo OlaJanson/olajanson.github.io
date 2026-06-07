@@ -134,6 +134,7 @@ TEMPLATE = '''<!DOCTYPE html>
             font-family: 'SKF Sans';
             src: url('/fonts/skfsans.otf') format('opentype');
         }}
+        :root {{ --bodyFont: 'SKF Sans', sans-serif; }}
 
         *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
 
@@ -177,6 +178,7 @@ TEMPLATE = '''<!DOCTYPE html>
             font-weight: 400 !important;
             color: #F2D024 !important;
             line-height: 0.9 !important;
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.9);
             margin-bottom: 0;
             letter-spacing: -0.01em;
         }}
@@ -280,8 +282,7 @@ TEMPLATE = '''<!DOCTYPE html>
         }}
         .prop-icon {{ color: #555; font-size: 13px; flex-shrink: 0; }}
         .prop-label {{
-            font-family: 'Fraunces', serif;
-            font-style: italic;
+            font-family: 'SKF Sans', sans-serif;
             font-size: 16px; color: #EAE6DA;
             flex-shrink: 0;
         }}
@@ -343,7 +344,7 @@ TEMPLATE = '''<!DOCTYPE html>
         .backlinks ul {{ list-style: none; }}
         .backlinks ul li {{ margin-bottom: 6px; }}
         .backlinks ul li a {{
-            font-family: 'Fraunces', serif;
+            font-family: 'SKF Sans', sans-serif;
             font-size: 14px; color: #9E9A91;
             text-decoration: underline; text-underline-offset: 3px;
         }}
