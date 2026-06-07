@@ -275,10 +275,9 @@ h1.article-title {
   margin-bottom: 0.6em;
   overflow-wrap: break-word;
 
-  /* Lägg H1 ovanpå stickymenyn; sänk texten så baslinjen vilar på menyns överkant */
+  /* H1 på översta lagret — renderas framför stickymenyn (z-index: 100) */
   position: relative;
   z-index: 101;
-  margin-top: calc(-0.8 * clamp(2rem, 4vw + 1rem, 4.2rem)) !important;
 }
 
 /* Gul rubrikfärg i dark mode */
