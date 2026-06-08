@@ -1,9 +1,10 @@
 name: Build and deploy Quartz to GitHub Pages
 
+# AVSTÄNGD: olajanson.se deployas nu från v5-grenen (se v5/.github/workflows/deploy.yml).
+# main och v5 delade samma GitHub Pages och konkurrerade — v5 är numera enda källan.
+# Endast manuell körning kvar för nödfall.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 permissions:
   contents: read
