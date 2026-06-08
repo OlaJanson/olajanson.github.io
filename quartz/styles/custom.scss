@@ -1,5 +1,28 @@
 @use "./variables.scss" as *;
 
+/* ── ANPASSADE FONTER ── */
+@font-face {
+  font-family: 'Magic Romance';
+  src: url('./fonts/magic-romance.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url('./fonts/fraunces.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SKF Sans';
+  src: url('./fonts/skfsans.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Garden-whisperer design — varm papperston, terracotta/moss, Labrada/IBM Plex Mono */
 
 /* Ambient background gradients */
@@ -12,6 +35,15 @@ body {
   background-attachment: fixed;
 }
 
+/* Utopia fluid typography — viewport 375px→1200px */
+:root {
+  --step--1: clamp(0.88rem, 0.82rem + 0.3vw,  1.00rem);
+  --step-0:  clamp(1.10rem, 0.80rem + 0.9vw,  1.45rem);
+  --step-1:  clamp(1.40rem, 1.17rem + 1.0vw,  1.90rem);
+  --step-2:  clamp(1.75rem, 1.25rem + 1.8vw,  2.60rem);
+  --step-3:  clamp(2.00rem, 1.09rem + 3.9vw,  4.00rem);
+}
+
 /* Typography */
 .page h1, .page h2, .page h3, .page h4,
 .article-title,
@@ -21,14 +53,14 @@ body {
   letter-spacing: -0.01em;
 }
 
-.page h1 { font-weight: 900; font-size: 4rem; letter-spacing: -0.02em; }
-.page h2 { font-size: 1.9rem; margin-top: 2.2em; }
-.page h3 { font-size: 1.35rem; font-style: italic; }
+.page h1 { font-weight: 900; font-size: var(--step-3); letter-spacing: -0.02em; }
+.page h2 { font-size: var(--step-1); margin-top: 2.2em; }
+.page h3 { font-size: var(--step-0); font-style: italic; }
 
 /* h5 som bildtext */
 article.popover-hint h5 {
   font-family: var(--headerFont);
-  font-size: 0.95rem;
+  font-size: var(--step--1);
   font-weight: 700;
   font-style: normal;
   color: var(--darkgray);
@@ -40,7 +72,7 @@ article.popover-hint h5 {
 /* Article content */
 article.popover-hint {
   font-family: var(--headerFont);
-  font-size: 1.45rem;
+  font-size: var(--step-0);
   line-height: 1.8;
   font-weight: 200;
   color: color-mix(in oklab, var(--darkgray) 60%, var(--light));
@@ -141,3 +173,272 @@ article.popover-hint img {
   border-color: var(--secondary);
   color: var(--secondary);
 }
+
+/* ── Landing page cards ── */
+
+@keyframes card-fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.garden-cards {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1.2rem 0 2.8rem;
+}
+
+.garden-card {
+  display: block;
+  padding: 1.1rem 1.4rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  text-decoration: none !important;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  animation: card-fadein 0.35s ease both;
+
+  &:nth-child(1) { animation-delay: 0.04s; }
+  &:nth-child(2) { animation-delay: 0.09s; }
+  &:nth-child(3) { animation-delay: 0.14s; }
+  &:nth-child(4) { animation-delay: 0.19s; }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px -10px rgba(0,0,0,0.35);
+    border-color: var(--secondary);
+  }
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-stage {
+  font-size: 0.9rem;
+}
+
+.card-tags {
+  font-family: var(--codeFont);
+  font-size: 0.72rem;
+  color: var(--gray);
+  letter-spacing: 0.02em;
+}
+
+.card-title {
+  font-family: var(--headerFont);
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+  transition: color 0.15s;
+}
+
+.garden-card:hover .card-title {
+  color: var(--secondary);
+}
+
+.card-desc {
+  font-size: var(--step--1);
+  color: color-mix(in oklab, var(--darkgray) 80%, var(--light));
+  line-height: 1.65;
+  font-weight: 200;
+}
+
+/* ══════════════════════════════════════════════
+   NY DESIGN — index2 / premiss
+   ══════════════════════════════════════════════ */
+
+/* Bakgrundstextur (skanlinjerat) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+  );
+}
+
+/* Artikelrubrik — Magic Romance, stor */
+h1.article-title {
+  font-family: 'Magic Romance', serif !important;
+  font-size: clamp(2rem, 4vw + 1rem, 4.2rem) !important;
+  line-height: 1.1 !important;
+  font-weight: normal !important;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6em;
+  overflow-wrap: break-word;
+
+  /* H1 på översta lagret — renderas framför stickymenyn (z-index: 100) */
+  position: relative;
+  z-index: 101;
+}
+
+/* Kompensera för breadcrumbs-höjden på undersidor — matchar index-sidans avstånd till topbar */
+.breadcrumb-container ~ h1.article-title {
+  margin-top: 0 !important;
+}
+
+/* Gul rubrikfärg (matchar subsidornas #F2D024) */
+:root[saved-theme="dark"] h1.article-title,
+:root[saved-theme="light"] h1.article-title,
+.dark h1.article-title {
+  color: #F2D024 !important;
+}
+
+/* Brödtext — Fraunces */
+article.popover-hint {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: var(--step-0);
+  line-height: 2.0;
+  font-weight: 200;
+}
+
+/* Sidebartitel — SKF Sans */
+.page-title {
+  font-family: 'SKF Sans', sans-serif !important;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem !important;
+}
+
+/* ── STICKY TOPBAR ── */
+:root {
+  --topbar-height: 52px;
+}
+
+.quartz-topbar {
+  grid-area: grid-topbar;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  background: var(--light);
+  border-bottom: 1px solid var(--lightgray);
+}
+
+.quartz-topbar-title {
+  font-family: 'SKF Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dark);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  &:hover { opacity: 1; color: var(--secondary); }
+}
+
+:root[saved-theme="dark"] .quartz-topbar,
+.dark .quartz-topbar {
+  background: #181c1e;
+  border-bottom-color: #2a2a2a;
+}
+
+/* Sidebars: account for topbar height when sticky — desktop/tablet only */
+@media (min-width: 800px) {
+  #quartz-body .sidebar.left,
+  #quartz-body .sidebar.right {
+    top: var(--topbar-height);
+    height: calc(100vh - var(--topbar-height));
+  }
+}
+
+/* page-header: placeras ovanpå stickymenyn i z-led */
+#quartz-body .page-header {
+  margin-top: 0;
+  position: relative;
+  z-index: 101;
+}
+
+/* Toolbar (search + darkmode) alignment */
+.sidebar.right {
+  padding-top: 1.2rem;
+}
+
+/* ══════════════════════════════════════════════
+   NY DESIGN SOM QUARTZ-DEFAULT
+   Gäller alla .md-sidor (t.ex. publicerade via Obsidian-pluginet),
+   så de matchar de handgjorda custom-HTML-sidorna utan extra steg.
+   ══════════════════════════════════════════════ */
+
+/* Custom-paletten tvingas oavsett tema-växlare — custom-HTML-sidorna är
+   alltid mörka (hårdkodad bakgrund), så Quartz-sidorna måste också vara det,
+   annars hamnar Obsidian-publicerade .md i ljust pappers-tema = matchar inte. */
+:root[saved-theme="dark"],
+:root[saved-theme="light"] {
+  --light: #14120e;       /* sidbakgrund */
+  --lightgray: #2a2a2a;   /* kantlinjer */
+  --gray: #666666;        /* sidebar-rubriker */
+  --darkgray: #9E9A91;    /* dämpad text */
+  --dark: #EAE6DA;        /* brödtext */
+  --secondary: #F2D024;   /* guld accent / hover */
+  --tertiary: #F2D024;
+  --bodyFont: 'SKF Sans', sans-serif;  /* PIXI-grafen läser denna för nodtext */
+}
+
+/* H1 — guld med mjuk skugga (matchar index hero-title), oavsett tema */
+h1.article-title {
+  color: #F2D024 !important;
+  text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* Brödtext — full creme, Fraunces; länkar creme → guld vid hover */
+article.popover-hint { color: #EAE6DA; }
+article.popover-hint a {
+  color: var(--dark);
+  text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
+}
+article.popover-hint a:hover { color: #F2D024; text-decoration-color: #F2D024; }
+article.popover-hint strong,
+article.popover-hint b { color: #ffffff; }
+
+/* Sidebar-sektioner (Backlinks, Graph View) — liten SKF Sans versal grå */
+.backlinks > h3,
+.graph > h3 {
+  font-family: 'SKF Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #666666 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  font-style: normal !important;
+}
+.backlinks ul li a {
+  font-family: 'SKF Sans', sans-serif;
+  font-size: 14px;
+  color: #9E9A91;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.backlinks ul li a:hover { color: #F2D024; }
+
+/* Graf-ruta */
+.graph-outer {
+  background: #181c1e !important;
+  border: 1px solid #222222 !important;
+}
+
+/* Properties — helt i SKF Sans */
+.note-properties,
+.note-properties-title,
+.note-properties-key,
+.note-properties-value,
+.note-properties-tags,
+.note-properties-count {
+  font-family: 'SKF Sans', sans-serif !important;
+}
+.note-properties-title { color: #EAE6DA; font-weight: 600; }
+.note-properties-tags a { color: #9E9A91; text-decoration: none; }
+.note-properties-tags a:hover { color: #F2D024; }
