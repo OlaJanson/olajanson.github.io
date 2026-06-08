@@ -11,7 +11,13 @@ thumbnail: thumbnails/resized/a0a87df948776d5e64a0f2ba835fe629_86cf658e.webp
 ---
 ![[dithering-effect-hus_trans.png]]
 
-Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral, eller att göra något som skulle lämpa sig på linjära plattformar. Sidan är strukturerad som en [[varfor-digital-garden|digital trädgård]] — en samling noter, essäer och idéer i olika mognadsstadier.
+Allt är mitt fel.
+På denna, av mig konstruerad plats, är inte bara allt fel mitt utan också allt rätt mitt.
+[[jag|Jag]] skriver här. Om det som faller mig in. Jag arbetar med öppen dörr utan minsta tanke på viralitet eller algoritmanpassat innehåll.
+
+Sidan är strukturerad som en [[varfor-digital-garden|digital trädgård]], en samling noter, essäer och idéer i olika mognadsstadier sammanlänkade med hyperlänkar – en mystisk mutation av en blogg och en wiki. Helt befriad från kronologi.
+
+Men vad betyder en mytoman i en lögndetektorfabrik? Skriver lite om det [[premiss|här]].
 
 ## Storytelling
 
