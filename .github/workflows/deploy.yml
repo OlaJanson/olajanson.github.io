@@ -41,6 +41,14 @@ jobs:
       - run: npm ci
       - run: npx quartz plugin install
       - run: npx quartz build
+      - name: Bygg hero-startsida + assets
+        run: |
+          mkdir -p public/fonts
+          cp content/fonts/* public/fonts/
+          cp content/factotal.jpeg public/factotal.jpeg
+          # Startsidan: injicera brödtext från index.md i index2.html-heron.
+          # Rubrik, bild och kort förblir låsta i index2.html.
+          python3 build_index.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
