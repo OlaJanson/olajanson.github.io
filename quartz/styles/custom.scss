@@ -357,7 +357,7 @@ article.popover-hint {
 .quartz-topbar .breadcrumb-element p {
   color: #9E9A91 !important;
 }
-.quartz-topbar .breadcrumb-container a:hover { color: #F2D024 !important; }
+.quartz-topbar .breadcrumb-container a:hover { color: #FFFFFF !important; }
 .quartz-topbar .flex-component {
   display: flex;
   flex-direction: row;
@@ -460,8 +460,8 @@ article.popover-hint {
   --gray: #666666;        /* sidebar-rubriker */
   --darkgray: #9E9A91;    /* dämpad text */
   --dark: #EAE6DA;        /* brödtext */
-  --secondary: #F2D024;   /* guld accent / hover */
-  --tertiary: #F2D024;
+  --secondary: #EAE6DA;   /* INTE guld — gult finns bara i H1. creme accent/länkar */
+  --tertiary: #EAE6DA;
   --bodyFont: 'SKF Sans', sans-serif;  /* PIXI-grafen läser denna för nodtext */
 }
 
@@ -471,13 +471,13 @@ h1.article-title {
   text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
 }
 
-/* Brödtext — ljus creme, Fraunces; länkar creme → guld vid hover */
+/* Brödtext — ljus creme, Fraunces; länkar creme → ljusare (vit) vid hover, aldrig guld */
 article.popover-hint { color: #F4EFE3; }
 article.popover-hint a {
   color: var(--dark);
   text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
 }
-article.popover-hint a:hover { color: #F2D024; text-decoration-color: #F2D024; }
+article.popover-hint a:hover { color: #FFFFFF; text-decoration-color: #FFFFFF; }
 article.popover-hint strong,
 article.popover-hint b { color: #ffffff; }
 
@@ -500,7 +500,7 @@ article.popover-hint b { color: #ffffff; }
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.backlinks ul li a:hover { color: #F2D024; }
+.backlinks ul li a:hover { color: #FFFFFF; }
 
 /* Graf-ruta */
 .graph-outer {
@@ -518,7 +518,7 @@ article.popover-hint b { color: #ffffff; }
   font-family: 'SKF Sans', sans-serif !important;
 }
 
-/* Properties — ingen foldout: en enkel rad "Properties: #tag #tag" med ljus ram.
+/* Properties — ingen foldout, INGEN ram: en enkel rad "Properties: #tag #tag".
    Tabellen plattas ut (display:contents) så taggarna ligger inline efter titeln. */
 .note-properties {
   display: flex;
@@ -528,9 +528,9 @@ article.popover-hint b { color: #ffffff; }
   width: fit-content;
   max-width: 100%;
   margin: 0.2em 0 1.6em 0;
-  padding: 0.4em 0.85em;
-  border: 1px solid rgba(234, 230, 218, 0.28);   /* ljus ram */
-  border-radius: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
 }
 .note-properties > summary,
 .note-properties[open] > .note-properties-header {
@@ -566,4 +566,4 @@ article.popover-hint b { color: #ffffff; }
   margin-right: 0.5em;
   display: inline;
 }
-.note-properties-tags a:hover { background: none !important; color: #F2D024; }
+.note-properties-tags a:hover { background: none !important; color: #FFFFFF; }
