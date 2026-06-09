@@ -1,4 +1,5 @@
 @use "./variables.scss" as *;
+@use "./syncer"; // Quartz Syncer-integrationsstilar — pluginet hanterar quartz/styles/syncer/
 
 /* ── ANPASSADE FONTER ── */
 @font-face {
