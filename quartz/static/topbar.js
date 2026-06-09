@@ -25,7 +25,20 @@
     const toolbar = document.querySelector(".right .flex-component, .sidebar.right .flex-component");
     if (toolbar) right.appendChild(toolbar);
 
-    // full viewport-bredd: lägg baren ovanför .page (syskon, ej i .page-boxen)
+    // H1 lyfts ut till en hero-band OVANFÖR topbaren — rubriken ligger
+    // överst, scrollar bort normalt, medan topbaren under den fäster sticky.
+    let hero = null;
+    const h1 = document.querySelector(".page-header .article-title, .page-header h1");
+    if (h1) {
+      hero = document.createElement("div");
+      hero.className = "quartz-hero";
+      hero.innerHTML =
+        '<div class="quartz-hero-inner"><div class="quartz-hero-title"></div></div>';
+      hero.querySelector(".quartz-hero-title").appendChild(h1);
+    }
+
+    // full viewport-bredd: lägg hero + bar ovanför .page (syskon, ej i .page-boxen)
+    if (hero) page.parentNode.insertBefore(hero, page);
     page.parentNode.insertBefore(bar, page);
     return true;
   }
@@ -43,7 +56,11 @@
     // (På initial load fyrar init två gånger — buildTopbar:s egen guard hanterar det.)
     const bar = document.querySelector(".quartz-topbar");
     const bc = document.querySelector(".breadcrumb-container");
-    if (bar && bc && !bar.contains(bc)) bar.remove(); // stale bar från föregående sida
+    if (bar && bc && !bar.contains(bc)) {
+      bar.remove(); // stale bar från föregående sida
+      const hero = document.querySelector(".quartz-hero");
+      if (hero) hero.remove();
+    }
     buildTopbar();
     moveLang();
     // språkknappen kan injiceras av language-toggle.js efter oss

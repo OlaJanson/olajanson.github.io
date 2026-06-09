@@ -24,6 +24,20 @@
     });
   }
 
+  // Backlinks innehåller både SV- och EN-versioner av länkande sidor. Visa bara
+  // de som matchar SIDANS språk (den sida man tittar på), inte preferensen.
+  function filterBacklinks() {
+    const lang = getCurrentLang();
+    const items = document.querySelectorAll(".backlinks ul.backlink-list > li, .backlinks ul > li");
+    items.forEach((item) => {
+      const link = item.querySelector("a[href]");
+      if (!link) return;
+      const href = (link.getAttribute("href") || "").replace(/[#?].*$/, "").replace(/\/$/, "");
+      const isEnglish = href.endsWith(".en");
+      item.style.display = (lang === "en") === isEnglish ? "" : "none";
+    });
+  }
+
   function injectButton() {
     if (document.querySelector(".language-toggle")) return;
 
@@ -82,15 +96,18 @@
     document.addEventListener("DOMContentLoaded", () => {
       injectButton();
       filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
+      filterBacklinks();
     });
   } else {
     injectButton();
     filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
+    filterBacklinks();
   }
 
   document.addEventListener("nav", () => {
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
     injectButton();
     filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
+    filterBacklinks();
   });
 })();

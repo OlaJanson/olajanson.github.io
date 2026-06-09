@@ -297,7 +297,7 @@ article.popover-hint {
   font-family: 'Fraunces', Georgia, serif;
   font-size: var(--step-0);
   line-height: 2.0;
-  font-weight: 200;
+  font-weight: 300;
 }
 
 /* Sidebartitel — SKF Sans */
@@ -351,6 +351,13 @@ article.popover-hint {
   margin: 0;
   font-family: 'SKF Sans', sans-serif;
 }
+/* Breadcrumb — samma dämpade kulör som backlinks (#9E9A91), aldrig guld */
+.quartz-topbar .breadcrumb-container,
+.quartz-topbar .breadcrumb-container a,
+.quartz-topbar .breadcrumb-element p {
+  color: #9E9A91 !important;
+}
+.quartz-topbar .breadcrumb-container a:hover { color: #F2D024 !important; }
 .quartz-topbar .flex-component {
   display: flex;
   flex-direction: row;
@@ -383,6 +390,37 @@ article.popover-hint {
 .dark .quartz-topbar {
   background: #181c1e;
   border-bottom-color: #2a2a2a;
+}
+
+/* ── HERO (H1 ovanför topbaren) ──
+   Rubriken ligger överst i flödet och scrollar bort normalt; topbaren under
+   den är sticky och fäster vid top:0. H1 vänsteralignas med center-kolumnen
+   via samma grid som topbaren. */
+.quartz-hero {
+  width: 100%;
+}
+.quartz-hero-inner {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 320px auto 320px;
+  column-gap: 5px;
+}
+.quartz-hero-title {
+  grid-column: 2;
+  min-width: 0;
+  padding: 2rem 0 0.5rem 0;
+}
+.quartz-hero-title h1.article-title {
+  margin: 0 !important;
+}
+@media (max-width: 1200px) {
+  .quartz-hero-inner {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .quartz-hero-title { grid-column: 1; }
 }
 
 /* Sidebars: account for topbar height when sticky — desktop/tablet only */
@@ -433,8 +471,8 @@ h1.article-title {
   text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
 }
 
-/* Brödtext — full creme, Fraunces; länkar creme → guld vid hover */
-article.popover-hint { color: #EAE6DA; }
+/* Brödtext — ljus creme, Fraunces; länkar creme → guld vid hover */
+article.popover-hint { color: #F4EFE3; }
 article.popover-hint a {
   color: var(--dark);
   text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
@@ -479,6 +517,53 @@ article.popover-hint b { color: #ffffff; }
 .note-properties-count {
   font-family: 'SKF Sans', sans-serif !important;
 }
+
+/* Properties — ingen foldout: en enkel rad "Properties: #tag #tag" med ljus ram.
+   Tabellen plattas ut (display:contents) så taggarna ligger inline efter titeln. */
+.note-properties {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0.2em 0 1.6em 0;
+  padding: 0.4em 0.85em;
+  border: 1px solid rgba(234, 230, 218, 0.28);   /* ljus ram */
+  border-radius: 6px;
+}
+.note-properties > summary,
+.note-properties[open] > .note-properties-header {
+  display: inline-flex;
+  align-items: baseline;
+  list-style: none;
+  cursor: default;
+  pointer-events: none;                          /* fälls aldrig ihop */
+  border-bottom: none !important;                /* plugin-understreck bort */
+}
+.note-properties > summary::-webkit-details-marker { display: none; }
+.note-properties > summary::marker { content: ""; }
+/* plugin-chevronen (roterande pil) — bort, ingen foldout-signal */
+.note-properties .note-properties-header::before { display: none !important; }
+.note-properties-count { display: none; }
 .note-properties-title { color: #EAE6DA; font-weight: 600; }
-.note-properties-tags a { color: #9E9A91; text-decoration: none; }
-.note-properties-tags a:hover { color: #F2D024; }
+.note-properties-title::after { content: ":"; }
+.note-properties-table,
+.note-properties-table tbody,
+.note-properties-row { display: contents; }
+.note-properties-key { display: none; }
+.note-properties-value { display: inline; padding: 0; }
+.note-properties-tags { display: inline; }
+.note-properties-separator { display: none; }
+/* taggar som ren #text, inte pill — matchar "#tag #tag" */
+.note-properties-tags a.tag-link,
+.note-properties-tags a {
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0;
+  color: #9E9A91;
+  text-decoration: none;
+  margin-right: 0.5em;
+  display: inline;
+}
+.note-properties-tags a:hover { background: none !important; color: #F2D024; }
