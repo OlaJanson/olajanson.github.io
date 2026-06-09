@@ -98,6 +98,7 @@ export default (() => {
           }
         })}
         <script src={`${baseDir}/static/language-toggle.js`} defer></script>
+        <script src={`${baseDir}/static/topbar.js`} defer></script>
       </head>
     )
   }
