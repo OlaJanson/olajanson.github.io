@@ -116,15 +116,23 @@
         .sidebar-right { grid-area: right; padding: 0 24px 0 0; position: sticky; top: 24px; }
 
         /* ── BRÖDTEXT ── */
+        /* Brödtext matchar undersidornas artikeltext (Fraunces, creme, weight 300) */
         .intro-text {
-            font-size: 20px;
-            line-height: 2.3;
-            color: #a8dadc;
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: clamp(1.10rem, 0.80rem + 0.9vw, 1.45rem);
+            line-height: 2.0;
+            font-weight: 300;
+            color: #F4EFE3;
             margin-bottom: 56px;
         }
         .intro-text p + p { margin-top: 1em; }
-        .intro-text a { color: #5fd7ff; text-decoration: none; }
-        .intro-text a:hover { text-decoration: underline; }
+        .intro-text a {
+            color: #EAE6DA;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
+        .intro-text a:hover { color: #FFFFFF; }
 
         /* ── HÖGERSIDEBAR: KONTROLLER ── */
         .sidebar-controls {
