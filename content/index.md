@@ -2,20 +2,16 @@
 publish: true
 title: En mytoman i en lögndetektorfabrik
 created: 2026-05-05T11:43:51.768+02:00
-modified: 2026-05-24T22:55:02.306+02:00
+modified: 2026-06-07T10:58:21.697+02:00
 tags:
   - "#meta"
   - "#garden"
 ---
 
-![[6. Verktyg/Attached/dithering-effect-hus_trans.png]]
+Allt är mitt fel.
+På denna, av mig konstruerad plats, är inte bara allt fel mitt utan också allt rätt mitt.
+[[jag|Jag]] skriver här. Om det som faller mig in. Jag arbetar med öppen dörr utan minsta tanke på viralitet eller algoritmanpassat innehåll.
 
-Här skriver [[jag]] saker om det som faller mig in och ibland ritar jag också. Jag vidhåller rätten att inte hålla mig till ämnet, inte sträva efter att bli viral eller göra något som skulle lämpa sig på linjära plattformar eller social medier. Här har jag full kontroll. Har kan jag till exempel skriva om [[treehouse|kojor]] eller [[businesschmodels|affärsmodeller]] för att jag vill det.
+Sidan är strukturerad som en [[varfor-digital-garden|digital trädgård]], en samling noter, essäer och idéer i olika mognadsstadier sammanlänkade med hyperlänkar – en mystisk mutation av en blogg och en wiki. Helt befriad från kronologi.
 
-Sidan är strukturerad som en [[varför-digital-garden|digital trädgård]], en samling noter, essäer och idéer i olika mognadsstadier sammanlänkade med hyperlänkar – en mystisk mutation av en blogg och en wiki.
-
-Med vad betyder en mytoman i lögndetektorfabrik? Skriver lite om det [[premiss|här]].
-
-Håll till godo
-
-Ola
+Men vad betyder en mytoman i en lögndetektorfabrik? Skriver lite om det [[premiss|här]].
