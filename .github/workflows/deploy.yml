@@ -50,6 +50,8 @@ jobs:
           # Startsidan: injicera brödtext från index.md i index2.html-heron.
           # Rubrik, bild och kort förblir låsta i index2.html.
           python3 build_index.py
+          # Cache-busting: index.css?v=<hash> så ny CSS hämtas direkt (ej stale 10-min-cache)
+          python3 cachebust.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
