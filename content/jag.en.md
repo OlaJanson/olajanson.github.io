@@ -1,25 +1,30 @@
-
 ---
-title: "About me"
-stage: seedling
-feature: arme-dith-trans.png
-tags: [meta]
+publish: true
+title: Fragment
+created: 2026-05-05T11:43:51.770+02:00
+modified: 2026-06-10T22:33:41.620+02:00
+tags:
+  - "#cv"
+  - "#aboutme"
+  - "#olajanson"
+  - "#adhd"
+  - "#audhd"
+  - "#designprocess"
+  - "#pedagogy"
 ---
+![[6. Verktyg/Attached/arme-dith-trans.png]]
+I am a Swiss army knife, I usually say.
 
-![](arme-dith-trans.png)
+Or perhaps it's not a perfect description of what I am?
 
-I'm a Swiss Army knife, I usually say.
+With a Swiss army knife, its diversity is its primary unique characteristic. The individual tool isn't that impressive, but fitting them all into one red unit is unique. And that's probably where I feel the analogy falls short. I remember as a child how annoyed I was that this red multi-tool couldn't be used in my treehouses – how the small saw included was useless for cutting branches. How virtually every tool was frustratingly bad compared to its single-purpose variant.
 
-Or maybe that's not a perfect description of what I am?
+No, I rather think I should describe myself as a toolbox. But the figurative metaphor doesn't have the same impact. It's too general. But it will have to do for now. But what does the toolbox contain?
 
-The Swiss Army knife's main selling point is its versatility. The individual tools aren't that impressive, but cramming them all into one little red unit is something unique. And that's where I feel the analogy starts to limp. I remember as a child how irritated I was with that red multi-tool — how the tiny saw was useless for cutting branches in my tree forts. How virtually every tool was frustratingly inferior compared to its single-purpose counterpart.
+Pedagogy, I would argue, is a well-used tool. I have worked on and off as a teacher, primarily in vocational colleges but also at universities and primary schools. I work to the best of my ability with [[formativ bedömning|formative assessment]]. Currently exclusively in online courses.
 
-No, I think I'd rather describe myself as a toolbox. The metaphor doesn't have the same ring to it. It's too generic. But it'll do for now. So what's in the toolbox?
+[[Designprocess|Design process]] and creative processes are something I have also spent many professional years with. Most recently as creative director at SKF. But before that as a business developer at HiQ.
 
-Pedagogy, I'd argue, is a well-used tool. I've worked on and off as a teacher — primarily in vocational higher education, but also at university and primary school.
+[[Speldesign|Game design]]. I have designed games - digital, board games, and role-playing games. Right now, it's mostly role-playing games. I constantly have a game project going but rarely finish it.
 
-Design process and creative processes are something else I've spent many professional years on. Most recently as Creative Director at SKF.
-
-Game design. I've designed games — digital, board games, and tabletop RPGs. More on that later.
-
-Three tools. Maybe not that impressive. But I'll write more later.
+I am gifted with both an ADHD and autism diagnosis. I feel relatively well-read in everything related to neurodivergence.
