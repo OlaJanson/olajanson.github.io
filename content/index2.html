@@ -416,13 +416,13 @@
     var enEl = document.getElementById('lang-en');
     var storedLang = localStorage.getItem('lang');
     if (storedLang === 'en') {
-        window.location.replace('/index.en');
+        window.location.replace('/index.en.html');
         return;
     }
     svEl.classList.add('active');
     document.getElementById('lang-btn').addEventListener('click', function() {
         localStorage.setItem('lang', 'en');
-        window.location.href = '/index.en';
+        window.location.href = '/index.en.html';
     });
 })();
 </script>
