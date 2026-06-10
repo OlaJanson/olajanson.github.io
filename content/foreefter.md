@@ -2,14 +2,19 @@
 publish: true
 title: Före eller efter
 created: 2026-06-08T08:08:25.855+02:00
-modified: 2026-06-10T07:05:11.569+02:00
+modified: 2026-06-10T21:50:07.983+02:00
+tags:
+  - "#marx"
+  - "#marxism"
+  - "#anticapitalism"
+  - "#businessmodels"
 ---
 
 ![[6. Verktyg/Attached/Mathew.png|300]]
 
 #### detta är matthew
 
-Jag snubblade över ett klipp på tiktok som fastnade. Det postades av Matthew Remski  [^1] och den här handlade om något så vardagligt som _när_ man får betalt eller förväntas betala. Jag tycker han har en poäng och jag gillar det som kommer ur hans hjärna.
+Detta är Matthew Remski  [^1] han postade en sak på tiktok som handlade om  _när_ man får betalt eller förväntas betala. Jag tyckte det var värt att lyfta och jag gillar generellt det som kommer ur hans hjärna.
 
 I ett stycke i fjärde kapitlet av Kapitalet, konstaterar Marx att det i alla länder där det kapitalistiska produktionssättet råder är brukligt att inte betala för arbetskraften förrän den utövats — typ i slutet av varje vecka (då, månad nu).
 

@@ -2,14 +2,14 @@
 publish: true
 title: Vikten av att ha en enastående premiss
 created: 2026-05-24T17:32:29.941+02:00
-modified: 2026-05-24T23:26:11.733+02:00
+modified: 2026-05-27T11:32:55.428+02:00
 tags:
   - storytelling
   - premiss
   - storyarc
 ---
 
-![[6. Verktyg/Attached/there is no picture.png]]
+![[6. Verktyg/Attached/there is no picture.png|300]]
 I någon av all litteratur som jag läste och använde när jag jobbade som lärare i speldesign så plockade jag upp den enkla formeln: **premiss=tema+förutsättningar+konflikt**. En formel som jag fortfarande kommer tillbaka till än i dag. Den berättar dock bara vad en premiss är och inte vad en _bra_ premiss är.
 
 För mig som kreatör är premissen egentligen det som får mig att ständigt komma tillbaka och fortsätta utveckla, vrida och vända. Enbart för att premissen för berättelsen/spelet är så bra. Några exempel som i relativ närtid har spikat en utmärkt premiss är tv-serien [Pluribus](https://www.imdb.com/title/tt22202452/) eller boken [There Is No Antimemetics Division](https://en.wikipedia.org/wiki/There_Is_No_Antimemetics_Division) och även första boken i [N.K Jemisins Broken Earth series](https://en.wikipedia.org/wiki/N._K._Jemisin#Broken_Earth_series). Jag föreställer mig att det måste varit en fröjd att jobba fram berättelserna efter att ha mejslat fram så enastående premisser.

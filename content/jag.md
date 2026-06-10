@@ -1,10 +1,16 @@
 ---
 publish: true
-title: Om mig
+title: Fragment
 created: 2026-05-05T11:43:51.770+02:00
-modified: 2026-05-05T14:07:11.572+02:00
+modified: 2026-06-10T22:33:41.620+02:00
 tags:
-  - meta
+  - "#cv"
+  - "#aboutme"
+  - "#olajanson"
+  - "#adhd"
+  - "#audhd"
+  - "#designprocess"
+  - "#pedagogy"
 ---
 
 ![[6. Verktyg/Attached/arme-dith-trans.png]]
@@ -16,10 +22,10 @@ Hos en schweizisk armékniv är mångfalden dess främsta unika egenskap. Det en
 
 Nej, jag tror snarare att jag kanske skall beskriva mig som en verktygslåda. Men den bildliga metaforen har inte samma genomslag. Den är för generell. Men den får  duga för nu. Men vad innehåller verktygslådan?
 
-Pedagogik skulle jag vilja hävda är ett väl använt verktyg. Jag har jobbat från och till som lärare, främst inom yrkeshögskola men också på universitet och grundskola.
+Pedagogik skulle jag vilja hävda är ett väl använt verktyg. Jag har jobbat från och till som lärare, främst inom yrkeshögskola men också på universitet och grundskola. Jag är jobbar efter bästa förmåga med [[formativ bedömning]]. Just nu uteslutande i online-kurser.
 
-Designprocess och kreativa processer är något jag också spenderat många yrkesår med. Senast som creative director på SKF.
+[[Designprocess]] och kreativa processer är något jag också spenderat många yrkesår med. Senast som creative director på SKF. Men dessförinnan som affärsutvecklare på HiQ.
 
-Speldesign. Jag har designat spel - digitala, brädspel och rollspel. Mer om det.
+[[Speldesign]]. Jag har designat spel - digitala, brädspel och rollspel. Just nu blir det mest rollspel. Jag har konstant ett spelprojekt igång men blir sällan klar.
 
-Tre verktyg. Det kanske inte var så imponerande. Men jag skriver mer senare.
+Jag är har en begåvad med både en adhd och autismdiagnos. Känner mig förhållandevis påläst i allt som har med neurodivergens att göra.

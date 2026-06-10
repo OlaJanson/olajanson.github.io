@@ -2,7 +2,11 @@
 publish: true
 title: Varför digital garden?
 created: 2026-05-05T11:43:51.773+02:00
-modified: 2026-06-10T08:34:27.079+02:00
+modified: 2026-06-10T21:50:27.718+02:00
+tags:
+  - "#complexsystems"
+  - "#digital-garden"
+  - "#businessmodels"
 ---
 
 Jag delade ut en läxa i en kurser som jag håller. Den heter [konstnärligt förverkligande i digitala miljöer](https://almosteducations.se/utbildningar/konstnarlig-praktik-digitalt/). Mina studenter fick i uppgift att hitta digitala förebilder — men inte fokusera på innehållet, utan på _hur_ de gör det. Hur de för fram saker. Ramverket för kommunikation.

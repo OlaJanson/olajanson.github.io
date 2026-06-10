@@ -2,9 +2,10 @@
 publish: true
 title: Ät upp annars får du ingen efterätt
 created: 2026-06-08T08:35:18.034+02:00
-modified: 2026-06-08T08:50:26.355+02:00
+modified: 2026-06-10T21:49:39.284+02:00
 tags:
   - "#ifthenrewards"
+  - "#businessmodels"
 ---
 
 ![[6. Verktyg/Attached/Dirty carrot.png]]
