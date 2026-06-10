@@ -107,9 +107,13 @@ def translate_file(filepath, key):
 
     en_body = gemini(
         "Translate the following Swedish markdown text to natural, fluent English. "
-        "Preserve all markdown formatting, wiki-links ([[...]]), external links, "
-        "and code blocks exactly. Only translate natural language text. "
-        "Return only the translated markdown, no explanation.\n\n" + body,
+        "Preserve markdown formatting, external links, and code blocks exactly. "
+        "For wiki-links [[target|alias]]: keep the target (before the | ) UNCHANGED, "
+        "but translate the visible alias (after the | ) to English. "
+        "For [[target]] without an alias, leave it unchanged. "
+        "Example: [[varfor-digital-garden|digital trädgård]] -> [[varfor-digital-garden|digital garden]]; "
+        "[[jag|Jag]] -> [[jag|I]]. "
+        "Only translate natural language text. Return only the translated markdown, no explanation.\n\n" + body,
         key,
     )
 

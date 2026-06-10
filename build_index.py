@@ -52,7 +52,7 @@ def md_to_html(md: str) -> str:
         p = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', p)
         p = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", p)
         p = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", p)
-        p = re.sub(r"\s*\n\s*", " ", p)  # mjuka radbrytningar → mellanslag (som Quartz)
+        p = re.sub(r"[ \t]*\n[ \t]*", "<br>\n", p)  # enkel radbrytning → <br> (Obsidian-stil, matchar hard-line-breaks)
         out.append(f"<p>{p}</p>")
     return "\n".join(out)
 

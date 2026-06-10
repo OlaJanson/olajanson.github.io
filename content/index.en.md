@@ -9,8 +9,8 @@ tags:
 ---
 Everything is my fault.
 On this place, constructed by me, not only is all wrong mine, but also all right mine.
-[[jag|Jag]] write here. About what comes to mind. I work with an open door without the slightest thought of virality or algorithm-adapted content.
+[[jag|I]] write here. About what comes to mind. I work with an open door without the slightest thought of virality or algorithm-adapted content.
 
-The page is structured as a [[varfor-digital-garden|digital trädgård]], a collection of notes, essays, and ideas in various stages of maturity linked by hyperlinks – a mysterious mutation of a blog and a wiki. Completely free from chronology.
+The page is structured as a [[varfor-digital-garden|digital garden]], a collection of notes, essays, and ideas in various stages of maturity linked by hyperlinks – a mysterious mutation of a blog and a wiki. Completely free from chronology.
 
 Enjoy, Ola.
