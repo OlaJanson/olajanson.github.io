@@ -50,7 +50,10 @@ jobs:
           # Startsidan: injicera brödtext från index.md i index2.html-heron.
           # Rubrik, bild och kort förblir låsta i index2.html.
           python3 build_index.py
-          # Cache-busting: index.css?v=<hash> så ny CSS hämtas direkt (ej stale 10-min-cache)
+          # Ta bort Quartz extensionslösa index.en (Pages octet-streamar den → download).
+          # Pages clean-URL:ar då /index.en → index.en.html (hero-versionen) som text/html.
+          rm -f public/index.en
+          # Cache-busting: index.css?v=<hash> + skriv om bara-index.en-länkar → .html
           python3 cachebust.py
       - uses: actions/upload-pages-artifact@v3
         with:

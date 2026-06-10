@@ -28,6 +28,8 @@ def main() -> int:
             t = f.read()
         # ersätt index.css ev. med befintlig ?v=… → ny hash
         new = re.sub(r"(index\.css)(\?v=[a-f0-9]+)?", rf"\1?v={h}", t)
+        # bara `index.en` (utan .html) → .html: Pages octet-streamar bara-index.en (download)
+        new = re.sub(r'(href="[^"]*index\.en)"', r'\1.html"', new)
         if new != t:
             with open(html, "w", encoding="utf-8") as f:
                 f.write(new)
