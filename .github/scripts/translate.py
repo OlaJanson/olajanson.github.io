@@ -127,26 +127,35 @@ def translate_file(filepath, key):
     return en_path
 
 
-def changed_sv_files():
+def _git_mtime(path):
+    """Senaste commit-tidsstämpel (epoch) för en fil; 0 om okänd. Kräver git-historik
+    (fetch-depth: 0) — disk-mtime är opålitlig efter en fräsch checkout."""
     try:
-        result = subprocess.run(
-            ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+        out = subprocess.run(
+            ["git", "log", "-1", "--format=%ct", "--", path],
             capture_output=True, text=True, check=True,
-        )
-        files = result.stdout.strip().splitlines()
-    except subprocess.CalledProcessError:
-        # First commit or shallow clone — translate everything published
-        files = []
-        for root, _, fnames in os.walk("content"):
-            for fname in fnames:
-                if fname.endswith(".md") and not fname.endswith(".en.md"):
-                    files.append(os.path.join(root, fname))
-        return files
+        ).stdout.strip()
+        return int(out) if out else 0
+    except (subprocess.CalledProcessError, ValueError):
+        return 0
 
-    return [
-        f for f in files
-        if f.startswith("content/") and f.endswith(".md") and not f.endswith(".en.md")
-    ]
+
+def changed_sv_files():
+    """TILLSTÅNDSBASERAD detektion: returnera varje svensk .md vars engelska
+    motsvarighet SAKNAS eller är ÄLDRE (stale). Robust mot commit-/push-struktur
+    och självläkande — fångar UPPDATERINGAR som gamla diff-baserade (`HEAD~1 HEAD`)
+    detektionen tappade vid batchade/multi-commit-pushar. (is_published filtrerar
+    bort opublicerade i translate_file.)"""
+    stale = []
+    for root, _, fnames in os.walk("content"):
+        for fname in fnames:
+            if not fname.endswith(".md") or fname.endswith(".en.md"):
+                continue
+            md = os.path.join(root, fname)
+            en = md[:-3] + ".en.md"
+            if not os.path.exists(en) or _git_mtime(md) > _git_mtime(en):
+                stale.append(md)
+    return stale
 
 
 def main():

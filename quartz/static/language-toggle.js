@@ -1,6 +1,6 @@
 // Language toggle — URL-based SV/EN navigation + tag page filtering
 (function () {
-  const STORAGE_KEY = "preferred-lang";
+  const STORAGE_KEY = "lang"; // GEMENSAM nyckel med startsidan (index2.html/index.en.html)
 
   function getCurrentLang() {
     return window.location.pathname.endsWith(".en") ? "en" : "sv";
@@ -106,6 +106,7 @@
 
   document.addEventListener("nav", () => {
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
+    applyPreference(); // språkpreferensen består även vid SPA-byten (kan omdirigera SV→EN)
     injectButton();
     filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
     filterBacklinks();
