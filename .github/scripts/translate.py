@@ -6,6 +6,7 @@ Always overwrites existing .en.md so updates stay in sync.
 """
 
 import os
+import re
 import sys
 import json
 import subprocess
@@ -83,6 +84,49 @@ def build_en_frontmatter(fm_raw, en_title):
     return "\n".join(lines)
 
 
+_SLUGS_CACHE = None
+
+
+def published_slugs():
+    """Basnamn (utan .md) för alla PUBLICERADE svenska content-filer — dvs mål
+    som har (eller får) en .en-version och därför ska länkas via .en på EN-sidor."""
+    global _SLUGS_CACHE
+    if _SLUGS_CACHE is not None:
+        return _SLUGS_CACHE
+    slugs = set()
+    for root, _, fnames in os.walk("content"):
+        for fname in fnames:
+            if not fname.endswith(".md") or fname.endswith(".en.md"):
+                continue
+            try:
+                fm, _ = parse_frontmatter(open(os.path.join(root, fname), encoding="utf-8").read())
+            except Exception:
+                continue
+            if is_published(fm):
+                slugs.add(fname[:-3])
+    _SLUGS_CACHE = slugs
+    return slugs
+
+
+_WIKILINK = re.compile(r"\[\[([^\]|#]+)((?:#[^\]|]+)?)(\|[^\]]+)?\]\]")
+
+
+def relink_to_en(body):
+    """Skriv om interna wiki-länkar i en EN-sida så att mål med en .en-version
+    pekar på .en. Annars länkar EN-sidan in i det svenska klustret → inga
+    backlinks och isolerad grafvy. Taggar/icke-publicerade mål lämnas orörda."""
+    slugs = published_slugs()
+
+    def repl(m):
+        target, anchor, alias = m.group(1), m.group(2) or "", m.group(3) or ""
+        t = target.strip()
+        if t.endswith(".en") or t not in slugs:
+            return m.group(0)
+        return f"[[{t}.en{anchor}{alias}]]"
+
+    return _WIKILINK.sub(repl, body)
+
+
 def translate_file(filepath, key):
     with open(filepath, encoding="utf-8") as f:
         raw = f.read()
@@ -116,6 +160,8 @@ def translate_file(filepath, key):
         "Only translate natural language text. Return only the translated markdown, no explanation.\n\n" + body,
         key,
     )
+
+    en_body = relink_to_en(en_body)  # interna länkmål → .en så EN-grafen/backlinks kopplas
 
     en_fm = build_en_frontmatter(fm_raw, en_title)
     en_path = filepath.replace(".md", ".en.md")

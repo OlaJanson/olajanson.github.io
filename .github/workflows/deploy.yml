@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - v5
+  workflow_dispatch:   # tillåter translate.yml att trigga deploy efter auto-översättning
 
 permissions:
   contents: read

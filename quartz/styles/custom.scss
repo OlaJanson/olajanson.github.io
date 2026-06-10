@@ -359,6 +359,15 @@ article.popover-hint {
   color: #9E9A91 !important;
 }
 .quartz-topbar .breadcrumb-container a:hover { color: #FFFFFF !important; }
+/* Home-länk på sidor utan breadcrumb (tagg-/mappsidor) */
+.quartz-topbar .quartz-home-link {
+  font-family: 'SKF Sans', sans-serif;
+  color: #9E9A91;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+.quartz-topbar .quartz-home-link:hover { color: #FFFFFF; }
 .quartz-topbar .flex-component {
   display: flex;
   flex-direction: row;

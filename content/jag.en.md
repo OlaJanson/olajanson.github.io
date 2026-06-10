@@ -21,9 +21,9 @@ With a Swiss army knife, its diversity is its primary unique characteristic. The
 
 No, I rather think I should describe myself as a toolbox. But the figurative metaphor doesn't have the same impact. It's too general. But it will have to do for now. But what does the toolbox contain?
 
-Pedagogy, I would argue, is a well-used tool. I have worked on and off as a teacher, primarily in vocational colleges but also at universities and primary schools. I work to the best of my ability with [[formativ bedömning|formative assessment]]. Currently exclusively in online courses.
+Pedagogy, I would argue, is a well-used tool. I have worked on and off as a teacher, primarily in vocational colleges but also at universities and primary schools. I work to the best of my ability with [[formativ bedömning.en|formative assessment]]. Currently exclusively in online courses.
 
-[[Designprocess|Design process]] and creative processes are something I have also spent many professional years with. Most recently as creative director at SKF. But before that as a business developer at HiQ.
+[[Designprocess.en|Design process]] and creative processes are something I have also spent many professional years with. Most recently as creative director at SKF. But before that as a business developer at HiQ.
 
 [[Speldesign|Game design]]. I have designed games - digital, board games, and role-playing games. Right now, it's mostly role-playing games. I constantly have a game project going but rarely finish it.
 

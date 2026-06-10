@@ -12,7 +12,7 @@ I gave out an assignment in a course that I teach. It is called [artistic realiz
 
 A student whose primary interest was in writing shared a page and said: "Maggie Appleton's, whose art/interests I'm not particularly interested in, but the website itself is roughly what I want to achieve.” The site the student shared was https://maggieappleton.com/. I immediately realized that this was something out of the ordinary. For example, every time a student submitted something, I did a little extra research to see what framework the person had used — WordPress, Shopify, Squarespace, or whatever the hell they use. And all examples except Maggie's page were made using commercial frameworks. Her page was where someone had sat down and thought "how do I want it?" — ignored templates, and just went for it. Built based on their own needs, based on "this is how I would like it to be".
 
-And that made me realize: how much we are stuck in other people's [[businesschmodels|business models]]. We are stuck because they have convinced us that this is the only way to do it — that it's so much simpler. And I believe that is demonstrably not true, especially not now with the help of AI.
+And that made me realize: how much we are stuck in other people's [[businesschmodels.en|business models]]. We are stuck because they have convinced us that this is the only way to do it — that it's so much simpler. And I believe that is demonstrably not true, especially not now with the help of AI.
 
 I read further on Maggie's page. I read her article about [digital gardens](https://maggieappleton.com/garden-history). I almost got angry, but mostly at myself — how the hell did I miss this? How has this passed me by? Why was I not invited to this party?
 
@@ -20,7 +20,7 @@ It pinpointed exactly what I've felt has been missing in web contexts right now.
 
 I don't need my posts to go viral. Perhaps that my content reaches the right people. And perhaps I'm not in a hurry either.
 
-But also: the advice if you're going to start a channel on some social media, where you're supposed to start cranking up the megaphone and talking out to the masses — advice number one is always to find a concept. Only talk about one thing. You can't talk about complex systems, politics, and disc golf or role-playing games. It's not possible. You have to choose, you have to be specialized. And [[jag|I]] am broad and want to talk about everything. I've always felt: "damn, do you have to do that? What a shame." Because with my ADHD brain, everything is connected. It's part of the same cloud of concepts that are always related to each other.
+But also: the advice if you're going to start a channel on some social media, where you're supposed to start cranking up the megaphone and talking out to the masses — advice number one is always to find a concept. Only talk about one thing. You can't talk about complex systems, politics, and disc golf or role-playing games. It's not possible. You have to choose, you have to be specialized. And [[jag.en|I]] am broad and want to talk about everything. I've always felt: "damn, do you have to do that? What a shame." Because with my ADHD brain, everything is connected. It's part of the same cloud of concepts that are always related to each other.
 
 I have been using Obsidian for many, many years now. And just that — writing in Obsidian, in that format — makes my brain just go "mm, lovely". It unleashed a lot of creativity in me, an incredible amount of immediate and easily accessible creativity, by moving away from a linear format.
 

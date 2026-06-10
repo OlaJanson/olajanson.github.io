@@ -30,9 +30,9 @@ He points out that deferred payment was nothing new – the Romans had it for co
 
 What he concludes is that this order says something about the constantly rushed feeling of time. This gives the metaphor "hamster wheel" weight and explanation. And he finishes with a detail I hadn't thought of: almost all proposals for basic income are designed to be paid out in advance, not in arrears, precisely to guarantee the right to exist in the future. Before, not after.
 
-This also lays the foundation for an invisible bedrock in our culture: [[if then rewards]] - something I intend to write more about. And shows how it is fundamentally built on a lack of trust.
+This also lays the foundation for an invisible bedrock in our culture: [[if then rewards.en]] - something I intend to write more about. And shows how it is fundamentally built on a lack of trust.
 
-It also connects with what I write about [[businesschmodels|business models]] – how things are presented as the obvious order when they actually only benefit someone else. But that connection is mine; the analysis itself is his.
+It also connects with what I write about [[businesschmodels.en|business models]] – how things are presented as the obvious order when they actually only benefit someone else. But that connection is mine; the analysis itself is his.
 
 ---
 

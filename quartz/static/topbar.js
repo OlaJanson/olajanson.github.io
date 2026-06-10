@@ -17,9 +17,18 @@
     const left = bar.querySelector(".quartz-topbar-left");
     const right = bar.querySelector(".quartz-topbar-right");
 
-    // breadcrumb → vänster (alignar med center-kolumnen via griden)
+    // breadcrumb → vänster (alignar med center-kolumnen via griden).
+    // Saknas breadcrumb (tagg-/mappsidor) → minst en Home-länk så man kan navigera hem.
     const bc = document.querySelector(".breadcrumb-container");
-    if (bc) left.appendChild(bc);
+    if (bc) {
+      left.appendChild(bc);
+    } else {
+      const home = document.createElement("a");
+      home.className = "quartz-home-link";
+      home.href = "/";
+      home.textContent = "❮ Home";
+      left.appendChild(home);
+    }
 
     // toolbar-gruppen (search + darkmode, + ev. språkknapp) → höger
     const toolbar = document.querySelector(".right .flex-component, .sidebar.right .flex-component");
