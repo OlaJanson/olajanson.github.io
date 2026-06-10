@@ -13,7 +13,7 @@ jobs:
       contents: write
       actions: write   # för att kunna dispatcha deploy.yml
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0   # full historik — translate.py jämför git-tidsstämplar .md vs .en.md
 
