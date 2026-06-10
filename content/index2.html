@@ -93,25 +93,13 @@
             padding: 10px 0;
         }
         .topbar-controls {
-            width: 100%;
-            padding: 0 24px;
+            width: 280px;
+            padding-right: 24px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        /* Sök centrerad på skärmen + större sökruta; darkmode+språk till höger.
-           Override index.css: .search{max-width:14rem} kapar tillväxt; .search-button{width:100%}. */
-        .topbar-controls .search { display: flex; align-items: center; flex: 1; justify-content: center; max-width: none; }
-        .topbar-controls .search-button {
-            width: auto;
-            font-size: 15px;
-            padding: 9px 28px;
-            gap: 8px;
-            border-radius: 20px;
-        }
-        .topbar-controls .search-button svg { width: 15px; height: 15px; }
-        /* nolla inline margin-left:auto så sökens flex:1 kan växa och centrera */
-        .topbar-controls .darkmode { margin-left: 0 !important; }
+        .topbar-controls .search { display: flex; align-items: center; flex: none; }
 
         /* ── TREDELAD LAYOUT ── */
         .page-layout {

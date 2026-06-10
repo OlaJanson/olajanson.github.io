@@ -368,6 +368,11 @@ article.popover-hint {
   letter-spacing: 0.03em;
 }
 .quartz-topbar .quartz-home-link:hover { color: #FFFFFF; }
+
+/* Sök-overlay: centrera input-fältet på skärmen (Quartz default = 12vh från toppen).
+   display:flex + margin:auto centrerar både axlar och är scroll-säkert vid långa resultat. */
+.search > .search-container.active { display: flex !important; }
+.search > .search-container > .search-space { margin: auto !important; }
 .quartz-topbar .flex-component {
   display: flex;
   flex-direction: row;
