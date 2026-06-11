@@ -25,24 +25,27 @@ configuration:
         weights: [200, 300, 400]
       code: IBM Plex Mono
     colors:
+      # Palett flyttad från custom.scss hit (styrbar från Obsidian/Quartz Syncer).
+      # Båda lägena satta till samma mörka palett → tema-växlaren stannar mörk
+      # och matchar de handbyggda HTML-sidorna.
       lightMode:
-        light: "#d4c8b8"
-        lightgray: "#e5ddd0"
-        gray: "#c2b8a8"
-        darkgray: "#0a0d19"
-        dark: "#100b1e"
-        secondary: "#b55a3e"
-        tertiary: "#5e8c5e"
-        highlight: rgba(181, 90, 62, 0.15)
-        textHighlight: "#e8c84a88"
+        light: "#14120e"        # sidbakgrund
+        lightgray: "#2a2a2a"    # kantlinjer
+        gray: "#666666"         # sidebar-rubriker
+        darkgray: "#9E9A91"     # dämpad text
+        dark: "#EAE6DA"         # brödtext
+        secondary: "#EAE6DA"    # creme accent/länkar (gult finns bara i H1)
+        tertiary: "#EAE6DA"
+        highlight: rgba(212, 122, 94, 0.15)
+        textHighlight: "#d4b84a88"
       darkMode:
-        light: "#140e06"
-        lightgray: "#1e1610"
-        gray: "#3a3028"
-        darkgray: "#9edbd8"
-        dark: "#D4FCF8"
-        secondary: "#d47a5e"
-        tertiary: "#7aac7a"
+        light: "#14120e"
+        lightgray: "#2a2a2a"
+        gray: "#666666"
+        darkgray: "#9E9A91"
+        dark: "#EAE6DA"
+        secondary: "#EAE6DA"
+        tertiary: "#EAE6DA"
         highlight: rgba(212, 122, 94, 0.15)
         textHighlight: "#d4b84a88"
 plugins:

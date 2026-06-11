@@ -465,18 +465,13 @@ article.popover-hint {
    så de matchar de handgjorda custom-HTML-sidorna utan extra steg.
    ══════════════════════════════════════════════ */
 
-/* Custom-paletten tvingas oavsett tema-växlare — custom-HTML-sidorna är
-   alltid mörka (hårdkodad bakgrund), så Quartz-sidorna måste också vara det,
-   annars hamnar Obsidian-publicerade .md i ljust pappers-tema = matchar inte. */
+/* Färgpaletten styrs numera från quartz.config.yaml → theme.colors
+   (både lightMode och darkMode satta till samma mörka palett, så tema-växlaren
+   stannar mörk och matchar de handbyggda HTML-sidorna). Vill du ändra färg:
+   gör det i configen / Quartz Syncer-pluginet, inte här.
+   Endast --bodyFont tvingas här eftersom PIXI-grafen läser den för nodtext. */
 :root[saved-theme="dark"],
 :root[saved-theme="light"] {
-  --light: #14120e;       /* sidbakgrund */
-  --lightgray: #2a2a2a;   /* kantlinjer */
-  --gray: #666666;        /* sidebar-rubriker */
-  --darkgray: #9E9A91;    /* dämpad text */
-  --dark: #EAE6DA;        /* brödtext */
-  --secondary: #EAE6DA;   /* INTE guld — gult finns bara i H1. creme accent/länkar */
-  --tertiary: #EAE6DA;
   --bodyFont: 'SKF Sans', sans-serif;  /* PIXI-grafen läser denna för nodtext */
 }
 
@@ -487,7 +482,7 @@ h1.article-title {
 }
 
 /* Brödtext — ljus creme, Fraunces; länkar creme → ljusare (vit) vid hover, aldrig guld */
-article.popover-hint { color: #F4EFE3; }
+article.popover-hint { color: var(--dark); }
 article.popover-hint a {
   color: var(--dark);
   text-decoration-color: color-mix(in oklab, var(--dark) 40%, transparent);
