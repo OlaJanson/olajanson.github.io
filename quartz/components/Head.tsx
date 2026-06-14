@@ -97,8 +97,11 @@ export default (() => {
             return resource
           }
         })}
+        <link rel="webmention" href="https://webmention.io/olajanson.se/webmention" />
+        <link rel="pingback" href="https://webmention.io/olajanson.se/xmlrpc" />
         <script src={`${baseDir}/static/language-toggle.js`} defer></script>
         <script src={`${baseDir}/static/topbar.js`} defer></script>
+        <script src={`${baseDir}/static/webmentions.js`} defer></script>
       </head>
     )
   }
