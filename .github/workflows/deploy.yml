@@ -40,6 +40,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-plugins-
       - run: npm ci
+      - name: Rendera gästboksinlägg
+        run: |
+          pip install pyyaml -q
+          python3 scripts/render-gastbok.py
       - run: npx quartz plugin install
       - run: npx quartz build
       - name: Bygg hero-startsida + assets

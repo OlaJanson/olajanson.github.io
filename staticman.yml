@@ -1,0 +1,27 @@
+# Staticman v3 config — Gästbok för olajanson.se
+# Tar emot meddelanden från gästbokssidan och committar dem till _data/gastbok/
+# Kräver att Staticman GitHub-appen är auktoriserad på OlaJanson/olajanson.github.io
+
+staticman:
+  allowedFields:
+    - name
+    - message
+    - url
+  allowedOrigins:
+    - olajanson.se
+    - localhost
+  branch: v5
+  filename: "{@timestamp}"
+  format: yaml
+  generatedFields:
+    date:
+      type: date
+      options:
+        format: iso8601
+  moderation: true
+  path: _data/gastbok
+  requiredFields:
+    - name
+    - message
+  transforms:
+    email: md5
