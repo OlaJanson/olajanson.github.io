@@ -49,6 +49,11 @@ def is_swedish(slug: str) -> bool:
     return not slug.endswith(EN_SUFFIX)
 
 
+def is_skippable(slug: str) -> bool:
+    """Slugs som aldrig ska bli kort: index, gästbok och Quartz tagg-sidor (tags/…)."""
+    return slug in ("index", "gästbok", "gastbok", "tags") or slug.startswith("tags/")
+
+
 def strip_tag(tag: str) -> str:
     return tag.lstrip(TAG_PREFIX).strip().lower()
 
@@ -59,7 +64,7 @@ def analyze_tags(content_index: dict) -> list[tuple[str, list[dict]]]:
     for slug, entry in content_index.items():
         if not is_swedish(slug):
             continue
-        if slug in ("index", "gästbok", "gastbok"):
+        if is_skippable(slug):
             continue
         tags = [strip_tag(t) for t in entry.get("tags", [])]
         display_tags = [t for t in tags if t not in IGNORE_TAGS]
@@ -84,17 +89,23 @@ def analyze_tags(content_index: dict) -> list[tuple[str, list[dict]]]:
         articles.sort(key=lambda a: len(a.get("content", "")), reverse=True)
         result.append((tag, articles[:2]))
 
+    # "Övrigt" är en catch-all → alltid sist bland kategorierna (stabil sort)
+    result.sort(key=lambda r: r[0] == "övrigt")
     return result
 
 
-def get_latest_articles(content_index: dict, repo_root: str) -> list[dict]:
-    """Hitta de 2 senast modifierade .md-filerna (svenska, ej index/gästbok)."""
+def get_latest_articles(content_index: dict, repo_root: str, exclude: set | None = None) -> list[dict]:
+    """Hitta de 2 senast modifierade .md-filerna (svenska, ej index/gästbok/tagg-sidor).
+
+    `exclude` = slugs som redan visas i kategorisektionerna → undvik dubbletter i Senaste.
+    """
+    exclude = exclude or set()
     content_dir = os.path.join(repo_root, "content")
     candidates = []
     for slug, entry in content_index.items():
         if not is_swedish(slug):
             continue
-        if slug in ("index", "gästbok", "gastbok"):
+        if is_skippable(slug) or slug in exclude:
             continue
         fp = entry.get("filePath", "")
         md_path = os.path.join(content_dir, fp)
@@ -245,7 +256,8 @@ def main() -> int:
     latest = []
     if content_index:
         categories = analyze_tags(content_index)
-        latest = get_latest_articles(content_index, repo_root)
+        used = {a["slug"] for _, arts in categories for a in arts}
+        latest = get_latest_articles(content_index, repo_root, exclude=used)
         print(f"  [dynamiska kort] {len(categories)} kategorier, {sum(len(a) for _, a in categories)} kort, {len(latest)} senaste")
 
     for md_path, tmpl_path, out_path in PAGES:
