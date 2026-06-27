@@ -235,6 +235,10 @@
             background: #232b2f !important;
             box-shadow: 0 8px 28px rgba(215, 190, 0, 0.15), 0 2px 8px rgba(0,0,0,0.5);
         }
+        @media (prefers-reduced-motion: reduce) {
+            .card { transition: none; }
+            .card:hover { transform: none; }
+        }
         .card-icon { color: #5fd7ff; font-size: 18px; margin-top: 3px; flex-shrink: 0; }
         .card-title {
             font-family: 'Fraunces', serif;
