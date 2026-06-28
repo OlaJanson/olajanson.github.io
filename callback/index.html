@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head><meta charset="utf-8"><title>Komodoro — loggar in…</title>
+<style>body{background:#14110f;color:#8a8273;font-family:Georgia,serif;display:flex;height:100vh;margin:0;align-items:center;justify-content:center;font-style:italic}</style>
+</head>
+<body><p id="m">Loggar in…</p>
+<script>
+const CLIENT_ID = "146c72f11c944dd0a26999ffea7ef350";
+const REDIRECT_URI = location.origin + "/callback";
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const code = params.get("code");
+  const verifier = localStorage.getItem("kmd_verifier");
+  const show = t => document.getElementById("m").textContent = t;
+  if (params.get("error")){ show("Spotify nekade: " + params.get("error")); return; }
+  if (!code){ show("Inget code i svaret — ingen redirect skedde."); return; }
+  if (!verifier){ show("Saknar PKCE-verifier i localStorage (origin-miss? börja om från /komodoro/ på SAMMA adress)."); return; }
+  const r = await fetch("https://accounts.spotify.com/api/token", {
+    method:"POST", headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: CLIENT_ID, grant_type:"authorization_code", code,
+      redirect_uri: REDIRECT_URI, code_verifier: verifier }) });
+  const j = await r.json();
+  if (j.access_token){
+    localStorage.setItem("kmd_token", j.access_token);
+    location.replace("/komodoro/");
+  } else {
+    show("Token-utbyte misslyckades: " + (j.error_description || j.error || JSON.stringify(j)));
+  }
+})();
+</script>
+</body>
+</html>
