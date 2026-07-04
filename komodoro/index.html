@@ -31,6 +31,9 @@
   ol { list-style: decimal inside; padding: 0; margin: .5rem 0 0; }
   ol li { padding: .2rem 0; border-bottom: 1px dotted var(--dim); }
   ol li:last-child { border-bottom: none; }
+  ol li small { display:block; color:var(--dim); font-size:.8rem; }
+  ol li.playing { color: var(--accent); }
+  ol li.passed, ol li.passed small { color: var(--dim); opacity:.55; }
 </style>
 </head>
 <body>
@@ -133,6 +136,9 @@ let timerInterval = null;
 let endTime = 0; // Timestamp when current phase ends
 let lastWorkDurationMin = 0; // To restart work after break
 let brownNoiseTrackUri = null;
+let currentPick = [];           // uri-ordning för passets låtlista (highlight/gråning)
+
+const fmtMs = ms => `${Math.floor(ms/60000)}:${String(Math.floor(ms/1000)%60).padStart(2,"0")}`;
 
 async function api(path){
   const r = await fetch("https://api.spotify.com/v1" + path,
@@ -150,7 +156,9 @@ async function loadLikedSongs(){
     while (url){
       const j = await api(url);
       for (const it of j.items)
-        allTracks.push({ uri: it.track.uri, duration_ms: it.track.duration_ms, name: it.track.name });
+        allTracks.push({ uri: it.track.uri, duration_ms: it.track.duration_ms, name: it.track.name,
+                         artist: it.track.artists.map(a => a.name).join(", "),
+                         album: it.track.album.name });
       url = j.next ? j.next.replace("https://api.spotify.com/v1","") : null;
     }
     status(`${allTracks.length} låtar redo. Välj passlängd.`);
@@ -195,11 +203,15 @@ async function startPass(min){
   status(`Pass: ${pick.length} låtar, ~${Math.round(sum/60000)} min.`);
   
   // Update tracklist
+  currentPick = pick.map(t => t.uri);
   const tracklistEl = $("#tracklist");
   tracklistEl.innerHTML = '';
   pick.forEach(t => {
     const li = document.createElement('li');
-    li.textContent = t.name;
+    li.textContent = `${t.artist} — ${t.name}`;   // textContent — låtnamn är otrodd input
+    const small = document.createElement('small');
+    small.textContent = `${t.album} · ${fmtMs(t.duration_ms)}`;
+    li.appendChild(small);
     tracklistEl.appendChild(li);
   });
   $("#tracklist").closest('details').open = true; // Open details by default
@@ -279,6 +291,12 @@ function initPlayer(){
     if (currentPhase === 'work') {
         $("#now").innerHTML = `▸ ${st.track_window.current_track.name}` +
         `<small>${st.track_window.next_tracks.length} låtar kvar i passet</small>`;
+        // Markera spelande låt, gråa passerade (uri-match; relinkade spår matchar ej → ingen markering)
+        const idx = currentPick.indexOf(st.track_window.current_track.uri);
+        [...$("#tracklist").children].forEach((li, i) => {
+          li.classList.toggle("playing", i === idx);
+          li.classList.toggle("passed", idx >= 0 && i < idx);
+        });
         if (st.paused && st.position === 0 && st.track_window.next_tracks.length === 0){
             // Work pass finished, start break
             startBreak();
