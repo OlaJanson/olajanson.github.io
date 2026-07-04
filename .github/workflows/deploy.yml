@@ -60,6 +60,7 @@ jobs:
           # Cache-busting: index.css?v=<hash> + skriv om bara-index.en-länkar → .html
           python3 cachebust.py
           cp -r komodoro public/komodoro
+          cp -r callback public/callback
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
