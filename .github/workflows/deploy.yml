@@ -76,6 +76,7 @@ jobs:
           rm -rf public/tags
           mkdir -p public/tags
           cp content/tags/*.html public/tags/
+          cp -r komodoro public/komodoro
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
