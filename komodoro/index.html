@@ -21,10 +21,16 @@
   #status { color:var(--dim); min-height:1.2em; text-align:center; max-width:30rem; }
   #now { font-size:1.3rem; text-align:center; min-height:1.5em; }
   #now small { display:block; color:var(--dim); font-size:.8rem; margin-top:.3rem; }
+  #timer { font-size: 2.5rem; font-weight: bold; text-align: center; margin-top: 1rem; min-height: 1.2em; }
   input { font-family:inherit; font-size:1rem; width:5rem; background:none; color:var(--fg);
           border:1px solid var(--dim); border-radius:2px; padding:.7rem; text-align:center; }
   .hidden { display:none !important; }
   a { color:var(--accent); }
+  details { margin-top: 1rem; border: 1px solid var(--dim); border-radius: 2px; padding: .5rem 1rem; }
+  summary { cursor: pointer; }
+  ol { list-style: decimal inside; padding: 0; margin: .5rem 0 0; }
+  ol li { padding: .2rem 0; border-bottom: 1px dotted var(--dim); }
+  ol li:last-child { border-bottom: none; }
 </style>
 </head>
 <body>
@@ -38,11 +44,14 @@
   <div id="app-view" class="hidden">
     <div class="durations">
       <button class="dur" data-min="25">25 min arbete</button>
-      <button class="dur" data-min="5">5 min paus</button>
       <input id="custom" type="number" min="1" max="180" placeholder="min">
       <button class="dur" data-custom>Starta</button>
+      <label for="pausmin">Paus:</label>
+      <input id="pausmin" type="number" value="5" min="1" max="60"> min
     </div>
     <div id="now"></div>
+    <div id="timer"></div>
+    <details><summary>Visa låtar</summary><ol id="tracklist"></ol></details>
     <button id="stop" class="hidden">Stoppa</button>
     <p><a href="#" id="relogin">logga in igen (ny token / nya scopes)</a></p>
   </div>
@@ -118,7 +127,12 @@ function selftest(){
 let token, deviceId, player;
 const allTracks = [];           // {uri, duration_ms, name}
 const played = new Set();
-let running = false;
+let running = false; // Indicates if a work pass or break is active
+let currentPhase = 'idle'; // 'work', 'break', 'idle'
+let timerInterval = null;
+let endTime = 0; // Timestamp when current phase ends
+let lastWorkDurationMin = 0; // To restart work after break
+let brownNoiseTrackUri = null;
 
 async function api(path){
   const r = await fetch("https://api.spotify.com/v1" + path,
@@ -128,6 +142,7 @@ async function api(path){
 }
 // Visar fel, loggar INTE ut automatiskt (så meddelandet står kvar att läsa).
 function fail(msg){ status("⚠ " + msg); console.error("[komodoro]", msg); }
+
 async function loadLikedSongs(){
   status("Hämtar gillade låtar…");
   try {
@@ -141,6 +156,115 @@ async function loadLikedSongs(){
     status(`${allTracks.length} låtar redo. Välj passlängd.`);
   } catch(e){ fail(e.message); }
 }
+
+function updateTimer(){
+  const remainingMs = endTime - Date.now();
+  if (remainingMs <= 0) {
+    clearInterval(timerInterval);
+    $("#timer").textContent = "00:00";
+    // ponytail: väggklocka, driftar vid manuell paus — arbete→paus ägs av
+    // tystnadsdetekteringen i player_state_changed; klockan är bara display där.
+    if (currentPhase === 'break') {
+      startPass(lastWorkDurationMin); // Auto-restart work
+    }
+    return;
+  }
+
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(seconds).padStart(2, '0');
+
+  $("#timer").textContent = `${formattedMinutes}:${formattedSeconds}`;
+}
+
+async function startPass(min){
+  if (!deviceId){ status("Spelaren är inte redo än."); return; }
+  if (timerInterval) clearInterval(timerInterval); // Clear any existing timer
+
+  const { pick, sum } = buildPass(allTracks, played, min);
+  if (!pick.length){ status("Inga osedda låtar kvar — alla har spelats denna session."); return; }
+  
+  pick.forEach(t => played.add(t.uri));
+  lastWorkDurationMin = min; // Store for auto-restart
+  running = true;
+  currentPhase = 'work';
+  $("#stop").classList.remove("hidden");
+  status(`Pass: ${pick.length} låtar, ~${Math.round(sum/60000)} min.`);
+  
+  // Update tracklist
+  const tracklistEl = $("#tracklist");
+  tracklistEl.innerHTML = '';
+  pick.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t.name;
+    tracklistEl.appendChild(li);
+  });
+  $("#tracklist").closest('details').open = true; // Open details by default
+
+  await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    method:"PUT", headers:{ Authorization:"Bearer "+token, "Content-Type":"application/json" },
+    body: JSON.stringify({ uris: pick.map(t => t.uri) }) });
+  
+  endTime = Date.now() + sum;
+  timerInterval = setInterval(updateTimer, 1000);
+  updateTimer(); // Initial call to display immediately
+}
+
+async function startBreak(){
+  if (!deviceId){ status("Spelaren är inte redo än."); return; }
+  if (timerInterval) clearInterval(timerInterval); // Clear any existing timer
+
+  const breakMin = parseInt($("#pausmin").value, 10) || 5;
+
+  running = true;
+  currentPhase = 'break';
+  $("#stop").classList.remove("hidden");
+  $("#now").textContent = "Paus!";
+  $("#tracklist").innerHTML = ''; // Clear tracklist for break
+  $("#tracklist").closest('details').open = false; // Close details for break
+
+  status(`Paus: ${breakMin} minuter.`);
+
+  if (!brownNoiseTrackUri) {
+    try {
+      const searchResult = await api(`/search?q=brown%20noise&type=track&limit=10`);
+      const items = searchResult.tracks.items;
+      // Helst ett spår som täcker pausen, annars det längsta — tyst svans är ok.
+      const suitableTrack = items.find(t => t.duration_ms >= breakMin * 60000) ||
+        items.slice().sort((a,b) => b.duration_ms - a.duration_ms)[0];
+      if (suitableTrack) brownNoiseTrackUri = suitableTrack.uri;
+    } catch (e) {
+      console.warn("[komodoro] brusspår misslyckades, tyst paus:", e.message);
+    }
+  }
+
+  if (brownNoiseTrackUri){
+    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+      method:"PUT", headers:{ Authorization:"Bearer "+token, "Content-Type":"application/json" },
+      body: JSON.stringify({ uris: [brownNoiseTrackUri] }) });
+  }
+
+  endTime = Date.now() + (breakMin * 60000);
+  timerInterval = setInterval(updateTimer, 1000);
+  updateTimer(); // Initial call to display immediately
+}
+
+function stopCycle(){
+  running = false;
+  if (player) player.pause();
+  if (timerInterval) clearInterval(timerInterval);
+  $("#now").textContent = "";
+  $("#timer").textContent = "";
+  $("#tracklist").innerHTML = '';
+  $("#tracklist").closest('details').open = false;
+  $("#stop").classList.add("hidden");
+  status("Stoppat.");
+  currentPhase = 'idle';
+}
+
 function initPlayer(){
   player = new Spotify.Player({ name:"Komodoro", getOAuthToken: cb => cb(token), volume:0.7 });
   player.addListener("ready", ({ device_id }) => { deviceId = device_id; loadLikedSongs(); });
@@ -151,34 +275,27 @@ function initPlayer(){
   // Tystnad = klar: sista spåret slut, inget nästa, paus vid position 0.
   player.addListener("player_state_changed", st => {
     if (!st || !running) return;
-    $("#now").innerHTML = `▸ ${st.track_window.current_track.name}` +
-      `<small>${st.track_window.next_tracks.length} låtar kvar i passet</small>`;
-    if (st.paused && st.position === 0 && st.track_window.next_tracks.length === 0){
-      running = false;
-      $("#now").innerHTML = "✓ Passet klart.<small>tystnaden är signalen</small>";
-      $("#stop").classList.add("hidden");
-      status("Välj nästa pass.");
+    
+    if (currentPhase === 'work') {
+        $("#now").innerHTML = `▸ ${st.track_window.current_track.name}` +
+        `<small>${st.track_window.next_tracks.length} låtar kvar i passet</small>`;
+        if (st.paused && st.position === 0 && st.track_window.next_tracks.length === 0){
+            // Work pass finished, start break
+            startBreak();
+        }
+    } else if (currentPhase === 'break') {
+        $("#now").innerHTML = `▸ Paus: ${st.track_window.current_track.name}`;
+        // If brown noise track ends, the timer will handle the transition to next work pass
     }
   });
   player.connect();
 }
-async function startPass(min){
-  if (!deviceId){ status("Spelaren är inte redo än."); return; }
-  const { pick, sum } = buildPass(allTracks, played, min);
-  if (!pick.length){ status("Inga osedda låtar kvar — alla har spelats denna session."); return; }
-  pick.forEach(t => played.add(t.uri));
-  running = true;
-  $("#stop").classList.remove("hidden");
-  status(`Pass: ${pick.length} låtar, ~${Math.round(sum/60000)} min.`);
-  await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-    method:"PUT", headers:{ Authorization:"Bearer "+token, "Content-Type":"application/json" },
-    body: JSON.stringify({ uris: pick.map(t => t.uri) }) });
-}
+
 document.querySelectorAll(".dur").forEach(b => b.onclick = () => {
   const min = b.dataset.custom !== undefined ? parseInt($("#custom").value,10) : parseInt(b.dataset.min,10);
   if (min > 0) startPass(min);
 });
-$("#stop").onclick = () => { running = false; player.pause(); $("#now").textContent=""; $("#stop").classList.add("hidden"); status("Stoppat."); };
+$("#stop").onclick = stopCycle;
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
 if (location.search.includes("selftest")){ selftest(); }
