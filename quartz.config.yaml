@@ -33,7 +33,7 @@ configuration:
         lightgray: "#2a2a2a"    # kantlinjer
         gray: "#666666"         # sidebar-rubriker
         darkgray: "#9E9A91"     # dämpad text
-        dark: "#fdff8f"         # brödtext
+        dark: "#EAE6DA"         # brödtext
         secondary: "#EAE6DA"    # creme accent/länkar (gult finns bara i H1)
         tertiary: "#EAE6DA"
         highlight: rgba(212, 122, 94, 0.15)
@@ -43,7 +43,7 @@ configuration:
         lightgray: "#2a2a2a"
         gray: "#666666"
         darkgray: "#9E9A91"
-        dark: "#fdff8f"
+        dark: "#EAE6DA"
         secondary: "#EAE6DA"
         tertiary: "#EAE6DA"
         highlight: rgba(212, 122, 94, 0.15)
