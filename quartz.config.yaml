@@ -19,22 +19,26 @@ configuration:
     typography:
       header:
         name: Fraunces
-        weights: [300, 400, 700, 900]
+        weights:
+          - 300
+          - 400
+          - 700
+          - 900
       body:
         name: Fraunces
-        weights: [200, 300, 400]
+        weights:
+          - 200
+          - 300
+          - 400
       code: IBM Plex Mono
     colors:
-      # Palett flyttad från custom.scss hit (styrbar från Obsidian/Quartz Syncer).
-      # Båda lägena satta till samma mörka palett → tema-växlaren stannar mörk
-      # och matchar de handbyggda HTML-sidorna.
       lightMode:
-        light: "#14120e"        # sidbakgrund
-        lightgray: "#2a2a2a"    # kantlinjer
-        gray: "#666666"         # sidebar-rubriker
-        darkgray: "#9E9A91"     # dämpad text
-        dark: "#EAE6DA"         # brödtext
-        secondary: "#EAE6DA"    # creme accent/länkar (gult finns bara i H1)
+        light: "#14120e"
+        lightgray: "#2a2a2a"
+        gray: "#666666"
+        darkgray: "#9E9A91"
+        dark: "#EAE6DA"
+        secondary: "#EAE6DA"
         tertiary: "#EAE6DA"
         highlight: rgba(212, 122, 94, 0.15)
         textHighlight: "#d4b84a88"
@@ -42,9 +46,9 @@ configuration:
         light: "#14120e"
         lightgray: "#2a2a2a"
         gray: "#666666"
-        darkgray: "#9E9A91"
-        dark: "#EAE6DA"
-        secondary: "#EAE6DA"
+        darkgray: "#b5e8e7"
+        dark: "#b5e8e7"
+        secondary: "#ffffff"
         tertiary: "#EAE6DA"
         highlight: rgba(212, 122, 94, 0.15)
         textHighlight: "#d4b84a88"
