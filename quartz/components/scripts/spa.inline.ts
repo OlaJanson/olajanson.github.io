@@ -101,8 +101,12 @@ async function _navigate(url: URL, isBack: boolean = false) {
   announcer.dataset.persist = ""
   html.body.appendChild(announcer)
 
-  // morph body
-  micromorph(document.body, html.body)
+  // morph body — MÅSTE awaitas: micromorph returnerar Promise<void> och löses via
+  // intern rAF-batchning. Utan await fyras "nav"-eventet (notifyNav nedan) innan DOM:en
+  // är färdigmorfad, så alla re-init-lyssnare (topbar.js, graph.inline.ts, popover…) kör
+  // mot en halvmorfad DOM. Det är roten till rubrik- och grafvy-buggarna på live: racet
+  // vinner lokalt (snabbt) men förlorar under live-latens. Se olajanson-korten.
+  await micromorph(document.body, html.body)
 
   // scroll into place and add history
   if (!isBack) {
