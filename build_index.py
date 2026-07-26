@@ -58,15 +58,30 @@ def strip_tag(tag: str) -> str:
     return tag.lstrip(TAG_PREFIX).strip().lower()
 
 
+def normalize_tag(tag: str) -> str:
+    t = tag.strip().lower()
+    if t in ('businessmodels', 'businessmodells', 'businesschmodels', 'enshitification', 'enshittification'):
+        return "businessmodels"
+    return t
+
+
 def analyze_tags(content_index: dict) -> list[tuple[str, list[dict]]]:
-    """Räkna taggar, hitta topp 4, returnera (kategori, [artiklar])."""
+    """Räkna taggar, hitta 2 icke-överlappande kategorier, returnera (kategori, [artiklar]).
+
+    Urvalsregel:
+    1. Normalisera taggar (merge businessmodels-stavningsvarianter).
+    2. Rubrik 1 = vanligaste taggen.
+    3. Rubrik 2 = nästa vanligaste tagg vars artiklar INTE till stor del överlappar rubrik 1.
+       En tagg hoppas över om >= 50% av dess artiklar redan finns i en tidigare vald kategori.
+    4. Returnera exakt 2 kategorier, 2 artiklar vardera.
+    """
     tag_articles: dict[str, list[dict]] = {}
     for slug, entry in content_index.items():
         if not is_swedish(slug):
             continue
         if is_skippable(slug):
             continue
-        tags = [strip_tag(t) for t in entry.get("tags", [])]
+        tags = [normalize_tag(strip_tag(t)) for t in entry.get("tags", [])]
         display_tags = [t for t in tags if t not in IGNORE_TAGS]
         if not display_tags:
             display_tags = ["övrigt"]
@@ -78,19 +93,47 @@ def analyze_tags(content_index: dict) -> list[tuple[str, list[dict]]]:
                 "content": entry.get("content", ""),
             })
 
-    # Topp 4 taggar efter antal artiklar
+    # Tagg-räkning efter normalisering
     tag_counts = Counter({t: len(v) for t, v in tag_articles.items()})
-    top4 = [t for t, _ in tag_counts.most_common(4)]
+    sorted_tags = [t for t, _ in tag_counts.most_common()]
 
     result = []
-    for tag in top4:
-        articles = tag_articles.get(tag, [])
-        # Ta max 2, prioritera de med rikast content som proxy för "bäst"
-        articles.sort(key=lambda a: len(a.get("content", "")), reverse=True)
-        result.append((tag, articles[:2]))
+    used_slugs: set[str] = set()
+    selected_tags: list[str] = []
 
-    # "Övrigt" är en catch-all → alltid sist bland kategorierna (stabil sort)
-    result.sort(key=lambda r: r[0] == "övrigt")
+    for tag in sorted_tags:
+        if len(result) >= 2:
+            break
+        if tag == "övrigt":
+            continue
+
+        articles = tag_articles.get(tag, [])
+        # Filtrera bort artiklar som redan använts i en tidigare kategori
+        available = [a for a in articles if a["slug"] not in used_slugs]
+        if len(available) < 2:
+            continue
+
+        # Kontrollera överlappning på taggnivå: hoppa över om denna tagg delar
+        # artiklar med någon tidigare vald tagg (mer än 0 överlappande artiklar)
+        overlaps = False
+        for prev_tag in selected_tags:
+            prev_slugs = {a["slug"] for a in tag_articles.get(prev_tag, [])}
+            curr_slugs = {a["slug"] for a in articles}
+            if prev_slugs & curr_slugs:
+                overlaps = True
+                break
+        if overlaps:
+            continue
+
+        # Sortera efter content-längd, ta top 2
+        available.sort(key=lambda a: len(a.get("content", "")), reverse=True)
+        chosen = available[:2]
+
+        for a in chosen:
+            used_slugs.add(a["slug"])
+        selected_tags.append(tag)
+        result.append((tag, chosen))
+
     return result
 
 
