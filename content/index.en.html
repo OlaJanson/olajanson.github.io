@@ -7,6 +7,9 @@
     <link href="./index.css" rel="stylesheet" type="text/css" data-persist="true">
     <script src="./prescript.js" type="application/javascript" data-persist="true"></script>
     <script type="application/javascript" data-persist="true">const fetchData = fetch("./static/contentIndex.json").then(data => data.json())</script>
+    <!-- Samma fix som index2.html (svenska startsidan) — se de kortens historik. -->
+    <script src="./static/topbar.js" defer data-persist="true"></script>
+    <script src="./static/language-toggle.js" defer data-persist="true"></script>
     <style>
         @font-face {
             font-family: 'Magic Romance';
@@ -271,7 +274,7 @@
         }
     </style>
 </head>
-<body>
+<body data-slug="index.en" data-basepath>
 
 <!-- HERO: full width -->
 <div class="hero">
