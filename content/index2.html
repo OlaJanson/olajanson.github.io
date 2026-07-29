@@ -12,6 +12,14 @@
          och en dynamiskt infogad <script> exekverar inte tillförlitligt sin nav-lyssnare.
          Se olajanson-korten "Rubrikerna på sidan renderas fel". -->
     <script src="./static/topbar.js" defer data-persist="true"></script>
+    <!-- Samma anledning som topbar.js — laddas annars aldrig tillförlitligt på FÖRSTA SPA-navet
+         bort härifrån (dynamisk script-infogning kör inte nav-lyssnaren pålitligt, bekräftat
+         i Firefox: språkväljaren saknas helt på undersidor efter SPA-nav). Säker att lägga
+         till här: injectButton() no-opar om .language-toggle redan finns (startsidans egen
+         #lang-btn), och applyPreference()s redirect-försök missar startsidans URL-schema
+         harmlöst (fetch 404 → ingen redirect) — startsidans egen synkrona redirect hinner
+         före ändå. -->
+    <script src="./static/language-toggle.js" defer data-persist="true"></script>
     <style>
         @font-face {
             font-family: 'Magic Romance';
