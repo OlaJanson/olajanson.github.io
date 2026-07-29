@@ -2,6 +2,16 @@
 (function () {
   const STORAGE_KEY = "lang"; // GEMENSAM nyckel med startsidan (index2.html/index.en.html)
 
+  // Landningssidan (index2.html/index.en.html) är rå HTML, inte Quartz-emitterad —
+  // den har sin EGEN #lang-btn + redirect-logik. Denna funktions nav-lyssnare tar
+  // annars bort ALLA .language-toggle-element (inkl. landningssidans egen knapp)
+  // och bygger om en ny — vilket händer redan vid FÖRSTA sidladdningen, eftersom
+  // Quartz-routern fyrar ett nav-event direkt vid load. ".page" finns bara på
+  // Quartz-emitterade sidor, aldrig på landningssidan — säkert particionerings-villkor.
+  function onLandingPage() {
+    return !document.querySelector(".page");
+  }
+
   function getCurrentLang() {
     return window.location.pathname.endsWith(".en") ? "en" : "sv";
   }
@@ -79,6 +89,7 @@
   }
 
   function applyPreference() {
+    if (onLandingPage()) return;
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
     filterListingPages(saved);
@@ -92,19 +103,21 @@
 
   applyPreference();
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      injectButton();
-      filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
-      filterBacklinks();
-    });
-  } else {
+  function initOnce() {
+    if (onLandingPage()) return;
     injectButton();
     filterListingPages(localStorage.getItem(STORAGE_KEY) || "sv");
     filterBacklinks();
   }
 
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initOnce);
+  } else {
+    initOnce();
+  }
+
   document.addEventListener("nav", () => {
+    if (onLandingPage()) return; // rör aldrig landningssidans egen #lang-btn
     document.querySelectorAll(".language-toggle").forEach((el) => el.remove());
     applyPreference(); // språkpreferensen består även vid SPA-byten (kan omdirigera SV→EN)
     injectButton();
