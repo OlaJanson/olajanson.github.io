@@ -7,6 +7,11 @@
     <link href="./index.css" rel="stylesheet" type="text/css" data-persist="true">
     <script src="./prescript.js" type="application/javascript" data-persist="true"></script>
     <script type="application/javascript" data-persist="true">const fetchData = fetch("./static/contentIndex.json").then(data => data.json())</script>
+    <!-- topbar.js MÅSTE laddas här (även om den är no-op på startsidan, ingen .page finns) —
+         annars laddas den FÖRST via dynamisk head-patchning vid första SPA-navet bort härifrån,
+         och en dynamiskt infogad <script> exekverar inte tillförlitligt sin nav-lyssnare.
+         Se olajanson-korten "Rubrikerna på sidan renderas fel". -->
+    <script src="./topbar.js" defer data-persist="true"></script>
     <style>
         @font-face {
             font-family: 'Magic Romance';
@@ -274,7 +279,7 @@
         }
     </style>
 </head>
-<body>
+<body data-slug="index" data-basepath>
 
 <!-- HERO: full bredd -->
 <div class="hero">
