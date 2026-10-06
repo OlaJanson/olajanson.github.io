@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Träning</title>
+<style>
+  body { margin: 0; background: #111; color: #eee; font-family: system-ui, sans-serif; min-height: 100vh;
+         display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; }
+  #val button, #kontroll button { font-size: 1.6rem; padding: .8em 1.4em; margin: .4em; border: 0; border-radius: .4em;
+         background: #333; color: #eee; cursor: pointer; }
+  #pass { display: none; text-align: center; width: 100%; max-width: 900px; }
+  #steg, #rad { color: #888; font-size: 1.2rem; }
+  #namn { font-size: clamp(2rem, 7vw, 3rem); margin: .2em 0; }
+  #bild { max-height: 34vh; max-width: 92%; border-radius: .4em; }
+  #bild:not([src]) { display: none; }
+  #text { font-size: clamp(1.1rem, 4vw, 1.5rem); color: #bbb; margin: .5em 1em; }
+  #antal { font-size: clamp(5rem, 25vw, 9rem); font-weight: 700; line-height: 1; }
+  #antal small { font-size: .45em; color: #666; }
+  #prickar { font-size: 2rem; letter-spacing: .15em; color: #444; }
+  #prickar b { color: #6c6; }
+  #tips { color: #666; margin-top: 1em; }
+</style>
+</head>
+<body>
+<div id="val">
+  <button data-pass="sang">Säng (övning 1–3)</button>
+  <button data-pass="bord">Stående (övning 4–8)</button>
+</div>
+<div id="pass">
+  <div id="steg"></div>
+  <div id="namn"></div>
+  <div id="rad"></div>
+  <img id="bild" alt="">
+  <div id="text"></div>
+  <div id="antal"></div>
+  <div id="prickar"></div>
+  <div id="kontroll"><button id="hoppa">Hoppa över</button></div>
+  <div id="tips">Tryck var som helst eller mellanslag = en repetition · Backsteg = ångra</div>
+</div>
+<script>
+// Programmet ur SÄS-broschyren sid 13–14. Sista talet är fysioterapeutens video-ID hos ExorLive
+// (broschyrens QR-kod), oanvänt tills vidare. Rösten är förinspelad i ljud/<pass>-<index>.mp3.
+const OVNINGAR = {
+  sang: [
+    ['Släpcykling', 'Ligg på rygg. Böj knät och dra foten mot dig, foten kvar i underlaget.', 20, 'slapcykling', 755],
+    ['Släpcykling, håll', 'Håll kvar i det böjda läget några sekunder.', 5, 'slapcykling', 755],
+    ['Spänn framsida lår', 'Sträck knät, pressa knävecket mot underlaget. Släpp.', 20, 'spann-lar', 8949],
+    ['Spänn lår, håll', 'Spänn framsida lår maximalt några sekunder.', 5, 'spann-lar', 8949],
+    ['Bäckenlyft', 'Böjda knän. Spänn sätet, lyft bäckenet, håll, sänk långsamt. Upp till 20 om det går.', 10, 'backenlyft', 13840],
+  ],
+  bord: [
+    ['Tyngdöverföring', 'Stöd mot bordet. Flytta vikten från ena foten till den andra. Höfterna raka.', 10, 'tyngd', 11177],
+    ['Tåhävning', 'Stöd mot bordet. Upp och ner på tå, lika mycket vikt på båda fötterna.', 10, 'tahavning', 7611],
+    ['Små knäböj', 'Stöd mot bordet. Små knäböj, lika mycket vikt på båda fötterna.', 10, 'knaboj', 5484],
+    ['Liten spark bakåt', 'Stå på det friska benet, stöd mot bordet. Spänn skinkan, för det opererade benet bakåt. Överkroppen stilla.', 10, 'spark-bak', 7616],
+    ['Liten spark åt sidan', 'Stå på det friska benet, stöd mot bordet. Liten spark åt sidan, led med hälen. Överkroppen stilla.', 10, 'spark-sida', 1146025],
+  ],
+};
+const $ = id => document.getElementById(id);
+let pass = '', lista = [], i = 0, n = 0;
+
+// Dagar i rad per övning, sparat i webbläsaren: { namn: [senaste datum, antal] }.
+// Mobilen och datorn har var sin räkning; säng görs i mobilen och stående vid datorn.
+const dag = (forskjut = 0) => { const d = new Date(); d.setDate(d.getDate() + forskjut); return d.toLocaleDateString('sv-SE'); };
+const rader = JSON.parse(localStorage.getItem('traning-rad') || '{}');
+const iRad = ([datum, antal] = []) => datum === dag() || datum === dag(-1) ? antal : 0;
+const klar = ([datum, antal] = []) => datum === dag() ? [datum, antal] : [dag(), datum === dag(-1) ? antal + 1 : 1];
+
+const spela = k => { const a = new Audio(k < lista.length ? `ljud/${pass}-${k}.mp3` : 'ljud/slut.mp3'); a.play().catch(() => {}); };
+
+const ctx = new AudioContext();
+const klick = (f = 660) => {
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.frequency.value = f; g.gain.setValueAtTime(.15, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .12);
+  o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + .12);
+};
+
+function visa() {
+  if (i >= lista.length) {
+    ['steg', 'rad', 'text', 'antal', 'prickar'].forEach(k => $(k).textContent = '');
+    $('namn').textContent = 'Passet är slut'; $('bild').removeAttribute('src');
+    $('kontroll').style.display = 'none'; return;
+  }
+  const [namn, text, mal, bild] = lista[i];
+  $('steg').textContent = `${i + 1} av ${lista.length}`;
+  $('namn').textContent = namn; $('text').textContent = text;
+  const r = iRad(rader[namn]);
+  $('rad').textContent = r ? `${r} ${r === 1 ? 'dag' : 'dagar'} i rad` : '';
+  $('bild').src = `bilder/${bild}.jpg`;
+  $('antal').innerHTML = `${n}<small> / ${mal}</small>`;
+  $('prickar').innerHTML = '<b>' + '●'.repeat(n) + '</b>' + '●'.repeat(mal - n);
+}
+
+function nasta() { i++; n = 0; visa(); spela(i); }
+
+function rep(d) {
+  if (i >= lista.length) return;
+  n = Math.max(0, n + d); if (d > 0) klick();
+  if (n >= lista[i][2]) {
+    rader[lista[i][0]] = klar(rader[lista[i][0]]);
+    localStorage.setItem('traning-rad', JSON.stringify(rader));
+    klick(880); nasta();
+  } else visa();
+}
+
+document.querySelectorAll('#val button').forEach(b => b.onclick = e => {
+  e.stopPropagation(); ctx.resume();
+  pass = b.dataset.pass; lista = OVNINGAR[pass]; i = 0; n = 0;
+  $('val').style.display = 'none'; $('pass').style.display = 'block';
+  visa(); spela(0);
+});
+$('hoppa').onclick = e => { e.stopPropagation(); nasta(); };
+document.body.addEventListener('click', () => lista.length && rep(1));
+document.addEventListener('keydown', e => {
+  if (!lista.length) return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); rep(1); }
+  if (e.key === 'Backspace') { e.preventDefault(); rep(-1); }
+});
+</script>
+</body>
+</html>
