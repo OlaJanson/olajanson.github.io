@@ -34,11 +34,18 @@
   #prickar { font-size: 2rem; letter-spacing: .15em; color: #2a2a2a; }
   #prickar b { color: #b5e8e7; font-weight: normal; }
   #tips { color: #666; margin-top: .8em; }
+  #kalender { display: grid; grid-template-columns: repeat(7, 1fr); gap: .3rem; width: min(92vw, 30rem); margin: 0 auto 1.5em; font-family: 'SKF Sans', sans-serif; }
+  #kalender div { background: #1e1610; border-radius: .3em; padding: .3em .4em; color: #9E9A91; font-size: .9rem; text-align: left; }
+  #kalender .rubrik { background: none; text-align: center; color: #666; }
+  #kalender .idag { outline: 1px solid #9E9A91; color: #EAE6DA; }
+  #kalender span { display: block; text-align: right; letter-spacing: .15em; color: #3a3226; font-size: .75rem; }
+  #kalender span b { color: #b5e8e7; font-weight: normal; }
 </style>
 </head>
 <body>
 <div id="val">
   <h1>Träning</h1>
+  <div id="kalender"></div>
   <button data-pass="sang">Säng (övning 1–3)</button>
   <button data-pass="bord">Stående (övning 4–8)</button>
   <label><input type="checkbox" id="test"> Bara testa, räknas inte</label>
@@ -82,6 +89,20 @@ const rader = JSON.parse(localStorage.getItem('traning-rad') || '{}');
 const iRad = ([datum, antal] = []) => datum === dag() || datum === dag(-1) ? antal : 0;
 const klar = ([datum, antal] = []) => datum === dag() ? [datum, antal] : [dag(), datum === dag(-1) ? antal + 1 : 1];
 
+// Avslutade pass per dag, sparat i webbläsaren: ['2026-10-10', ...]. Månadskalendern tänder en prick per pass, max tre.
+const passlogg = JSON.parse(localStorage.getItem('traning-pass') || '[]');
+function kalender() {
+  const nu = new Date(), ar = nu.getFullYear(), m = nu.getMonth(), dagar = new Date(ar, m + 1, 0).getDate();
+  let h = ['må','ti','on','to','fr','lö','sö'].map(d => `<div class="rubrik">${d}</div>`).join('');
+  h += '<div class="rubrik"></div>'.repeat((new Date(ar, m, 1).getDay() + 6) % 7);
+  for (let d = 1; d <= dagar; d++) {
+    const k = Math.min(3, passlogg.filter(x => x === new Date(ar, m, d).toLocaleDateString('sv-SE')).length);
+    h += `<div class="${d === nu.getDate() ? 'idag' : ''}">${d}<span><b>${'●'.repeat(k)}</b>${'●'.repeat(3 - k)}</span></div>`;
+  }
+  $('kalender').innerHTML = h;
+}
+kalender();
+
 let ljud = null;
 const spela = k => {
   if (ljud) ljud.pause();
@@ -115,6 +136,7 @@ function visa() {
 function ga(till) {
   if (till < 0) { if (ljud) ljud.pause(); lista = []; $('pass').style.display = 'none'; $('val').style.display = ''; return; }
   i = till; n = 0; visa(); spela(i);
+  if (i === lista.length && !test) { passlogg.push(dag()); localStorage.setItem('traning-pass', JSON.stringify(passlogg)); kalender(); }
 }
 
 function rep(d) {
