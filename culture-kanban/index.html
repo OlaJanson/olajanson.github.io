@@ -94,6 +94,8 @@
       <button class="wipb" data-w="1">1</button><button class="wipb" data-w="2">2</button>
       <button class="wipb" data-w="3">3</button><button class="wipb" data-w="4">4</button>
       · take over others' tasks: <select id="collab2"><option value="low">low (only when nothing else)</option><option value="medium" selected>medium</option><option value="high">high</option></select>
+      · planning: <label><input type="radio" name="plan" value="0" checked> none</label>
+      <label><input type="radio" name="plan" value="1"> first round (removes most dependencies)</label>
     </div>
   </div>
 
@@ -126,13 +128,14 @@
       <li><b>Dependency</b> (10): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
       <li><b>External block</b> (2): the chosen task moves to Blocked. It waits for an email, a decision or a delivery from outside the team.</li>
       <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit. Players also pull work from the right: on your turn you 1) finish a task in In Progress if you can, otherwise 2) work on a task that another task is waiting for, otherwise 3) chase an external block, and only then 4) start a new task.</li>
+      <li><b>Planning</b> (optional in round 2): the team spends the first round, one turn per player, mapping which tasks depend on which. No cards are drawn. In return 8 of the 10 Dependency cards become Smooth hours, because the tasks are now done in the right order. The game is just as long, so the team draws 4 fewer cards.</li>
       <li><b>Every task has an owner</b>: the player who started it. When someone else finishes it, that counts as collaboration. In round 1, how willing players are to take over someone else's task can be set: high, medium, or low (only when there is nothing else to do). Their own started tasks they always pick up. In round 2 the pull order decides, whoever started the task.</li>
     </ul>
     <p>In the simulation the players choose at random among the moves the rules allow, in both rounds. Like people without kanban habits, they would rather start a new task than take over one that is already in progress: by default they start a new one 70% of the time. Players behave the same in both rounds, so any difference comes from the WIP limit alone.</p>
   </details>
 </main>
 
-<script src="engine.js?v=20261125-2"></script>
+<script src="engine.js?v=20261126-1"></script>
 <script>
 (function () {
   'use strict';
@@ -144,7 +147,8 @@
 
   function opts(wip) {
     return { wip: wip, chaseBlocked: $('#chase').checked, blockedCountsWip: $('#blwip').checked,
-      pNew: +$('#neww').value, collab: wip === null ? $('#collab1').value : $('#collab2').value, pull: wip !== null };
+      pNew: +$('#neww').value, collab: wip === null ? $('#collab1').value : $('#collab2').value, pull: wip !== null,
+      planning: wip !== null && $('input[name=plan]:checked').value === '1' };
   }
 
   function record(o) { // play a game and keep a snapshot after every turn
@@ -153,7 +157,7 @@
       snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep }; }), e: e, idle: s.idle, collab: s.collab });
     });
     snaps.unshift({ cards: g.state.cards.map(function (c) { return { id: c.id, col: 'ns', dep: null }; }), e: null, idle: 0 });
-    return { snaps: snaps, deck: g.deck, opt: o };
+    return { snaps: snaps, deck: g.deck, drawn: g.drawn, opt: o };
   }
 
   function build(board) {
@@ -231,7 +235,9 @@
       p.setAttribute('stroke-dasharray', '5 4'); p.setAttribute('opacity', '.7');
       svg.appendChild(p);
     });
-    $('.action', board).textContent = snap.e ? 'Player ' + snap.e.player + ': ' + snap.e.action : '';
+    var dr = i > 0 ? game.drawn[i - 1] : null;
+    var own = dr && dr !== game.deck[i - 1] ? ' [drew ' + NAMES[dr] + ']' : '';
+    $('.action', board).textContent = snap.e ? 'Player ' + snap.e.player + own + ': ' + snap.e.action : '';
     var ip = snap.cards.filter(function (c) { return c.col === 'ip'; }).length;
     var bl = snap.cards.filter(function (c) { return c.col === 'bl'; }).length;
     var stacked = Object.keys(on).length;
@@ -288,6 +294,7 @@
   $('#collab1').onchange = function () { setup(); runStats(); };
   $('#collab2').onchange = function () { setup(); runStats(); };
   $('#blwip').onchange = function () { setup(); runStats(); };
+  document.querySelectorAll('input[name=plan]').forEach(function (x) { x.onchange = function () { setup(); runStats(); }; });
   window.addEventListener('resize', function () { build($('#b1')); build($('#b2')); show(st.i); });
 
   function runStats() {

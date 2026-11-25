@@ -123,6 +123,25 @@
     return pick(r, going); // emergency: only other people's tasks are left
   }
 
+  // A planning turn: the player maps the tasks with the team instead of drawing a card.
+  function planTurn(s, player) {
+    s.turn++;
+    var e = { turn: s.turn, player: player, draw: null, chosen: null,
+      action: 'Plans with the team – maps which tasks depend on which (no card drawn).' };
+    s.log.push(e); return e;
+  }
+
+  // Planning finds most dependencies before work starts, so they no longer come as surprises.
+  // All but keepShare of the dependency cards become smooth hours (the tasks are done in the right order).
+  function plannedDeck(deck, seed, keepShare) {
+    var r = rng(seed * 31 + 7), idx = [];
+    deck.forEach(function (d, i) { if (d === 'dependency') idx.push(i); });
+    for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    var keep = Math.round(idx.length * keepShare), out = deck.slice(), planned = {};
+    idx.slice(keep).forEach(function (i) { out[i] = 'smooth'; planned[i] = true; });
+    return { deck: out, planned: planned };
+  }
+
   // One turn. Returns a log entry describing what happened.
   function step(s, draw, player, r, opt) {
     s.turn++;
@@ -186,15 +205,27 @@
   // Plays a whole game. onTurn(state, entry) is called after every turn (for animation).
   function play(opt, onTurn) {
     opt = Object.assign({ tasks: 16, players: 4, wip: null, blockedCountsWip: false,
-      pLift: 0.5, chaseBlocked: false, pNew: 0.5, collab: 'high', pull: false, seed: 1, choiceSeed: null, deck: DECK }, opt);
+      pLift: 0.5, chaseBlocked: false, pNew: 0.5, collab: 'high', pull: false, planning: false, planKeep: 0.2,
+      seed: 1, choiceSeed: null, deck: DECK }, opt);
     var deck = shuffledDeck(opt.seed, opt.deck);
     var r = rng(opt.choiceSeed === null ? opt.seed * 7919 + 13 : opt.choiceSeed);
     var s = newState(opt.tasks);
+    // With planning the first round (one turn per player) goes to planning. The game is as long
+    // as without it, so cards are drawn from turn players+1 and the last `players` cards are never drawn.
+    var plan = opt.planning ? plannedDeck(deck, opt.seed, opt.planKeep) : { deck: deck, planned: {} };
+    var drawn = [];
     deck.forEach(function (d, i) {
-      var e = step(s, d, (i % opt.players) + 1, r, opt);
+      var player = (i % opt.players) + 1, e;
+      if (opt.planning && i < opt.players) { e = planTurn(s, player); drawn.push(null); }
+      else {
+        var k = opt.planning ? i - opt.players : i;
+        e = step(s, plan.deck[k], player, r, opt);
+        if (plan.planned[k]) { e.planned = true; e.action += ' (a dependency already found during planning)'; }
+        drawn.push(plan.deck[k]);
+      }
       if (onTurn) onTurn(s, e);
     });
-    return { state: s, deck: deck, result: summary(s) };
+    return { state: s, deck: deck, drawn: drawn, result: summary(s) };
   }
 
   function summary(s) {
