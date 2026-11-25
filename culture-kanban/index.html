@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Culture Kanban – flow simulation</title>
+<style>
+  :root {
+    --bg: #f6f4ef; --ink: #1d1d1b; --muted: #6b6a66; --line: #d9d5cc;
+    --ns: #e4e1da; --ip: #f2b134; --done: #3a9d5d; --bl: #d64541; --dep: #7a4fb5;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
+  main { max-width: 1280px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 12px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; background: #fff;
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+  .controls .group { display: flex; gap: 6px; align-items: center; }
+  button { font: inherit; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; cursor: pointer; }
+  button.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button.on { background: var(--ink); color: #fff; }
+  label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  .draw { display: flex; gap: 12px; align-items: center; margin: 0 0 12px; min-height: 44px; }
+  .draw .card { padding: 8px 14px; border-radius: 8px; background: #fff; border: 2px solid var(--line); font-weight: 600; }
+  .draw .card.smooth { border-color: var(--done); }
+  .draw .card.breakthrough { border-color: var(--ip); }
+  .draw .card.dependency { border-color: var(--dep); }
+  .draw .card.external { border-color: var(--bl); }
+  .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .boards { grid-template-columns: 1fr; } }
+  .board { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  .board h2 { font-size: 1.1rem; margin: 0 0 2px; }
+  .board .action { color: var(--muted); min-height: 2.8em; margin: 0 0 6px; font-size: .95rem; }
+  .board .wip { font-size: .9rem; margin-bottom: 6px; }
+  .board .wip b.over { color: var(--bl); }
+  .grid { position: relative; height: 300px; }
+  .col { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--line); }
+  .col:first-child { border-left: 0; }
+  .col h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0; padding: 0 6px; height: 22px; }
+  .col.blcol { background: rgba(214,69,65,.05); }
+  .tile { position: absolute; width: 62px; height: 34px; gap: 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; background: var(--ns); border: 2px solid transparent;
+    transition: left .45s ease, top .45s ease, background .3s; }
+  .tile.ip { background: linear-gradient(90deg, var(--ip) 50%, #fbe6b8 50%); }
+  .tile.done { background: var(--done); color: #fff; }
+  .tile.bl { background: var(--bl); color: #fff; }
+  .tile.waiting { border: 2px dashed var(--dep); }
+  .tile.chosen { box-shadow: 0 0 0 3px var(--ink); }
+  .tile.helper { border: 2px solid var(--dep); }
+  .tile .tag { background: var(--dep); color: #fff; font-size: .7rem; padding: 0 4px; border-radius: 6px; font-weight: 600; }
+  svg.deps { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+  .result { margin-top: 8px; font-size: .95rem; min-height: 1.4em; }
+  .result b { font-size: 1.1rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; color: var(--muted); margin: 10px 0; }
+  .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+  .lg-ns::before { background: var(--ns); } .lg-ip::before { background: linear-gradient(90deg, var(--ip) 50%, #fbe6b8 50%); }
+  .lg-done::before { background: var(--done); } .lg-bl::before { background: var(--bl); }
+  .lg-dep::before { border: 2px dashed var(--dep); }
+  section.stats { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-top: 16px; }
+  section.stats h2 { font-size: 1.1rem; margin: 0 0 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  td.bar { width: 40%; }
+  .barw { display: flex; height: 16px; border-radius: 3px; overflow: hidden; background: var(--ns); }
+  .barw i { display: block; height: 100%; }
+  details { margin-top: 16px; }
+  details p, details li { max-width: 70ch; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Culture Kanban – flow simulation</h1>
+  <p class="sub">4 players · 16 tasks · 32 cards drawn. Every task takes two hours: one step to In Progress, one step to Done. Both rounds draw exactly the same cards.</p>
+
+  <div class="controls">
+    <div class="group">
+      <button id="play" class="primary">▶ Play</button>
+      <button id="step">Step</button>
+      <button id="reset">New shuffle</button>
+    </div>
+    <div class="group">Speed <input id="speed" type="range" min="1" max="5" value="3"></div>
+    <div class="group">Round 2 WIP limit:
+      <button class="wipb" data-w="1">1</button><button class="wipb" data-w="2">2</button>
+      <button class="wipb" data-w="3">3</button><button class="wipb" data-w="4">4</button>
+    </div>
+    <div class="group">
+      <label><input type="checkbox" id="chase" checked> A normal turn can chase an external block</label>
+      <label><input type="checkbox" id="blwip"> Blocked counts toward WIP</label>
+    </div>
+  </div>
+
+  <div class="draw"><span id="turnlbl">Turn 0 / 32</span><span id="drawn" class="card">Press Play</span></div>
+
+  <div class="boards">
+    <div class="board" id="b1"><h2>Round 1 – no WIP limit</h2><div class="wip"></div><p class="action"></p><div class="grid"></div><div class="result"></div></div>
+    <div class="board" id="b2"><h2>Round 2 – WIP limit <span class="wipn"></span></h2><div class="wip"></div><p class="action"></p><div class="grid"></div><div class="result"></div></div>
+  </div>
+
+  <div class="legend">
+    <span class="lg-ns">Not started</span><span class="lg-ip">In progress (1 of 2 hours)</span>
+    <span class="lg-done">Done</span><span class="lg-bl">Blocked – waiting for someone outside the team</span>
+    <span class="lg-dep">Waiting for another task: →7 means it needs #7 first</span>
+  </div>
+
+  <section class="stats">
+    <h2>1000 games per WIP limit</h2>
+    <p class="sub" id="statsnote">Average result when the same rules are played 1000 times with different shuffles.</p>
+    <table><thead><tr><th>WIP limit</th><th>Done</th><th>Half-finished</th><th>Not started</th><th>Turns spent waiting</th><th class="bar">Where the 16 tasks ended</th></tr></thead>
+    <tbody id="stbody"></tbody></table>
+  </section>
+
+  <details>
+    <summary>The rules</summary>
+    <ul>
+      <li>On your turn, choose a task that is not done, then draw a card.</li>
+      <li><b>Smooth hour</b> (18): move the chosen task one step.</li>
+      <li><b>Breakthrough</b> (2): move the chosen task straight to Done – or leave it and lift an external block.</li>
+      <li><b>Dependency</b> (10): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
+      <li><b>External block</b> (2): the chosen task moves to Blocked. It waits for an email, a decision or a delivery from outside the team.</li>
+      <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit.</li>
+    </ul>
+    <p>In the simulation the players choose at random among the moves the rules allow, in both rounds. Any difference between the rounds comes from the WIP limit alone.</p>
+  </details>
+</main>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  var COLS = [['ns', 'Not Started'], ['bl', 'Blocked'], ['ip', 'In Progress'], ['done', 'Done']];
+  var NAMES = { smooth: 'Smooth hour', breakthrough: 'Breakthrough', dependency: 'Dependency', external: 'External block' };
+  var SPEEDS = [2200, 1500, 1000, 600, 300];
+  var st = { wip: 2, seed: Math.floor(Math.random() * 1e6), i: 0, timer: null, games: null };
+  var $ = function (q, el) { return (el || document).querySelector(q); };
+
+  function opts(wip) {
+    return { wip: wip, chaseBlocked: $('#chase').checked, blockedCountsWip: $('#blwip').checked };
+  }
+
+  function record(o) { // play a game and keep a snapshot after every turn
+    var snaps = [];
+    var g = CK.play(Object.assign({ seed: st.seed }, o), function (s, e) {
+      snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep }; }), e: e, idle: s.idle });
+    });
+    snaps.unshift({ cards: g.state.cards.map(function (c) { return { id: c.id, col: 'ns', dep: null }; }), e: null, idle: 0 });
+    return { snaps: snaps, deck: g.deck, opt: o };
+  }
+
+  function build(board) {
+    var grid = $('.grid', board); grid.innerHTML = '';
+    var w = grid.clientWidth / 4;
+    COLS.forEach(function (c, k) {
+      var d = document.createElement('div');
+      d.className = 'col' + (c[0] === 'bl' ? ' blcol' : '');
+      d.style.left = (k * w) + 'px'; d.style.width = w + 'px';
+      d.innerHTML = '<h3>' + c[1] + '</h3>';
+      grid.appendChild(d);
+    });
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'deps'); grid.appendChild(svg);
+    for (var i = 1; i <= 16; i++) {
+      var t = document.createElement('div'); t.className = 'tile'; t.dataset.id = i;
+      t.innerHTML = i; grid.appendChild(t);
+    }
+  }
+
+  function positions(grid, cards) {
+    var w = grid.clientWidth / 4, pos = {}, slot = { ns: 0, bl: 0, ip: 0, done: 0 };
+    var perRow = Math.max(1, Math.floor((w - 8) / 68));
+    cards.forEach(function (c) {
+      var k = COLS.findIndex(function (x) { return x[0] === c.col; });
+      var n = slot[c.col]++;
+      pos[c.id] = { x: k * w + 6 + (n % perRow) * 68, y: 30 + Math.floor(n / perRow) * 44 };
+    });
+    return pos;
+  }
+
+  function render(board, game, i, wip) {
+    var snap = game.snaps[i], grid = $('.grid', board), pos = positions(grid, snap.cards);
+    var waitingFor = {};
+    snap.cards.forEach(function (c) {
+      if (c.dep && snap.cards[c.dep - 1].col !== 'done' && c.col !== 'done') waitingFor[c.dep] = true;
+    });
+    snap.cards.forEach(function (c) {
+      var t = $('.tile[data-id="' + c.id + '"]', grid);
+      var waiting = c.col !== 'done' && c.dep && snap.cards[c.dep - 1].col !== 'done';
+      t.className = 'tile ' + c.col + (waiting ? ' waiting' : '') + (waitingFor[c.id] ? ' helper' : '') +
+        (snap.e && snap.e.chosen === c.id ? ' chosen' : '');
+      t.innerHTML = c.id + (waiting ? '<span class="tag">→' + c.dep + '</span>' : '');
+      t.style.left = pos[c.id].x + 'px'; t.style.top = pos[c.id].y + 'px';
+    });
+    var svg = $('svg', grid); svg.innerHTML = '';
+    snap.cards.forEach(function (c) {
+      if (c.col === 'done' || !c.dep || snap.cards[c.dep - 1].col === 'done') return;
+      var a = pos[c.id], b = pos[c.dep];
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var x1 = a.x + 31, y1 = a.y + 17, x2 = b.x + 31, y2 = b.y + 17;
+      p.setAttribute('d', 'M' + x1 + ',' + y1 + ' Q' + ((x1 + x2) / 2) + ',' + (Math.min(y1, y2) - 40) + ' ' + x2 + ',' + y2);
+      p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#7a4fb5'); p.setAttribute('stroke-width', '2');
+      p.setAttribute('stroke-dasharray', '5 4'); p.setAttribute('opacity', '.7');
+      svg.appendChild(p);
+    });
+    $('.action', board).textContent = snap.e ? 'Player ' + snap.e.player + ': ' + snap.e.action : '';
+    var ip = snap.cards.filter(function (c) { return c.col === 'ip'; }).length;
+    var bl = snap.cards.filter(function (c) { return c.col === 'bl'; }).length;
+    var helping = snap.cards.filter(function (c) { return c.col === 'ip' && CK.isHelper({ cards: snap.cards }, c); }).length;
+    $('.wip', board).innerHTML = 'In Progress: <b>' + ip + '</b>' + (wip ? ' (limit ' + wip + (helping ? ', plus ' + helping + ' unblocking another task' : '') + ')' : '') +
+      ' · Blocked: <b>' + bl + '</b> · Turns spent waiting: <b>' + snap.idle + '</b>';
+    var res = $('.result', board);
+    if (i === game.snaps.length - 1) {
+      var n = function (col) { return snap.cards.filter(function (c) { return c.col === col; }).length; };
+      res.innerHTML = '<b>' + n('done') + ' done</b> · ' + (n('ip') + n('bl')) + ' half-finished · ' + n('ns') + ' not started';
+    } else res.innerHTML = '';
+  }
+
+  function show(i) {
+    var g = st.games, last = g[0].snaps.length - 1;
+    st.i = Math.max(0, Math.min(i, last));
+    render($('#b1'), g[0], st.i, null);
+    render($('#b2'), g[1], st.i, st.wip);
+    $('#turnlbl').textContent = 'Turn ' + st.i + ' / ' + last;
+    var d = $('#drawn');
+    if (st.i === 0) { d.className = 'card'; d.textContent = 'Press Play'; }
+    else { var k = g[0].deck[st.i - 1]; d.className = 'card ' + k; d.textContent = NAMES[k]; }
+    if (st.i === last) stop();
+  }
+
+  function setup() {
+    stop();
+    st.games = [record(opts(null)), record(opts(st.wip))];
+    $('.wipn').textContent = st.wip;
+    document.querySelectorAll('.wipb').forEach(function (b) { b.classList.toggle('on', +b.dataset.w === st.wip); });
+    build($('#b1')); build($('#b2'));
+    show(0);
+  }
+
+  function stop() { clearTimeout(st.timer); st.timer = null; $('#play').textContent = '▶ Play'; }
+  function tick() {
+    show(st.i + 1);
+    if (st.timer !== null) st.timer = setTimeout(tick, SPEEDS[$('#speed').value - 1]);
+  }
+
+  $('#play').onclick = function () {
+    if (st.timer !== null) return stop();
+    if (st.i >= st.games[0].snaps.length - 1) show(0);
+    $('#play').textContent = '❚❚ Pause';
+    st.timer = 0; tick();
+  };
+  $('#step').onclick = function () { stop(); show(st.i + 1); };
+  $('#reset').onclick = function () { st.seed = Math.floor(Math.random() * 1e6); setup(); };
+  document.querySelectorAll('.wipb').forEach(function (b) {
+    b.onclick = function () { st.wip = +b.dataset.w; setup(); };
+  });
+  $('#chase').onchange = function () { setup(); runStats(); };
+  $('#blwip').onchange = function () { setup(); runStats(); };
+  window.addEventListener('resize', function () { build($('#b1')); build($('#b2')); show(st.i); });
+
+  function runStats() {
+    var body = $('#stbody'); body.innerHTML = '<tr><td colspan="6">Calculating…</td></tr>';
+    setTimeout(function () {
+      var rows = [[null, 'No limit'], [4, '4'], [3, '3'], [2, '2'], [1, '1']].map(function (w) {
+        var a = CK.stats(opts(w[0]), 1000);
+        var half = a.inProgress + a.blocked;
+        var pc = function (x) { return (x / 16 * 100).toFixed(1) + '%'; };
+        return '<tr><td>' + w[1] + '</td><td><b>' + a.done.toFixed(1) + '</b></td><td>' + half.toFixed(1) +
+          '</td><td>' + a.notStarted.toFixed(1) + '</td><td>' + a.idle.toFixed(1) + '</td><td class="bar"><div class="barw">' +
+          '<i style="width:' + pc(a.done) + ';background:var(--done)"></i>' +
+          '<i style="width:' + pc(a.inProgress) + ';background:var(--ip)"></i>' +
+          '<i style="width:' + pc(a.blocked) + ';background:var(--bl)"></i></div></td></tr>';
+      });
+      body.innerHTML = rows.join('');
+    }, 30);
+  }
+
+  setup();
+  runStats();
+})();
+</script>
+</body>
+</html>

@@ -62,6 +62,7 @@ jobs:
           cp -r komodoro public/komodoro
           cp -r callback public/callback
           cp -r traning-r7k2 public/traning-r7k2
+          cp -r culture-kanban public/culture-kanban
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
