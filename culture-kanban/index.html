@@ -49,6 +49,7 @@
   .tile.waiting { border: 2px dashed var(--dep); }
   .tile.chosen { box-shadow: 0 0 0 3px var(--ink); }
   .tile.helper { border: 2px solid var(--dep); }
+  .tile.under { align-items: flex-start; padding-top: 1px; box-sizing: border-box; }
   .tile .tag { background: var(--dep); color: #fff; font-size: .7rem; padding: 0 4px; border-radius: 6px; font-weight: 600; }
   svg.deps { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
   .result { margin-top: 8px; font-size: .95rem; min-height: 1.4em; }
@@ -81,13 +82,18 @@
       <button id="reset">New shuffle</button>
     </div>
     <div class="group">Speed <input id="speed" type="range" min="1" max="5" value="3"></div>
-    <div class="group">Round 2 WIP limit:
-      <button class="wipb" data-w="1">1</button><button class="wipb" data-w="2">2</button>
-      <button class="wipb" data-w="3">3</button><button class="wipb" data-w="4">4</button>
-    </div>
     <div class="group">
       <label><input type="checkbox" id="chase" checked> A normal turn can chase an external block</label>
       <label><input type="checkbox" id="blwip"> Blocked counts toward WIP</label>
+    </div>
+    <div class="group"><b>Round 1</b>
+      start new instead of continuing: <select id="neww"><option value="0.5">half the time</option><option value="0.7" selected>70% of the time</option><option value="0.85">85% of the time</option><option value="1">always</option></select>
+      · take over others' tasks: <select id="collab1"><option value="low">low (only when nothing else)</option><option value="medium" selected>medium</option><option value="high">high</option></select>
+    </div>
+    <div class="group"><b>Round 2</b> WIP limit:
+      <button class="wipb" data-w="1">1</button><button class="wipb" data-w="2">2</button>
+      <button class="wipb" data-w="3">3</button><button class="wipb" data-w="4">4</button>
+      · take over others' tasks: <select id="collab2"><option value="low">low (only when nothing else)</option><option value="medium" selected>medium</option><option value="high">high</option></select>
     </div>
   </div>
 
@@ -107,7 +113,7 @@
   <section class="stats">
     <h2>1000 games per WIP limit</h2>
     <p class="sub" id="statsnote">Average result when the same rules are played 1000 times with different shuffles.</p>
-    <table><thead><tr><th>WIP limit</th><th>Done</th><th>Half-finished</th><th>Not started</th><th>Turns spent waiting</th><th class="bar">Where the 16 tasks ended</th></tr></thead>
+    <table><thead><tr><th>WIP limit</th><th>Done</th><th>Half-finished</th><th>Not started</th><th>Turns spent waiting</th><th>Finished by someone else</th><th class="bar">Where the 16 tasks ended</th></tr></thead>
     <tbody id="stbody"></tbody></table>
   </section>
 
@@ -119,13 +125,14 @@
       <li><b>Breakthrough</b> (2): move the chosen task straight to Done – or leave it and lift an external block.</li>
       <li><b>Dependency</b> (10): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
       <li><b>External block</b> (2): the chosen task moves to Blocked. It waits for an email, a decision or a delivery from outside the team.</li>
-      <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit.</li>
+      <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit. Players also pull work from the right: on your turn you 1) finish a task in In Progress if you can, otherwise 2) work on a task that another task is waiting for, otherwise 3) chase an external block, and only then 4) start a new task.</li>
+      <li><b>Every task has an owner</b>: the player who started it. When someone else finishes it, that counts as collaboration. In round 1, how willing players are to take over someone else's task can be set: high, medium, or low (only when there is nothing else to do). Their own started tasks they always pick up. In round 2 the pull order decides, whoever started the task.</li>
     </ul>
-    <p>In the simulation the players choose at random among the moves the rules allow, in both rounds. Any difference between the rounds comes from the WIP limit alone.</p>
+    <p>In the simulation the players choose at random among the moves the rules allow, in both rounds. Like people without kanban habits, they would rather start a new task than take over one that is already in progress: by default they start a new one 70% of the time. Players behave the same in both rounds, so any difference comes from the WIP limit alone.</p>
   </details>
 </main>
 
-<script src="engine.js"></script>
+<script src="engine.js?v=20261125-2"></script>
 <script>
 (function () {
   'use strict';
@@ -136,13 +143,14 @@
   var $ = function (q, el) { return (el || document).querySelector(q); };
 
   function opts(wip) {
-    return { wip: wip, chaseBlocked: $('#chase').checked, blockedCountsWip: $('#blwip').checked };
+    return { wip: wip, chaseBlocked: $('#chase').checked, blockedCountsWip: $('#blwip').checked,
+      pNew: +$('#neww').value, collab: wip === null ? $('#collab1').value : $('#collab2').value, pull: wip !== null };
   }
 
   function record(o) { // play a game and keep a snapshot after every turn
     var snaps = [];
     var g = CK.play(Object.assign({ seed: st.seed }, o), function (s, e) {
-      snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep }; }), e: e, idle: s.idle });
+      snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep }; }), e: e, idle: s.idle, collab: s.collab });
     });
     snaps.unshift({ cards: g.state.cards.map(function (c) { return { id: c.id, col: 'ns', dep: null }; }), e: null, idle: 0 });
     return { snaps: snaps, deck: g.deck, opt: o };
@@ -169,7 +177,9 @@
   function positions(grid, cards) {
     var w = grid.clientWidth / 4, pos = {}, slot = { ns: 0, bl: 0, ip: 0, done: 0 };
     var perRow = Math.max(1, Math.floor((w - 8) / 68));
+    var on = stackedOn(cards);
     cards.forEach(function (c) {
+      if (on[c.id]) return;
       var k = COLS.findIndex(function (x) { return x[0] === c.col; });
       var n = slot[c.col]++;
       pos[c.id] = { x: k * w + 6 + (n % perRow) * 68, y: 30 + Math.floor(n / perRow) * 44 };
@@ -177,19 +187,38 @@
     return pos;
   }
 
+  // A started task that another started task waits for lies on top of it (one WIP slot).
+  function stackedOn(cards) {
+    var on = {};
+    cards.forEach(function (c) {
+      if (c.col === 'done' || !c.dep) return;
+      var h = cards[c.dep - 1];
+      if (h.col === 'ip' && (c.col === 'ip' || c.col === 'bl')) on[h.id] = c.id;
+    });
+    return on;
+  }
+
   function render(board, game, i, wip) {
     var snap = game.snaps[i], grid = $('.grid', board), pos = positions(grid, snap.cards);
+    var on = stackedOn(snap.cards), depth = {};
+    for (var pass = 0; pass < 16; pass++) Object.keys(on).forEach(function (h) {
+      var base = pos[on[h]];
+      if (base && !pos[h]) { depth[h] = (depth[on[h]] || 0) + 1; pos[h] = { x: base.x + 8, y: base.y + 18 }; }
+    });
     var waitingFor = {};
     snap.cards.forEach(function (c) {
       if (c.dep && snap.cards[c.dep - 1].col !== 'done' && c.col !== 'done') waitingFor[c.dep] = true;
     });
     snap.cards.forEach(function (c) {
       var t = $('.tile[data-id="' + c.id + '"]', grid);
+      t.style.zIndex = 1;
       var waiting = c.col !== 'done' && c.dep && snap.cards[c.dep - 1].col !== 'done';
       t.className = 'tile ' + c.col + (waiting ? ' waiting' : '') + (waitingFor[c.id] ? ' helper' : '') +
-        (snap.e && snap.e.chosen === c.id ? ' chosen' : '');
+        (snap.e && snap.e.chosen === c.id ? ' chosen' : '') +
+        (Object.keys(on).some(function (h) { return on[h] === c.id; }) ? ' under' : '');
       t.innerHTML = c.id + (waiting ? '<span class="tag">→' + c.dep + '</span>' : '');
       t.style.left = pos[c.id].x + 'px'; t.style.top = pos[c.id].y + 'px';
+      t.style.zIndex = 1 + (depth[c.id] || 0);
     });
     var svg = $('svg', grid); svg.innerHTML = '';
     snap.cards.forEach(function (c) {
@@ -205,9 +234,10 @@
     $('.action', board).textContent = snap.e ? 'Player ' + snap.e.player + ': ' + snap.e.action : '';
     var ip = snap.cards.filter(function (c) { return c.col === 'ip'; }).length;
     var bl = snap.cards.filter(function (c) { return c.col === 'bl'; }).length;
-    var helping = snap.cards.filter(function (c) { return c.col === 'ip' && CK.isHelper({ cards: snap.cards }, c); }).length;
-    $('.wip', board).innerHTML = 'In Progress: <b>' + ip + '</b>' + (wip ? ' (limit ' + wip + (helping ? ', plus ' + helping + ' unblocking another task' : '') + ')' : '') +
-      ' · Blocked: <b>' + bl + '</b> · Turns spent waiting: <b>' + snap.idle + '</b>';
+    var stacked = Object.keys(on).length;
+    $('.wip', board).innerHTML = 'In Progress: <b>' + (ip - stacked) + '</b>' + (wip ? ' of ' + wip : '') +
+      (stacked ? ' (' + stacked + ' card' + (stacked > 1 ? 's' : '') + ' lying on the task that waits for ' + (stacked > 1 ? 'them' : 'it') + ')' : '') +
+      ' · Blocked: <b>' + bl + '</b> · Turns spent waiting: <b>' + snap.idle + '</b> · Finished by someone else: <b>' + (snap.collab || 0) + '</b>';
     var res = $('.result', board);
     if (i === game.snaps.length - 1) {
       var n = function (col) { return snap.cards.filter(function (c) { return c.col === col; }).length; };
@@ -254,18 +284,21 @@
     b.onclick = function () { st.wip = +b.dataset.w; setup(); };
   });
   $('#chase').onchange = function () { setup(); runStats(); };
+  $('#neww').onchange = function () { setup(); runStats(); };
+  $('#collab1').onchange = function () { setup(); runStats(); };
+  $('#collab2').onchange = function () { setup(); runStats(); };
   $('#blwip').onchange = function () { setup(); runStats(); };
   window.addEventListener('resize', function () { build($('#b1')); build($('#b2')); show(st.i); });
 
   function runStats() {
-    var body = $('#stbody'); body.innerHTML = '<tr><td colspan="6">Calculating…</td></tr>';
+    var body = $('#stbody'); body.innerHTML = '<tr><td colspan="7">Calculating…</td></tr>';
     setTimeout(function () {
       var rows = [[null, 'No limit'], [4, '4'], [3, '3'], [2, '2'], [1, '1']].map(function (w) {
         var a = CK.stats(opts(w[0]), 1000);
         var half = a.inProgress + a.blocked;
         var pc = function (x) { return (x / 16 * 100).toFixed(1) + '%'; };
         return '<tr><td>' + w[1] + '</td><td><b>' + a.done.toFixed(1) + '</b></td><td>' + half.toFixed(1) +
-          '</td><td>' + a.notStarted.toFixed(1) + '</td><td>' + a.idle.toFixed(1) + '</td><td class="bar"><div class="barw">' +
+          '</td><td>' + a.notStarted.toFixed(1) + '</td><td>' + a.idle.toFixed(1) + '</td><td>' + a.collab.toFixed(1) + '</td><td class="bar"><div class="barw">' +
           '<i style="width:' + pc(a.done) + ';background:var(--done)"></i>' +
           '<i style="width:' + pc(a.inProgress) + ';background:var(--ip)"></i>' +
           '<i style="width:' + pc(a.blocked) + ';background:var(--bl)"></i></div></td></tr>';

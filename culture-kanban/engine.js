@@ -34,8 +34,8 @@
   // col: 'ns' Not Started, 'bl' Blocked (external), 'ip' In Progress, 'done'
   function newState(nTasks) {
     var cards = [];
-    for (var i = 0; i < nTasks; i++) cards.push({ id: i + 1, col: 'ns', dep: null });
-    return { cards: cards, turn: 0, idle: 0, log: [] };
+    for (var i = 0; i < nTasks; i++) cards.push({ id: i + 1, col: 'ns', dep: null, owner: null });
+    return { cards: cards, turn: 0, idle: 0, collab: 0, log: [] };
   }
 
   function byId(s, id) { return s.cards[id - 1]; }
@@ -77,6 +77,52 @@
 
   function pick(r, arr) { return arr[Math.floor(r() * arr.length)]; }
 
+  // How willing players are to work on a task someone else started.
+  // low: only when there is nothing else to do.
+  var OTHERS_WEIGHT = { high: 1, medium: 0.35, low: 0 };
+
+  function pickWeighted(r, arr, weights) {
+    var x = r() * weights.reduce(function (a, b) { return a + b; }, 0);
+    for (var i = 0; i < arr.length; i++) { x -= weights[i]; if (x < 0) return arr[i]; }
+    return arr[arr.length - 1];
+  }
+
+  function pickTask(s, r, cand, player, opt) {
+    // Round 2 (pull): look upstream from Done. 1) finish something in In Progress,
+    // 2) resolve a dependency, 3) chase an external block, 4) only then start a new task.
+    // Willingness to collaborate decides whose tasks count: with low willingness a player
+    // walks the order over their own tasks (and new ones) first, other people's only as a last resort.
+    if (opt.pull) {
+      var tiers = [
+        function (c) { return c.col === 'ip'; },
+        function (c) { return isHelper(s, c); },
+        function (c) { return c.col === 'bl'; },
+        function (c) { return c.col === 'ns'; }
+      ];
+      var ow2 = OTHERS_WEIGHT[opt.collab];
+      var mine = function (c) { return c.col === 'ns' || c.owner === player; };
+      var passes = ow2 === 0 ? [mine, function () { return true; }] : [function () { return true; }];
+      for (var q = 0; q < passes.length; q++) {
+        for (var k = 0; k < tiers.length; k++) {
+          var tier = cand.filter(tiers[k]).filter(passes[q]);
+          if (tier.length) return pickWeighted(r, tier, tier.map(function (c) { return mine(c) || !ow2 ? 1 : ow2; }));
+        }
+      }
+    }
+    var fresh = cand.filter(function (c) { return c.col === 'ns'; });
+    var going = cand.filter(function (c) { return c.col !== 'ns'; });
+    var ow = OTHERS_WEIGHT[opt.collab];
+    var gw = going.map(function (c) { return c.owner === player ? 1 : ow; });
+    var goingOk = gw.some(function (w) { return w > 0; });
+    if (fresh.length && goingOk) {
+      // Without kanban habits players would rather start something new (pNew of the time).
+      return r() < opt.pNew ? pick(r, fresh) : pickWeighted(r, going, gw);
+    }
+    if (fresh.length) return pick(r, fresh);
+    if (goingOk) return pickWeighted(r, going, gw);
+    return pick(r, going); // emergency: only other people's tasks are left
+  }
+
   // One turn. Returns a log entry describing what happened.
   function step(s, draw, player, r, opt) {
     s.turn++;
@@ -95,7 +141,7 @@
       s.log.push(e); return e;
     }
 
-    var c = pick(r, cand);
+    var c = pickTask(s, r, cand, player, opt);
     e.chosen = c.id;
     if (c.col === 'bl') { // chasing an external block
       if (draw === 'smooth' || draw === 'breakthrough') {
@@ -129,13 +175,18 @@
       c.col = 'bl';
       e.action = '#' + c.id + ' waits for someone outside the team.';
     }
+    if (c.owner === null && c.col !== 'ns') c.owner = player;
+    if (c.col === 'done' && c.owner !== player) {
+      s.collab++;
+      e.action += ' (started by player ' + c.owner + ')';
+    }
     s.log.push(e); return e;
   }
 
   // Plays a whole game. onTurn(state, entry) is called after every turn (for animation).
   function play(opt, onTurn) {
     opt = Object.assign({ tasks: 16, players: 4, wip: null, blockedCountsWip: false,
-      pLift: 0.5, chaseBlocked: false, seed: 1, choiceSeed: null, deck: DECK }, opt);
+      pLift: 0.5, chaseBlocked: false, pNew: 0.5, collab: 'high', pull: false, seed: 1, choiceSeed: null, deck: DECK }, opt);
     var deck = shuffledDeck(opt.seed, opt.deck);
     var r = rng(opt.choiceSeed === null ? opt.seed * 7919 + 13 : opt.choiceSeed);
     var s = newState(opt.tasks);
@@ -150,11 +201,11 @@
     var n = function (col) { return s.cards.filter(function (c) { return c.col === col; }).length; };
     return { done: n('done'), inProgress: n('ip'), blocked: n('bl'), notStarted: n('ns'),
       waitingDep: s.cards.filter(function (c) { return c.col !== 'done' && depActive(s, c); }).length,
-      idle: s.idle };
+      idle: s.idle, collab: s.collab };
   }
 
   function stats(opt, runs) {
-    var keys = ['done', 'inProgress', 'blocked', 'notStarted', 'idle'];
+    var keys = ['done', 'inProgress', 'blocked', 'notStarted', 'idle', 'collab'];
     var sum = {}, hist = [];
     keys.forEach(function (k) { sum[k] = 0; });
     for (var i = 0; i < runs; i++) {
