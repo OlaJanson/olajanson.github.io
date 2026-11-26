@@ -3,13 +3,18 @@
 (function (root) {
   'use strict';
 
-  var DECK = { smooth: 18, breakthrough: 2, dependency: 10, external: 2 };
+  var DECK = { smooth: 18, breakthrough: 2, dependency: 3, longer: 3, rework: 2, urgent: 2, external: 2 };
   var CARD_TEXT = {
     smooth: 'Smooth hour – move the chosen task one step.',
     breakthrough: 'Breakthrough – finish the chosen task, or lift an external block.',
     dependency: 'Dependency – the chosen task turns out to need another task first.',
+    longer: 'Takes longer – the hour goes into the chosen task, but it does not move.',
+    rework: 'Rework – someone wants changes: a done task goes back to In Progress.',
+    urgent: 'Urgent request – a new task lands in Not Started. The hour goes to handling it.',
     external: 'External block – the chosen task waits for someone outside the team.'
   };
+  // Cards that planning finds in advance (they become smooth hours), and how many of each are left.
+  var PLANNED_AWAY = { dependency: true, longer: true };
 
   function rng(seed) { // mulberry32
     var a = seed >>> 0;
@@ -34,8 +39,12 @@
   // col: 'ns' Not Started, 'bl' Blocked (external), 'ip' In Progress, 'done'
   function newState(nTasks) {
     var cards = [];
-    for (var i = 0; i < nTasks; i++) cards.push({ id: i + 1, col: 'ns', dep: null, owner: null });
+    for (var i = 0; i < nTasks; i++) cards.push(newCard(i + 1));
     return { cards: cards, turn: 0, idle: 0, collab: 0, log: [] };
+  }
+
+  function newCard(id) {
+    return { id: id, col: 'ns', dep: null, owner: null, hours: 0, rework: false, urgent: false };
   }
 
   function byId(s, id) { return s.cards[id - 1]; }
@@ -131,15 +140,38 @@
     s.log.push(e); return e;
   }
 
-  // Planning finds most dependencies before work starts, so they no longer come as surprises.
-  // All but keepShare of the dependency cards become smooth hours (the tasks are done in the right order).
+  // Planning finds most dependencies and underestimated tasks before work starts.
+  // Of each such card type only keepShare is left; the rest become smooth hours.
   function plannedDeck(deck, seed, keepShare) {
-    var r = rng(seed * 31 + 7), idx = [];
-    deck.forEach(function (d, i) { if (d === 'dependency') idx.push(i); });
-    for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
-    var keep = Math.round(idx.length * keepShare), out = deck.slice(), planned = {};
-    idx.slice(keep).forEach(function (i) { out[i] = 'smooth'; planned[i] = true; });
+    var r = rng(seed * 31 + 7), out = deck.slice(), planned = {};
+    Object.keys(PLANNED_AWAY).forEach(function (type) {
+      var idx = [];
+      deck.forEach(function (d, i) { if (d === type) idx.push(i); });
+      for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+      idx.slice(Math.round(idx.length * keepShare)).forEach(function (i) { out[i] = 'smooth'; planned[i] = type; });
+    });
     return { deck: out, planned: planned };
+  }
+
+  // Cards that hit the team whatever task was chosen. Return a description, or null if not such a card.
+  function teamEvent(s, draw, chosen, r) {
+    if (draw === 'urgent') {
+      var n = newCard(s.cards.length + 1); n.urgent = true; s.cards.push(n);
+      return 'Urgent request – new task #' + n.id + ' lands in Not Started.';
+    }
+    if (draw === 'rework') {
+      var done = s.cards.filter(function (c) { return c.col === 'done'; });
+      if (done.length) {
+        var d = pick(r, done); d.col = 'ip'; d.rework = true;
+        return 'Someone wants changes to #' + d.id + ' – back to In Progress.';
+      }
+      if (chosen && chosen.col === 'ip') {
+        chosen.col = 'ns'; chosen.rework = true;
+        return '#' + chosen.id + ' must be redone – back to Not Started.';
+      }
+      return 'Changes are requested before anything is done – the hour is lost.';
+    }
+    return null;
   }
 
   // One turn. Returns a log entry describing what happened.
@@ -150,6 +182,8 @@
     var e = { turn: s.turn, player: player, draw: draw, chosen: null, action: '' };
 
     if (!cand.length) {
+      var ev0 = teamEvent(s, draw, null, r);
+      if (ev0) { e.action = ev0; s.log.push(e); return e; }
       if (draw === 'breakthrough' && blocked.length) {
         var b0 = pick(r, blocked); b0.col = 'ip';
         e.action = 'No task to choose. Lifts the block on #' + b0.id + '.';
@@ -162,12 +196,15 @@
 
     var c = pickTask(s, r, cand, player, opt);
     e.chosen = c.id;
+    var ev = teamEvent(s, draw, c, r);
+    if (ev) { e.action = ev; s.log.push(e); return e; }
     if (c.col === 'bl') { // chasing an external block
       if (draw === 'smooth' || draw === 'breakthrough') {
         c.col = 'ip'; e.action = 'Chases the outside party – #' + c.id + ' is unblocked.';
       } else e.action = 'Chases #' + c.id + ', but the answer has not come yet.';
       s.log.push(e); return e;
     }
+    if (draw !== 'breakthrough') c.hours++;
     if (draw === 'smooth') {
       c.col = c.col === 'ns' ? 'ip' : 'done';
       e.action = c.col === 'ip' ? 'Starts #' + c.id + '.' : 'Finishes #' + c.id + '.';
@@ -176,7 +213,7 @@
         var b = pick(r, blocked); b.col = 'ip';
         e.action = 'Leaves #' + c.id + ' and lifts the block on #' + b.id + '.';
       } else {
-        c.col = 'done';
+        c.hours++; c.col = 'done';
         e.action = 'Finishes #' + c.id + ' in one go.';
       }
     } else if (draw === 'dependency') {
@@ -190,6 +227,9 @@
       } else {
         e.action = '#' + c.id + ' gets an hour of work, nothing else to wait for.';
       }
+    } else if (draw === 'longer') {
+      if (c.owner === null) c.owner = player;
+      e.action = '#' + c.id + ' takes longer than planned – the hour goes in, the task does not move.';
     } else if (draw === 'external') {
       c.col = 'bl';
       e.action = '#' + c.id + ' waits for someone outside the team.';
@@ -205,7 +245,7 @@
   // Plays a whole game. onTurn(state, entry) is called after every turn (for animation).
   function play(opt, onTurn) {
     opt = Object.assign({ tasks: 16, players: 4, wip: null, blockedCountsWip: false,
-      pLift: 0.5, chaseBlocked: false, pNew: 0.5, collab: 'high', pull: false, planning: false, planKeep: 0.2,
+      pLift: 0.5, chaseBlocked: false, pNew: 0.5, collab: 'high', pull: false, planning: false, planKeep: 1 / 3,
       seed: 1, choiceSeed: null, deck: DECK }, opt);
     var deck = shuffledDeck(opt.seed, opt.deck);
     var r = rng(opt.choiceSeed === null ? opt.seed * 7919 + 13 : opt.choiceSeed);
@@ -220,7 +260,7 @@
       else {
         var k = opt.planning ? i - opt.players : i;
         e = step(s, plan.deck[k], player, r, opt);
-        if (plan.planned[k]) { e.planned = true; e.action += ' (a dependency already found during planning)'; }
+        if (plan.planned[k]) { e.planned = true; e.action += ' (planning avoided a ' + (plan.planned[k] === 'longer' ? 'task taking longer' : 'dependency') + ')'; }
         drawn.push(plan.deck[k]);
       }
       if (onTurn) onTurn(s, e);
@@ -232,11 +272,16 @@
     var n = function (col) { return s.cards.filter(function (c) { return c.col === col; }).length; };
     return { done: n('done'), inProgress: n('ip'), blocked: n('bl'), notStarted: n('ns'),
       waitingDep: s.cards.filter(function (c) { return c.col !== 'done' && depActive(s, c); }).length,
-      idle: s.idle, collab: s.collab };
+      idle: s.idle, collab: s.collab, tasks: s.cards.length, waste: waste(s) };
+  }
+
+  // Lean waste: hours put into tasks that did not reach Done.
+  function waste(s) {
+    return s.cards.reduce(function (a, c) { return a + (c.col === 'done' ? 0 : c.hours); }, 0);
   }
 
   function stats(opt, runs) {
-    var keys = ['done', 'inProgress', 'blocked', 'notStarted', 'idle', 'collab'];
+    var keys = ['done', 'inProgress', 'blocked', 'notStarted', 'idle', 'collab', 'tasks', 'waste'];
     var sum = {}, hist = [];
     keys.forEach(function (k) { sum[k] = 0; });
     for (var i = 0; i < runs; i++) {

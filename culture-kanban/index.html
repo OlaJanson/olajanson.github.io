@@ -8,7 +8,7 @@
 <style>
   :root {
     --bg: #f6f4ef; --ink: #1d1d1b; --muted: #6b6a66; --line: #d9d5cc;
-    --ns: #e4e1da; --ip: #f2b134; --done: #3a9d5d; --bl: #d64541; --dep: #7a4fb5;
+    --ns: #e4e1da; --ip: #f2b134; --done: #3a9d5d; --bl: #d64541; --dep: #7a4fb5; --rw: #2f7fc1; --urg: #d0489a;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font: 16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
@@ -28,6 +28,9 @@
   .draw .card.breakthrough { border-color: var(--ip); }
   .draw .card.dependency { border-color: var(--dep); }
   .draw .card.external { border-color: var(--bl); }
+  .draw .card.longer { border-color: var(--muted); }
+  .draw .card.rework { border-color: var(--rw); }
+  .draw .card.urgent { border-color: var(--urg); }
   .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 900px) { .boards { grid-template-columns: 1fr; } }
   .board { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
@@ -50,6 +53,9 @@
   .tile.chosen { box-shadow: 0 0 0 3px var(--ink); }
   .tile.helper { border: 2px solid var(--dep); }
   .tile.under { align-items: flex-start; padding-top: 1px; box-sizing: border-box; }
+  .tile.rework::before, .tile.urgent::before { content: ""; position: absolute; left: -2px; right: -2px; top: -2px; height: 7px; border-radius: 6px 6px 0 0; }
+  .tile.rework::before { background: var(--rw); }
+  .tile.urgent::before { background: var(--urg); }
   .tile .tag { background: var(--dep); color: #fff; font-size: .7rem; padding: 0 4px; border-radius: 6px; font-weight: 600; }
   svg.deps { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
   .result { margin-top: 8px; font-size: .95rem; min-height: 1.4em; }
@@ -59,6 +65,7 @@
   .lg-ns::before { background: var(--ns); } .lg-ip::before { background: linear-gradient(90deg, var(--ip) 50%, #fbe6b8 50%); }
   .lg-done::before { background: var(--done); } .lg-bl::before { background: var(--bl); }
   .lg-dep::before { border: 2px dashed var(--dep); }
+  .lg-rw::before { background: var(--rw); } .lg-urg::before { background: var(--urg); }
   section.stats { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-top: 16px; }
   section.stats h2 { font-size: 1.1rem; margin: 0 0 4px; }
   table { border-collapse: collapse; width: 100%; font-size: .95rem; }
@@ -73,7 +80,7 @@
 <body>
 <main>
   <h1>Culture Kanban – flow simulation</h1>
-  <p class="sub">4 players · 16 tasks · 32 cards drawn. Every task takes two hours: one step to In Progress, one step to Done. Both rounds draw exactly the same cards.</p>
+  <p class="sub">4 players · 16 tasks (more if urgent requests come in) · 32 cards drawn. Every task takes two hours: one step to In Progress, one step to Done. Both rounds draw exactly the same cards.</p>
 
   <div class="controls">
     <div class="group">
@@ -109,12 +116,13 @@
     <span class="lg-ns">Not started</span><span class="lg-ip">In progress (1 of 2 hours)</span>
     <span class="lg-done">Done</span><span class="lg-bl">Blocked – waiting for someone outside the team</span>
     <span class="lg-dep">Waiting for another task: →7 means it needs #7 first</span>
+    <span class="lg-rw">Blue band: has been sent back for rework</span><span class="lg-urg">Pink band: urgent request that came in during the game</span>
   </div>
 
   <section class="stats">
     <h2>1000 games per WIP limit</h2>
     <p class="sub" id="statsnote">Average result when the same rules are played 1000 times with different shuffles.</p>
-    <table><thead><tr><th>WIP limit</th><th>Done</th><th>Half-finished</th><th>Not started</th><th>Turns spent waiting</th><th>Finished by someone else</th><th class="bar">Where the 16 tasks ended</th></tr></thead>
+    <table><thead><tr><th>WIP limit</th><th>Done</th><th>Half-finished</th><th>Not started</th><th>Turns spent waiting</th><th>Finished by someone else</th><th>Waste (hours in unfinished tasks)</th><th class="bar">Where the tasks ended</th></tr></thead>
     <tbody id="stbody"></tbody></table>
   </section>
 
@@ -124,22 +132,27 @@
       <li>On your turn, choose a task that is not done, then draw a card.</li>
       <li><b>Smooth hour</b> (18): move the chosen task one step.</li>
       <li><b>Breakthrough</b> (2): move the chosen task straight to Done – or leave it and lift an external block.</li>
-      <li><b>Dependency</b> (10): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
+      <li><b>Dependency</b> (3): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
+      <li><b>Takes longer</b> (3): the hour goes into the chosen task, but it does not move.</li>
+      <li><b>Rework</b> (2): someone wants changes. A done task goes back to In Progress. If nothing is done yet, the chosen task goes back to Not Started.</li>
+      <li><b>Urgent request</b> (2): a new task lands in Not Started. The hour goes to handling it, so the chosen task does not move.</li>
       <li><b>External block</b> (2): the chosen task moves to Blocked. It waits for an email, a decision or a delivery from outside the team. The team cannot speed this up: only a Breakthrough lifts the block.</li>
       <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit. Players also pull work from the right: on your turn you 1) finish a task in In Progress if you can, otherwise 2) work on a task that another task is waiting for, and only then 3) start a new task.</li>
-      <li><b>Planning</b> (optional in round 2): the team spends the first round, one turn per player, mapping which tasks depend on which. No cards are drawn. In return 8 of the 10 Dependency cards become Smooth hours, because the tasks are now done in the right order. The game is just as long, so the team draws 4 fewer cards.</li>
+      <li><b>Planning</b> (optional in round 2): the team spends the first round, one turn per player, mapping which tasks depend on which. No cards are drawn. In return 2 of the 3 Dependency cards and 2 of the 3 Takes longer cards become Smooth hours: the team knows what depends on what and how big each task is. Rework stays, since people change their minds anyway. The game is just as long, so the team draws 4 fewer cards.</li>
+      <li><b>Waste</b>: every hour put into a task that is not done when the game ends. Lean counts it as waste: the time is spent, but nobody gets any value from it.</li>
       <li><b>Every task has an owner</b>: the player who started it. When someone else finishes it, that counts as collaboration. In round 1, how willing players are to take over someone else's task can be set: high, medium, or low (only when there is nothing else to do). Their own started tasks they always pick up. In round 2 the pull order decides, whoever started the task.</li>
     </ul>
     <p>In the simulation the players choose at random among the moves the rules allow, in both rounds. Like people without kanban habits, they would rather start a new task than take over one that is already in progress: by default they start a new one 70% of the time. Players behave the same in both rounds, so any difference comes from the WIP limit alone.</p>
   </details>
 </main>
 
-<script src="engine.js?v=20261126-1"></script>
+<script src="engine.js?v=20261126-2"></script>
 <script>
 (function () {
   'use strict';
   var COLS = [['ns', 'Not Started'], ['bl', 'Blocked'], ['ip', 'In Progress'], ['done', 'Done']];
-  var NAMES = { smooth: 'Smooth hour', breakthrough: 'Breakthrough', dependency: 'Dependency', external: 'External block' };
+  var NAMES = { smooth: 'Smooth hour', breakthrough: 'Breakthrough', dependency: 'Dependency', external: 'External block',
+    longer: 'Takes longer', rework: 'Rework', urgent: 'Urgent request' };
   var SPEEDS = [2200, 1500, 1000, 600, 300];
   var st = { wip: 2, seed: Math.floor(Math.random() * 1e6), i: 0, timer: null, games: null };
   var $ = function (q, el) { return (el || document).querySelector(q); };
@@ -153,13 +166,15 @@
   function record(o) { // play a game and keep a snapshot after every turn
     var snaps = [];
     var g = CK.play(Object.assign({ seed: st.seed }, o), function (s, e) {
-      snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep }; }), e: e, idle: s.idle, collab: s.collab });
+      snaps.push({ cards: s.cards.map(function (c) { return { id: c.id, col: c.col, dep: c.dep, hours: c.hours, rework: c.rework, urgent: c.urgent }; }),
+        e: e, idle: s.idle, collab: s.collab, waste: CK.summary(s).waste });
     });
-    snaps.unshift({ cards: g.state.cards.map(function (c) { return { id: c.id, col: 'ns', dep: null }; }), e: null, idle: 0 });
+    snaps.unshift({ cards: g.state.cards.filter(function (c) { return !c.urgent; }).map(function (c) {
+      return { id: c.id, col: 'ns', dep: null, hours: 0, rework: false, urgent: false }; }), e: null, idle: 0, collab: 0, waste: 0 });
     return { snaps: snaps, deck: g.deck, drawn: g.drawn, opt: o };
   }
 
-  function build(board) {
+  function build(board, nTiles) {
     var grid = $('.grid', board); grid.innerHTML = '';
     var w = grid.clientWidth / 4;
     COLS.forEach(function (c, k) {
@@ -171,7 +186,7 @@
     });
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'deps'); grid.appendChild(svg);
-    for (var i = 1; i <= 16; i++) {
+    for (var i = 1; i <= nTiles; i++) {
       var t = document.createElement('div'); t.className = 'tile'; t.dataset.id = i;
       t.innerHTML = i; grid.appendChild(t);
     }
@@ -204,7 +219,7 @@
   function render(board, game, i, wip) {
     var snap = game.snaps[i], grid = $('.grid', board), pos = positions(grid, snap.cards);
     var on = stackedOn(snap.cards), depth = {};
-    for (var pass = 0; pass < 16; pass++) Object.keys(on).forEach(function (h) {
+    for (var pass = 0; pass < snap.cards.length; pass++) Object.keys(on).forEach(function (h) {
       var base = pos[on[h]];
       if (base && !pos[h]) { depth[h] = (depth[on[h]] || 0) + 1; pos[h] = { x: base.x + 8, y: base.y + 18 }; }
     });
@@ -212,13 +227,16 @@
     snap.cards.forEach(function (c) {
       if (c.dep && snap.cards[c.dep - 1].col !== 'done' && c.col !== 'done') waitingFor[c.dep] = true;
     });
+    grid.querySelectorAll('.tile').forEach(function (t) { t.style.display = +t.dataset.id <= snap.cards.length ? '' : 'none'; });
     snap.cards.forEach(function (c) {
       var t = $('.tile[data-id="' + c.id + '"]', grid);
       t.style.zIndex = 1;
       var waiting = c.col !== 'done' && c.dep && snap.cards[c.dep - 1].col !== 'done';
       t.className = 'tile ' + c.col + (waiting ? ' waiting' : '') + (waitingFor[c.id] ? ' helper' : '') +
         (snap.e && snap.e.chosen === c.id ? ' chosen' : '') +
-        (Object.keys(on).some(function (h) { return on[h] === c.id; }) ? ' under' : '');
+        (Object.keys(on).some(function (h) { return on[h] === c.id; }) ? ' under' : '') +
+        (c.urgent ? ' urgent' : c.rework ? ' rework' : '');
+      t.title = '#' + c.id + ': ' + c.hours + ' h put in' + (c.rework ? ', sent back for rework' : '') + (c.urgent ? ', urgent request' : '');
       t.innerHTML = c.id + (waiting ? '<span class="tag">→' + c.dep + '</span>' : '');
       t.style.left = pos[c.id].x + 'px'; t.style.top = pos[c.id].y + 'px';
       t.style.zIndex = 1 + (depth[c.id] || 0);
@@ -242,11 +260,13 @@
     var stacked = Object.keys(on).length;
     $('.wip', board).innerHTML = 'In Progress: <b>' + (ip - stacked) + '</b>' + (wip ? ' of ' + wip : '') +
       (stacked ? ' (' + stacked + ' card' + (stacked > 1 ? 's' : '') + ' lying on the task that waits for ' + (stacked > 1 ? 'them' : 'it') + ')' : '') +
-      ' · Blocked: <b>' + bl + '</b> · Turns spent waiting: <b>' + snap.idle + '</b> · Finished by someone else: <b>' + (snap.collab || 0) + '</b>';
+      ' · Blocked: <b>' + bl + '</b> · Turns spent waiting: <b>' + snap.idle + '</b> · Finished by someone else: <b>' + (snap.collab || 0) + '</b>' +
+      ' · Waste: <b>' + snap.waste + ' h</b> in unfinished tasks';
     var res = $('.result', board);
     if (i === game.snaps.length - 1) {
       var n = function (col) { return snap.cards.filter(function (c) { return c.col === col; }).length; };
-      res.innerHTML = '<b>' + n('done') + ' done</b> · ' + (n('ip') + n('bl')) + ' half-finished · ' + n('ns') + ' not started';
+      res.innerHTML = '<b>' + n('done') + ' done</b> of ' + snap.cards.length + ' · ' + (n('ip') + n('bl')) + ' half-finished · ' + n('ns') + ' not started' +
+        ' · <b>' + snap.waste + ' h waste</b>';
     } else res.innerHTML = '';
   }
 
@@ -267,7 +287,8 @@
     st.games = [record(opts(null)), record(opts(st.wip))];
     $('.wipn').textContent = st.wip;
     document.querySelectorAll('.wipb').forEach(function (b) { b.classList.toggle('on', +b.dataset.w === st.wip); });
-    build($('#b1')); build($('#b2'));
+    st.tiles = Math.max(st.games[0].snaps[st.games[0].snaps.length - 1].cards.length, st.games[1].snaps[st.games[1].snaps.length - 1].cards.length);
+    build($('#b1'), st.tiles); build($('#b2'), st.tiles);
     show(0);
   }
 
@@ -293,17 +314,17 @@
   $('#collab2').onchange = function () { setup(); runStats(); };
   $('#blwip').onchange = function () { setup(); runStats(); };
   document.querySelectorAll('input[name=plan]').forEach(function (x) { x.onchange = function () { setup(); runStats(); }; });
-  window.addEventListener('resize', function () { build($('#b1')); build($('#b2')); show(st.i); });
+  window.addEventListener('resize', function () { build($('#b1'), st.tiles); build($('#b2'), st.tiles); show(st.i); });
 
   function runStats() {
-    var body = $('#stbody'); body.innerHTML = '<tr><td colspan="7">Calculating…</td></tr>';
+    var body = $('#stbody'); body.innerHTML = '<tr><td colspan="8">Calculating…</td></tr>';
     setTimeout(function () {
       var rows = [[null, 'No limit'], [4, '4'], [3, '3'], [2, '2'], [1, '1']].map(function (w) {
         var a = CK.stats(opts(w[0]), 1000);
         var half = a.inProgress + a.blocked;
-        var pc = function (x) { return (x / 16 * 100).toFixed(1) + '%'; };
+        var pc = function (x) { return (x / a.tasks * 100).toFixed(1) + '%'; };
         return '<tr><td>' + w[1] + '</td><td><b>' + a.done.toFixed(1) + '</b></td><td>' + half.toFixed(1) +
-          '</td><td>' + a.notStarted.toFixed(1) + '</td><td>' + a.idle.toFixed(1) + '</td><td>' + a.collab.toFixed(1) + '</td><td class="bar"><div class="barw">' +
+          '</td><td>' + a.notStarted.toFixed(1) + '</td><td>' + a.idle.toFixed(1) + '</td><td>' + a.collab.toFixed(1) + '</td><td>' + a.waste.toFixed(1) + ' h</td><td class="bar"><div class="barw">' +
           '<i style="width:' + pc(a.done) + ';background:var(--done)"></i>' +
           '<i style="width:' + pc(a.inProgress) + ';background:var(--ip)"></i>' +
           '<i style="width:' + pc(a.blocked) + ';background:var(--bl)"></i></div></td></tr>';
