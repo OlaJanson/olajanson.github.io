@@ -9,7 +9,7 @@
     breakthrough: 'Breakthrough – finish the chosen task, or lift an external block.',
     dependency: 'Dependency – the chosen task turns out to need another task first.',
     longer: 'Takes longer – the hour goes into the chosen task, but it does not move.',
-    rework: 'Rework – someone wants changes: a done task goes back to In Progress.',
+    rework: 'Rework – someone wants changes: a started task goes back to Not Started.',
     urgent: 'Urgent request – a new task lands in Not Started. The hour goes to handling it.',
     external: 'External block – the chosen task waits for someone outside the team.'
   };
@@ -160,16 +160,14 @@
       return 'Urgent request – new task #' + n.id + ' lands in Not Started.';
     }
     if (draw === 'rework') {
-      var done = s.cards.filter(function (c) { return c.col === 'done'; });
-      if (done.length) {
-        var d = pick(r, done); d.col = 'ip'; d.rework = true;
-        return 'Someone wants changes to #' + d.id + ' – back to In Progress.';
+      // Only started tasks can be sent back; done is done.
+      var started = chosen && chosen.col === 'ip' ? [chosen] : s.cards.filter(function (c) { return c.col === 'ip'; });
+      if (started.length) {
+        var d = pick(r, started); d.col = 'ns'; d.rework = true;
+        s.lost = (s.lost || 0) + d.hours; d.hours = 0; // the thrown-away hours are waste even if the task is finished later
+        return 'Someone wants changes to #' + d.id + ' – back to Not Started. The hours already put in are lost.';
       }
-      if (chosen && chosen.col === 'ip') {
-        chosen.col = 'ns'; chosen.rework = true;
-        return '#' + chosen.id + ' must be redone – back to Not Started.';
-      }
-      return 'Changes are requested before anything is done – the hour is lost.';
+      return 'Changes are requested before anything is started – the hour is lost.';
     }
     return null;
   }
@@ -278,7 +276,7 @@
 
   // Lean waste: hours put into tasks that did not reach Done.
   function waste(s) {
-    return s.cards.reduce(function (a, c) { return a + (c.col === 'done' ? 0 : c.hours); }, 0);
+    return (s.lost || 0) + s.cards.reduce(function (a, c) { return a + (c.col === 'done' ? 0 : c.hours); }, 0);
   }
 
   function stats(opt, runs) {

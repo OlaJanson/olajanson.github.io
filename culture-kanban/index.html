@@ -134,7 +134,7 @@
       <li><b>Breakthrough</b> (2): move the chosen task straight to Done – or leave it and lift an external block.</li>
       <li><b>Dependency</b> (3): the chosen task turns out to need another task first (picked at random, never a blocked task and never one that another task already waits for). It cannot move until that task is done.</li>
       <li><b>Takes longer</b> (3): the hour goes into the chosen task, but it does not move.</li>
-      <li><b>Rework</b> (2): someone wants changes. A done task goes back to In Progress. If nothing is done yet, the chosen task goes back to Not Started.</li>
+      <li><b>Rework</b> (2): someone wants changes. A started task (the chosen one if it is in progress, otherwise another started task) goes back to Not Started, and the hours already put in are lost. Done tasks are never sent back.</li>
       <li><b>Urgent request</b> (2): a new task lands in Not Started. The hour goes to handling it, so the chosen task does not move.</li>
       <li><b>External block</b> (2): the chosen task moves to Blocked. It waits for an email, a decision or a delivery from outside the team. The team cannot speed this up: only a Breakthrough lifts the block.</li>
       <li><b>Round 2</b> adds one rule: a WIP limit on In Progress for the whole team. A task that another task is waiting for may always be started, and does not count toward the limit. Players also pull work from the right: on your turn you 1) finish a task in In Progress if you can, otherwise 2) work on a task that another task is waiting for, and only then 3) start a new task.</li>
@@ -147,7 +147,7 @@
   </details>
 </main>
 
-<script src="engine.js?v=20261126-3"></script>
+<script src="engine.js?v=20261126-4"></script>
 <script>
 (function () {
   'use strict';
