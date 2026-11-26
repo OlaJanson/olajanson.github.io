@@ -33,6 +33,8 @@
   .draw .card.urgent { border-color: var(--urg); }
   .boards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 900px) { .boards { grid-template-columns: 1fr; } }
+  .boards.single { grid-template-columns: 1fr; }
+  .board[hidden] { display: none; }
   .board { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
   .board h2 { font-size: 1.1rem; margin: 0 0 2px; }
   .board .action { color: var(--muted); min-height: 2.8em; margin: 0 0 6px; font-size: .95rem; }
@@ -89,6 +91,11 @@
       <button id="reset">New shuffle</button>
     </div>
     <div class="group">Speed <input id="speed" type="range" min="1" max="5" value="3"></div>
+    <div class="group">Show:
+      <label><input type="radio" name="view" value="1"> Round 1</label>
+      <label><input type="radio" name="view" value="2"> Round 2</label>
+      <label><input type="radio" name="view" value="both" checked> Side by side</label>
+    </div>
     <div class="group">
       <label><input type="checkbox" id="blwip"> Blocked counts toward WIP</label>
     </div>
@@ -314,6 +321,15 @@
   $('#collab1').onchange = function () { setup(); runStats(); };
   $('#collab2').onchange = function () { setup(); runStats(); };
   $('#blwip').onchange = function () { setup(); runStats(); };
+  function applyView() {
+    var v = $('input[name=view]:checked').value;
+    $('#b1').hidden = v === '2';
+    $('#b2').hidden = v === '1';
+    $('.boards').classList.toggle('single', v !== 'both');
+    // Tile positions depend on the board width, so lay the boards out again.
+    build($('#b1'), st.tiles); build($('#b2'), st.tiles); show(st.i);
+  }
+  document.querySelectorAll('input[name=view]').forEach(function (x) { x.onchange = applyView; });
   document.querySelectorAll('input[name=plan]').forEach(function (x) { x.onchange = function () { setup(); runStats(); }; });
   window.addEventListener('resize', function () { build($('#b1'), st.tiles); build($('#b2'), st.tiles); show(st.i); });
 
