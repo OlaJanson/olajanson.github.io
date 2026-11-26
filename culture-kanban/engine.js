@@ -118,9 +118,6 @@
         }
       }
     }
-    // People want to finish what they started: an own task that can move beats starting something new.
-    var own = cand.filter(function (c) { return c.col === 'ip' && c.owner === player; });
-    if (own.length) return pick(r, own);
     var fresh = cand.filter(function (c) { return c.col === 'ns'; });
     var going = cand.filter(function (c) { return c.col !== 'ns'; });
     var ow = OTHERS_WEIGHT[opt.collab];
