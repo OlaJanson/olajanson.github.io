@@ -219,7 +219,8 @@
     } else if (draw === 'dependency') {
       c.col = 'ip';
       var targets = s.cards.filter(function (o) {
-        return o.id !== c.id && o.col !== 'done' && !reaches(s, o.id, c.id);
+        // Not a blocked task, and not one that another task already waits for: each dependency is unique.
+        return o.id !== c.id && o.col !== 'done' && o.col !== 'bl' && !isHelper(s, o) && !reaches(s, o.id, c.id);
       });
       if (targets.length) {
         c.dep = pick(r, targets).id;

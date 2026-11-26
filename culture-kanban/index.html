@@ -132,7 +132,7 @@
       <li>On your turn, choose a task that is not done, then draw a card.</li>
       <li><b>Smooth hour</b> (18): move the chosen task one step.</li>
       <li><b>Breakthrough</b> (2): move the chosen task straight to Done – or leave it and lift an external block.</li>
-      <li><b>Dependency</b> (3): the chosen task turns out to need another task first (picked at random). It cannot move until that task is done.</li>
+      <li><b>Dependency</b> (3): the chosen task turns out to need another task first (picked at random, never a blocked task and never one that another task already waits for). It cannot move until that task is done.</li>
       <li><b>Takes longer</b> (3): the hour goes into the chosen task, but it does not move.</li>
       <li><b>Rework</b> (2): someone wants changes. A done task goes back to In Progress. If nothing is done yet, the chosen task goes back to Not Started.</li>
       <li><b>Urgent request</b> (2): a new task lands in Not Started. The hour goes to handling it, so the chosen task does not move.</li>
@@ -147,7 +147,7 @@
   </details>
 </main>
 
-<script src="engine.js?v=20261126-2"></script>
+<script src="engine.js?v=20261126-3"></script>
 <script>
 (function () {
   'use strict';
